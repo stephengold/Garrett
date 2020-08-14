@@ -53,7 +53,7 @@ import jme3utilities.ui.ActionAppState;
 /**
  * An ActionAppState to control a 4 degree-of-freedom Camera that chases and
  * orbits a Target, jumping forward as needed to maintain a clear line of sight
- * in a CollisionSpace. TODO move to library
+ * in a CollisionSpace.
  *
  * @author Stephen Gold sgold@sonic.net
  */
