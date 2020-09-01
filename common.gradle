@@ -34,7 +34,7 @@ ext {
     heartVersion = '6.0.0'
     jme3utilitiesuiVersion = '0.9.0'
     jmonkeyengineVersion = '3.3.2-stable'
-    minieVersion = '2.0.1'
+    minieVersion = '3.0.0'
 }
 
 repositories {
