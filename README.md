@@ -53,8 +53,8 @@ After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
 You can install the Maven artifacts to your local cache:
- + using Bash:  `./gradlew :GarrettLibrary:publishToMavenLocal`
- + using Windows Command Prompt:  `.\gradlew :GarrettLibrary:publishToMavenLocal`
+ + using Bash:  `./gradlew publishToMavenLocal`
+ + using Windows Command Prompt:  `.\gradlew publishToMavenLocal`
 
 [Jump to table of contents](#toc)
 
