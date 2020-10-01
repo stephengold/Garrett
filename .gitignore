@@ -2,4 +2,5 @@
 *.dylib
 *.so
 /.gradle/
+/.nb-gradle/
 /GarrettLibrary/build
