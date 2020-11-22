@@ -38,7 +38,6 @@ import com.jme3.math.Vector3f;
  * @author Stephen Gold sgold@sonic.net
  */
 public interface Target {
-
     /**
      * Access the collision object that contains the primary target.
      *
