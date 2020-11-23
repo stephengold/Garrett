@@ -31,8 +31,8 @@ gradle.projectsEvaluated {
 ext {
     // current versions of various libraries
     garrettVersion = '0.1.0-SNAPSHOT'
-    heartVersion = '6.0.0'
-    jme3utilitiesuiVersion = '0.9.0'
+    heartVersion = '6.2.0'
+    jme3utilitiesuiVersion = '0.9.1'
     jmonkeyengineVersion = '3.3.2-stable'
     minieVersion = '3.0.0'
 }
