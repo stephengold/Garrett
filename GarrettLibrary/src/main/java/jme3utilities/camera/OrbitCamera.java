@@ -365,7 +365,7 @@ public class OrbitCamera
         /*
          * Hide the cursor if dragging.
          */
-        boolean cursorVisible = !isDragging();
+        boolean cursorVisible = !isActive(OcFunction.DragToOrbit);
         inputManager.setCursorVisible(cursorVisible);
         /*
          * Sum the active discrete inputs (signals).
@@ -374,10 +374,8 @@ public class OrbitCamera
         int orbitUpSign = 0;
         int orbitCwSign = 0;
         int zoomSignalDirection = 0;
-
         for (OcFunction function : OcFunction.values()) {
-            String signalName = signalNames.get(function);
-            if (signalName != null && signals.test(signalName)) {
+            if (isActive(function)) {
                 switch (function) {
                     case Back:
                         --forwardSum;
@@ -482,9 +480,7 @@ public class OrbitCamera
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
-        String xraySignalName = signalNames.get(OcFunction.Xray);
-        boolean xrayVision = xraySignalName != null
-                && signals.test(xraySignalName);
+        boolean xrayVision = isActive(OcFunction.Xray);
 
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
@@ -561,27 +557,28 @@ public class OrbitCamera
         Validate.nonNegative(tpf, "time per frame");
         assert isEnabled();
 
+        boolean isDragToOrbit = isActive(OcFunction.DragToOrbit);
         switch (eventName) {
             case analogOrbitCcw:
-                if (isDragging()) {
+                if (isDragToOrbit) {
                     yawAnalogSum += reading;
                 }
                 break;
 
             case analogOrbitCw:
-                if (isDragging()) {
+                if (isDragToOrbit) {
                     yawAnalogSum -= reading;
                 }
                 break;
 
             case analogOrbitDown:
-                if (isDragging()) {
+                if (isDragToOrbit) {
                     pitchAnalogSum += reading;
                 }
                 break;
 
             case analogOrbitUp:
-                if (isDragging()) {
+                if (isDragToOrbit) {
                     pitchAnalogSum -= reading;
                 }
                 break;
@@ -677,10 +674,10 @@ public class OrbitCamera
     }
 
     /**
-     * Test whether a dragging function is active.
+     * Test whether the specified camera function (signal) is active.
      */
-    private boolean isDragging() {
-        String signalName = signalNames.get(OcFunction.DragToOrbit);
+    private boolean isActive(OcFunction function) {
+        String signalName = signalNames.get(function);
         if (signalName != null && signals.test(signalName)) {
             return true;
         } else {
