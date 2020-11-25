@@ -647,13 +647,11 @@ public class OrbitCamera
              * Configure perspective.
              */
             yDegrees = 30f;
-        } else {
-            yDegrees = MyCamera.yDegrees(camera);
+            float aspectRatio = MyCamera.viewAspectRatio(camera);
+            float near = camera.getFrustumNear();
+            float far = camera.getFrustumFar();
+            camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
         }
-        float aspectRatio = MyCamera.viewAspectRatio(camera);
-        float near = camera.getFrustumNear();
-        float far = camera.getFrustumFar();
-        camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
         /*
          * Configure the analog inputs.
          */
