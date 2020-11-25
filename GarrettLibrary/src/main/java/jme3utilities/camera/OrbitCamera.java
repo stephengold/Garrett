@@ -51,9 +51,9 @@ import jme3utilities.math.MyVector3f;
 import jme3utilities.ui.ActionAppState;
 
 /**
- * An ActionAppState to control a 4 degree-of-freedom Camera that chases and
+ * A VehicleCamera to control a 4 degree-of-freedom Camera that chases and
  * orbits a Target, jumping forward as needed to maintain a clear line of sight
- * in a CollisionSpace.
+ * in the target's CollisionSpace.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -91,7 +91,7 @@ public class OrbitCamera
     final private Camera camera;
     /**
      * maximum magnitude of the dot product between the camera's look direction
-     * and its preferred up direction (default=cos(0.3))
+     * and its preferred "up" direction (default=cos(0.3))
      */
     private double maxAbsDot = Math.cos(0.3);
     /**
@@ -146,7 +146,7 @@ public class OrbitCamera
      */
     private Target target = null;
     /**
-     * camera's preferred up direction (unit vector in world coordinates)
+     * camera's preferred "up" direction (unit vector in world coordinates)
      */
     final private Vector3f preferredUpDirection = new Vector3f(0f, 1f, 0f);
     /**
@@ -164,7 +164,7 @@ public class OrbitCamera
     // constructors
 
     /**
-     * Instantiate a disabled camera controller.
+     * Instantiate a disabled camera controller that chases and orbits a target.
      *
      * @param camera the Camera to control (not null, alias created)
      * @param obstructionFilter to determine which collision objects obstruct
@@ -368,7 +368,7 @@ public class OrbitCamera
         boolean cursorVisible = !isDragging();
         inputManager.setCursorVisible(cursorVisible);
         /*
-         * Sum the active input signals.
+         * Sum the active discrete inputs (signals).
          */
         int forwardSum = 0;
         int orbitUpSign = 0;
@@ -495,7 +495,7 @@ public class OrbitCamera
             range = preferredRange;
         }
         /*
-         * Attempt to avoid far-plane clipping.
+         * Limit the range to reduce the risk of far-plane clipping.
          */
         float maxRange = 0.5f * camera.getFrustumFar();
         if (range > maxRange) {
@@ -507,7 +507,7 @@ public class OrbitCamera
 
         if (!xrayVision) {
             /*
-             * Test the sightline for obstructions.
+             * Test the sightline for obstructions, from target to camera.
              */
             List<PhysicsRayTestResult> hits
                     = collisionSpace.rayTestRaw(tmpCenter, tmpLocation);
@@ -531,7 +531,8 @@ public class OrbitCamera
 
         camera.setLocation(tmpLocation);
         /*
-         * Apply focal zoom, if any.
+         * Apply focal zoom, if any:
+         * first the discrete signals and then the analog values.
          */
         if (zoomSignalDirection != 0) {
             float zoomFactor = FastMath.exp(zoomSignalDirection * tpf);
@@ -607,7 +608,7 @@ public class OrbitCamera
         assert isInitialized();
         assert isEnabled();
         /*
-         * Configure the InputManager.
+         * Configure the analog inputs.
          */
         inputManager.deleteMapping(analogOrbitCcw);
         inputManager.deleteMapping(analogOrbitCw);
@@ -616,14 +617,14 @@ public class OrbitCamera
         inputManager.deleteMapping(analogZoomIn);
         inputManager.deleteMapping(analogZoomOut);
         inputManager.removeListener(this);
+
         inputManager.setCursorVisible(true);
 
         super.setEnabled(false);
     }
 
     /**
-     * Enable this camera controller. Assumes this controller is initialized and
-     * disabled.
+     * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
         assert isInitialized();
@@ -633,13 +634,18 @@ public class OrbitCamera
         }
 
         camera.setName("orbit camera");
-
+        /*
+         * Initialize the preferred range.
+         */
         tmpLocation.set(camera.getLocation());
         target.target(tmpCenter);
         preferredRange = tmpLocation.distance(tmpCenter);
 
         float yDegrees;
         if (camera.isParallelProjection()) {
+            /*
+             * Configure perspective.
+             */
             yDegrees = 30f;
         } else {
             yDegrees = MyCamera.yDegrees(camera);
@@ -649,7 +655,7 @@ public class OrbitCamera
         float far = camera.getFrustumFar();
         camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
         /*
-         * Configure the InputManager.
+         * Configure the analog inputs.
          */
         inputManager.addMapping(analogOrbitCcw,
                 new MouseAxisTrigger(MouseInput.AXIS_X, false));
