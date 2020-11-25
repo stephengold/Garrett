@@ -146,6 +146,10 @@ public class OrbitCamera
      */
     private Target target = null;
     /**
+     * camera's offset relative to the target (in world coordinates)
+     */
+    final private static Vector3f offset = new Vector3f();
+    /**
      * camera's preferred "up" direction (unit vector in world coordinates)
      */
     final private Vector3f preferredUpDirection = new Vector3f(0f, 1f, 0f);
@@ -155,7 +159,6 @@ public class OrbitCamera
     final private static Vector3f tmpCameraLocation = new Vector3f();
     final private static Vector3f tmpLeft = new Vector3f();
     final private static Vector3f tmpLook = new Vector3f();
-    final private static Vector3f tmpOffset = new Vector3f();
     final private static Vector3f tmpProj = new Vector3f();
     final private static Vector3f tmpRej = new Vector3f();
     final private static Vector3f tmpTargetLocation = new Vector3f();
@@ -164,7 +167,7 @@ public class OrbitCamera
     // constructors
 
     /**
-     * Instantiate a disabled camera controller that chases and orbits a target.
+     * Instantiate a disabled camera controller that chases and orbits a Target.
      *
      * @param camera the Camera to control (not null, alias created)
      * @param obstructionFilter to determine which collision objects obstruct
@@ -420,38 +423,31 @@ public class OrbitCamera
             }
         }
         /*
-         * Calculate the camera's offset from the target.
+         * Apply the orbital inputs to the camera offset:
+         * first the discrete signals and then the analog values.
          */
-        tmpCameraLocation.set(camera.getLocation());
-        target.target(tmpTargetLocation);
-        tmpCameraLocation.subtract(tmpTargetLocation, tmpOffset);
-
-        float range = tmpOffset.length();
-        assert range > 0f : range;
-
+        float range = offset.length();
         if (orbitCwSign != 0 || orbitUpSign != 0) {
             float rootSumSquares = MyMath.hypotenuse(orbitCwSign, orbitUpSign);
             float dist = range * orbitRate * tpf / rootSumSquares;
 
             camera.getLeft(tmpLeft);
             assert tmpLeft.isUnitVector();
-            MyVector3f.accumulateScaled(tmpOffset, tmpLeft, orbitCwSign * dist);
+            MyVector3f.accumulateScaled(offset, tmpLeft, orbitCwSign * dist);
 
             camera.getUp(tmpUp);
             assert tmpUp.isUnitVector();
-            MyVector3f.accumulateScaled(tmpOffset, tmpUp, orbitUpSign * dist);
+            MyVector3f.accumulateScaled(offset, tmpUp, orbitUpSign * dist);
 
-            float factor = range / tmpOffset.length();
-            tmpOffset.multLocal(factor);
-            tmpTargetLocation.add(tmpOffset, tmpCameraLocation);
+            float factor = range / offset.length();
+            offset.multLocal(factor);
         }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
             float multiplier = camera.getHeight() * frustumYTangent / 1024f;
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
-            tmpRotation.mult(tmpOffset, tmpOffset);
-            tmpTargetLocation.add(tmpOffset, tmpCameraLocation);
+            tmpRotation.mult(offset, offset);
 
             pitchAnalogSum = 0f;
             yawAnalogSum = 0f;
@@ -459,7 +455,7 @@ public class OrbitCamera
         /*
          * Avoid looking too near the preferred "up" direction or its opposite.
          */
-        tmpOffset.mult(-1f, tmpLook);
+        offset.mult(-1f, tmpLook);
         tmpLook.normalizeLocal();
         double dot = MyVector3f.dot(tmpLook, preferredUpDirection);
         if (Math.abs(dot) > maxAbsDot) {
@@ -481,7 +477,6 @@ public class OrbitCamera
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
         boolean xrayVision = isActive(OcFunction.Xray);
-
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
             if (forwardSum > 0 || xrayVision) {
@@ -498,13 +493,14 @@ public class OrbitCamera
             range = maxRange;
         }
 
-        tmpLook.mult(-range, tmpOffset);
-        tmpTargetLocation.add(tmpOffset, tmpCameraLocation);
-
+        target.target(tmpTargetLocation);
         if (!xrayVision) {
             /*
              * Test the sightline for obstructions, from target to camera.
              */
+            float rayRange = Math.max(range, preferredRange);
+            tmpLook.mult(-rayRange, offset);
+            tmpTargetLocation.add(offset, tmpCameraLocation);
             List<PhysicsRayTestResult> hits = collisionSpace.rayTestRaw(
                     tmpTargetLocation, tmpCameraLocation);
 
@@ -521,10 +517,16 @@ public class OrbitCamera
                     }
                 }
             }
-            tmpOffset.multLocal(minFraction);
-            tmpTargetLocation.add(tmpOffset, tmpCameraLocation);
+            float obstructRange = rayRange * minFraction;
+            if (obstructRange < range) {
+                range = obstructRange;
+            }
         }
-
+        /*
+         * Calculate the new camera offset and apply it.
+         */
+        tmpLook.mult(-range, offset);
+        tmpTargetLocation.add(offset, tmpCameraLocation);
         camera.setLocation(tmpCameraLocation);
         /*
          * Apply focal zoom, if any:
@@ -632,11 +634,12 @@ public class OrbitCamera
 
         camera.setName("orbit camera");
         /*
-         * Initialize the preferred range.
+         * Initialize the camera offset and preferred range.
          */
         tmpCameraLocation.set(camera.getLocation());
         target.target(tmpTargetLocation);
-        preferredRange = tmpCameraLocation.distance(tmpTargetLocation);
+        tmpCameraLocation.subtract(tmpTargetLocation, offset);
+        preferredRange = offset.length();
 
         float yDegrees;
         if (camera.isParallelProjection()) {
