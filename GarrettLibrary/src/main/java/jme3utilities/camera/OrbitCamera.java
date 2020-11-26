@@ -233,6 +233,17 @@ public class OrbitCamera
     }
 
     /**
+     * Alter the offset.
+     *
+     * @param desiredOffset the desired offset from the target vehicle (in world
+     * coordintes)
+     */
+    public void setOffset(Vector3f desiredOffset) {
+        Validate.finite(desiredOffset, "offset");
+        offset.set(desiredOffset);
+    }
+
+    /**
      * Alter the orbital rate.
      *
      * @param rate the desired rate (in radians per second, &ge;0, default=0.5)
@@ -369,7 +380,7 @@ public class OrbitCamera
         boolean cursorVisible = !isActive(OcFunction.DragToOrbit);
         inputManager.setCursorVisible(cursorVisible);
         /*
-         * Sum the active discrete inputs (signals).
+         * Sum the discrete inputs (signals).
          */
         int forwardSum = 0;
         int orbitUpSign = 0;
@@ -472,6 +483,9 @@ public class OrbitCamera
                 tmpLook.set(tmpProj);
             }
         }
+        /*
+         * Apply the new "look" direction to the Camera.
+         */
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
@@ -522,7 +536,7 @@ public class OrbitCamera
             }
         }
         /*
-         * Calculate the new camera offset and apply it.
+         * Calculate the new camera offset and apply it to the Camera.
          */
         tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
