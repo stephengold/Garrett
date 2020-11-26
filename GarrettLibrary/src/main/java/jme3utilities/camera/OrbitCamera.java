@@ -100,10 +100,6 @@ public class OrbitCamera
     final private EnumMap<OcFunction, String> signalNames
             = new EnumMap<>(OcFunction.class);
     /**
-     * frustum's Y tangent ratio
-     */
-    private float frustumYTangent = 1f;
-    /**
      * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
      */
     private float maxYTangent = 2f;
@@ -205,6 +201,7 @@ public class OrbitCamera
     public void magnify(float factor) {
         Validate.positive(factor, "factor");
 
+        float frustumYTangent = MyCamera.yTangent(camera);
         frustumYTangent /= factor;
         frustumYTangent
                 = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
@@ -225,6 +222,7 @@ public class OrbitCamera
         Validate.positive(min, "min magnification");
         Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
 
+        float frustumYTangent = MyCamera.yTangent(camera);
         minYTangent = 1f / max;
         maxYTangent = 1f / min;
         frustumYTangent
@@ -443,6 +441,7 @@ public class OrbitCamera
             offset.multLocal(factor);
         }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
+            float frustumYTangent = MyCamera.yTangent(camera);
             float multiplier = camera.getHeight() * frustumYTangent / 1024f;
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
