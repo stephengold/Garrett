@@ -130,9 +130,9 @@ public class OrbitCamera
      */
     private float zoomAnalogSum = 0f;
     /**
-     * analog zoom input multiplier (in log units per click, default=0.5)
+     * analog zoom input multiplier (in log units per click)
      */
-    private float zoomMultiplier = 0.5f;
+    private float zoomMultiplier = 0.3f;
     /**
      * reusable Quaternion
      */
@@ -300,7 +300,7 @@ public class OrbitCamera
      * Alter the analog input multiplier for focal zoom.
      *
      * @param multiplier the desired multipler (in log units per click,
-     * default=0.2)
+     * default=0.3)
      */
     public void setZoomMultiplier(float multiplier) {
         zoomMultiplier = multiplier;
