@@ -81,14 +81,14 @@ public class OrbitCamera
     // fields
 
     /**
+     * Camera being controlled (not null)
+     */
+    final private Camera camera;
+    /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
      */
     final private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
-    /**
-     * Camera being controlled (not null)
-     */
-    final private Camera camera;
     /**
      * maximum magnitude of the dot product between the camera's look direction
      * and its preferred "up" direction (default=cos(0.3))
