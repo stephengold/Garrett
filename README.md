@@ -35,9 +35,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 
 ## How to build Garrett from source
 
- 1. Install build software:
-   + a Java Development Kit and
-   + [Gradle]
+ 1. Install a Java Development Kit (JDK), if you don't already have one.
  2. Download and extract the source code from GitHub:
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
