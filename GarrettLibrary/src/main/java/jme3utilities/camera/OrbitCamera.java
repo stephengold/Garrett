@@ -51,7 +51,7 @@ import jme3utilities.math.MyVector3f;
 import jme3utilities.ui.ActionAppState;
 
 /**
- * A VehicleCamera to control a 4 degree-of-freedom Camera that chases and
+ * A VehicleCamera to control a 4 degree-of-freedom Camera that tracks and
  * orbits a Target, jumping forward as needed to maintain a clear line of sight
  * in the target's CollisionSpace.
  *
