@@ -452,8 +452,7 @@ public class OrbitCamera
             offset.multLocal(factor);
         }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
-            float frustumYTangent = MyCamera.yTangent(camera);
-            float multiplier = camera.getHeight() * frustumYTangent / 1024f;
+            float multiplier = camera.getHeight() / 1024f;
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
