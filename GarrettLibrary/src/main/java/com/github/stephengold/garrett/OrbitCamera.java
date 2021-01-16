@@ -51,9 +51,10 @@ import jme3utilities.math.MyVector3f;
 import jme3utilities.ui.ActionAppState;
 
 /**
- * A VehicleCamera to control a 4 degree-of-freedom Camera that tracks and
- * orbits a Target, jumping forward as needed to maintain a clear line of sight
- * in the target's CollisionSpace.
+ * An AppState to control a 4 degree-of-freedom Camera that tracks and orbits a
+ * Target, jumping forward as needed to maintain a clear line of sight in the
+ * target's CollisionSpace. Two chasing behaviors are implemented: FreeOrbit and
+ * StrictChase.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -89,6 +90,10 @@ public class OrbitCamera
      * to treat all non-target PCOs as obstructions
      */
     final private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
+    /**
+     * configured target-chasing behavior (not null)
+     */
+    final private ChaseOption chaseOption;
     /**
      * maximum magnitude of the dot product between the camera's look direction
      * and its preferred "up" direction (default=cos(0.3))
@@ -163,19 +168,23 @@ public class OrbitCamera
     // constructors
 
     /**
-     * Instantiate a disabled camera controller that chases and orbits a Target.
+     * Instantiate a disabled camera controller that orbits (and optionally
+     * chases) the specified Target.
      *
      * @param camera the Camera to control (not null, alias created)
+     * @param chaseOption to configure chase behavior (not null)
      * @param obstructionFilter to determine which collision objects obstruct
      * the camera's view (alias created) or null to treat all non-target PCOs as
      * obstructions
      */
-    public OrbitCamera(Camera camera,
+    public OrbitCamera(Camera camera, ChaseOption chaseOption,
             BulletDebugAppState.DebugAppStateFilter obstructionFilter) {
         super(false);
         Validate.nonNull(camera, "camera");
+        Validate.nonNull(chaseOption, "chase option");
 
         this.camera = camera;
+        this.chaseOption = chaseOption;
         this.obstructionFilter = obstructionFilter;
         /*
          * Initialize some signal names.
@@ -192,6 +201,15 @@ public class OrbitCamera
     }
     // *************************************************************************
     // new methods exposed
+
+    /**
+     * Determine the configured ChaseOption.
+     *
+     * @return the enum value
+     */
+    public ChaseOption getChaseOption() {
+        return chaseOption;
+    }
 
     /**
      * Magnify the view by the specified factor.
@@ -461,6 +479,9 @@ public class OrbitCamera
             float factor = range / offset.length();
             offset.multLocal(factor);
         }
+        if (chaseOption == ChaseOption.StrictFollow) {
+            yawAnalogSum = 0f;
+        }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
             float multiplier = camera.getHeight() / 1024f;
             float pitchAngle = multiplier * pitchAnalogSum;
@@ -490,6 +511,21 @@ public class OrbitCamera
             } else {
                 MyVector3f.generateBasis(tmpLook, tmpProj, tmpRej);
                 tmpLook.set(tmpProj);
+            }
+        }
+        if (chaseOption == ChaseOption.StrictFollow) {
+            /*
+             * Rotate the "look" direction to stay directly behind the Target.
+             */
+            target.forwardDirection(tmpRej);
+            assert preferredUpDirection.equals(Vector3f.UNIT_Y) :
+                    preferredUpDirection;
+            float thetaForward = FastMath.atan2(tmpRej.x, tmpRej.z);
+            float thetaLook = FastMath.atan2(tmpLook.x, tmpLook.z);
+            float angle = thetaForward - thetaLook;
+            if (Float.isFinite(angle)) {
+                tmpRotation.fromAngles(0f, angle, 0f);
+                tmpRotation.mult(tmpLook, tmpLook);
             }
         }
         /*
@@ -609,8 +645,10 @@ public class OrbitCamera
         /*
          * Configure the analog inputs.
          */
-        inputManager.deleteMapping(analogOrbitCcw);
-        inputManager.deleteMapping(analogOrbitCw);
+        if (chaseOption == ChaseOption.FreeOrbit) {
+            inputManager.deleteMapping(analogOrbitCcw);
+            inputManager.deleteMapping(analogOrbitCw);
+        }
         inputManager.deleteMapping(analogOrbitDown);
         inputManager.deleteMapping(analogOrbitUp);
         inputManager.deleteMapping(analogZoomIn);
@@ -632,7 +670,11 @@ public class OrbitCamera
             throw new IllegalStateException("No target has been set.");
         }
 
-        camera.setName("orbit camera");
+        if (chaseOption == ChaseOption.FreeOrbit) {
+            camera.setName("orbit camera");
+        } else {
+            camera.setName("chase camera");
+        }
         /*
          * Initialize the camera offset and preferred range.
          */
@@ -655,10 +697,13 @@ public class OrbitCamera
         /*
          * Configure the analog inputs.
          */
-        inputManager.addMapping(analogOrbitCcw,
-                new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        inputManager.addMapping(analogOrbitCw,
-                new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        if (chaseOption == ChaseOption.FreeOrbit) {
+            inputManager.addMapping(analogOrbitCcw,
+                    new MouseAxisTrigger(MouseInput.AXIS_X, false));
+            inputManager.addMapping(analogOrbitCw,
+                    new MouseAxisTrigger(MouseInput.AXIS_X, true));
+            inputManager.addListener(this, analogOrbitCcw, analogOrbitCw);
+        }
         inputManager.addMapping(analogOrbitDown,
                 new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         inputManager.addMapping(analogOrbitUp,
@@ -668,8 +713,8 @@ public class OrbitCamera
         inputManager.addMapping(analogZoomOut,
                 new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
 
-        inputManager.addListener(this, analogOrbitCcw, analogOrbitCw,
-                analogOrbitDown, analogOrbitUp, analogZoomIn, analogZoomOut);
+        inputManager.addListener(this, analogOrbitDown, analogOrbitUp,
+                analogZoomIn, analogZoomOut);
 
         super.setEnabled(true);
     }
