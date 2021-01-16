@@ -25,7 +25,7 @@ Complete source code (in Java) is provided under
 
 ## Conventions
 
-Package names begin with `jme3utilities.`
+Classes are located in the `com.github.stephengold.garrett` package.
 
 Both the source code and the pre-built libraries are compatible with JDK 7.
 
