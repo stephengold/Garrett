@@ -21,7 +21,6 @@ sourcesJar { archiveBaseName = project.ext.baseName }
 dependencies {
     api 'org.jmonkeyengine:jme3-core:' + jmonkeyengineVersion
     api 'com.github.stephengold:Heart:' + heartVersion
-    api 'com.github.stephengold:jme3-utilities-ui:' + jme3utilitiesuiVersion
     api 'com.github.stephengold:Minie:' + minieVersion
 }
 

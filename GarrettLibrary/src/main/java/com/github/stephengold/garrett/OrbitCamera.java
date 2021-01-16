@@ -29,10 +29,13 @@
  */
 package com.github.stephengold.garrett;
 
+import com.jme3.app.Application;
+import com.jme3.app.state.BaseAppState;
 import com.jme3.bullet.CollisionSpace;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.PhysicsRayTestResult;
 import com.jme3.bullet.debug.BulletDebugAppState;
+import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseAxisTrigger;
@@ -45,21 +48,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.MyCamera;
+import jme3utilities.SignalTracker;
 import jme3utilities.Validate;
 import jme3utilities.math.MyMath;
 import jme3utilities.math.MyVector3f;
-import jme3utilities.ui.ActionAppState;
 
 /**
- * An AppState to control a 4 degree-of-freedom Camera that tracks and orbits a
- * Target, jumping forward as needed to maintain a clear line of sight in the
- * target's CollisionSpace. Two chasing behaviors are implemented: FreeOrbit and
- * StrictChase.
+ * An AppState to control a 4 degree-of-freedom Camera that orbits (and
+ * optionally chases) a Target, jumping forward as needed to maintain a clear
+ * line of sight in the target's CollisionSpace. Two chasing behaviors are
+ * implemented: FreeOrbit and StrictFollow.
  *
  * @author Stephen Gold sgold@sonic.net
  */
 public class OrbitCamera
-        extends ActionAppState
+        extends BaseAppState
         implements AnalogListener {
     // *************************************************************************
     // constants and loggers
@@ -143,13 +146,17 @@ public class OrbitCamera
      */
     final private static Quaternion tmpRotation = new Quaternion();
     /**
+     * status of named signals
+     */
+    final private SignalTracker signalTracker;
+    /**
      * what's being orbited, or null if none
      */
     private Target target = null;
     /**
      * camera's offset relative to the target (in world coordinates)
      */
-    final private static Vector3f offset = new Vector3f();
+    final private static Vector3f offset = new Vector3f(); // TODO static??
     /**
      * camera's preferred "up" direction (unit vector in world coordinates)
      */
@@ -168,22 +175,26 @@ public class OrbitCamera
     // constructors
 
     /**
-     * Instantiate a disabled camera controller that orbits (and optionally
-     * chases) the specified Target.
+     * Instantiate a disabled AppState that will cause the specified Camera to
+     * orbit (and optionally chase) the specified Target.
      *
      * @param camera the Camera to control (not null, alias created)
+     * @param tracker the status tracker for named signals (not null, alias
+     * created)
      * @param chaseOption to configure chase behavior (not null)
      * @param obstructionFilter to determine which collision objects obstruct
      * the camera's view (alias created) or null to treat all non-target PCOs as
      * obstructions
      */
-    public OrbitCamera(Camera camera, ChaseOption chaseOption,
+    public OrbitCamera(Camera camera, SignalTracker tracker,
+            ChaseOption chaseOption,
             BulletDebugAppState.DebugAppStateFilter obstructionFilter) {
-        super(false);
+        super();
         Validate.nonNull(camera, "camera");
         Validate.nonNull(chaseOption, "chase option");
 
         this.camera = camera;
+        this.signalTracker = tracker;
         this.chaseOption = chaseOption;
         this.obstructionFilter = obstructionFilter;
         /*
@@ -197,7 +208,7 @@ public class OrbitCamera
         signalNames.put(CameraSignal.OrbitDown, "FLYCAM_Lower");
         signalNames.put(CameraSignal.OrbitUp, "FLYCAM_Rise");
 
-        assert !isEnabled();
+        setEnabled(false);
     }
     // *************************************************************************
     // new methods exposed
@@ -345,37 +356,46 @@ public class OrbitCamera
         zoomMultiplier = multiplier;
     }
     // *************************************************************************
-    // ActionAppState methods
+    // BaseAppState methods
 
     /**
-     * Clean up this state during the first update after it gets detached.
-     * Should be invoked only by a subclass or by the AppStateManager.
+     * Callback invoked after this AppState is detached or during application
+     * shutdown if the state is still attached. onDisable() is called before
+     * this cleanup() method if the state is enabled at the time of cleanup.
+     *
+     * @param application the application instance (not null)
      */
     @Override
-    public void cleanup() {
-        if (isEnabled()) {
-            disable();
-        }
-
-        super.cleanup();
+    protected void cleanup(Application application) {
+        // do nothing
     }
 
     /**
-     * Enable or disable the functionality of this state.
+     * Callback invoked after this AppState is attached but before onEnable().
      *
-     * @param newSetting true &rarr; enable, false &rarr; disable
+     * @param application the application instance (not null)
      */
     @Override
-    final public void setEnabled(boolean newSetting) {
-        if (!isInitialized()) {
-            throw new RuntimeException();
-        }
+    protected void initialize(Application application) {
+        // do nothing
+    }
 
-        if (newSetting && !isEnabled()) {
-            enable();
-        } else if (!newSetting && isEnabled()) {
-            disable();
-        }
+    /**
+     * Callback invoked whenever this AppState ceases to be both attached and
+     * enabled.
+     */
+    @Override
+    protected void onDisable() {
+        disable();
+    }
+
+    /**
+     * Callback invoked whenever this AppState becomes both attached and
+     * enabled.
+     */
+    @Override
+    protected void onEnable() {
+        enable();
     }
 
     /**
@@ -405,6 +425,7 @@ public class OrbitCamera
         /*
          * Hide the cursor if dragging.
          */
+        InputManager inputManager = getApplication().getInputManager();
         boolean cursorVisible = !isActive(CameraSignal.DragToOrbit);
         inputManager.setCursorVisible(cursorVisible);
         /*
@@ -579,7 +600,7 @@ public class OrbitCamera
         }
     }
     // *************************************************************************
-    // AnalogListener methods
+    // AnalogListener methods - TODO re-order methods
 
     /**
      * Callback to receive an analog input event.
@@ -637,14 +658,13 @@ public class OrbitCamera
     // private methods
 
     /**
-     * Disable this camera controller. Assumes it is initialized and enabled.
+     * Disable this camera controller.
      */
     private void disable() {
-        assert isInitialized();
-        assert isEnabled();
         /*
          * Configure the analog inputs.
          */
+        InputManager inputManager = getApplication().getInputManager();
         if (chaseOption == ChaseOption.FreeOrbit) {
             inputManager.deleteMapping(analogOrbitCcw);
             inputManager.deleteMapping(analogOrbitCw);
@@ -656,16 +676,12 @@ public class OrbitCamera
         inputManager.removeListener(this);
 
         inputManager.setCursorVisible(true);
-
-        super.setEnabled(false);
     }
 
     /**
-     * Enable this camera controller. Assumes it is initialized and disabled.
+     * Enable this camera controller.
      */
     private void enable() {
-        assert isInitialized();
-        assert !isEnabled();
         if (target == null) {
             throw new IllegalStateException("No target has been set.");
         }
@@ -697,6 +713,7 @@ public class OrbitCamera
         /*
          * Configure the analog inputs.
          */
+        InputManager inputManager = getApplication().getInputManager();
         if (chaseOption == ChaseOption.FreeOrbit) {
             inputManager.addMapping(analogOrbitCcw,
                     new MouseAxisTrigger(MouseInput.AXIS_X, false));
@@ -715,8 +732,6 @@ public class OrbitCamera
 
         inputManager.addListener(this, analogOrbitDown, analogOrbitUp,
                 analogZoomIn, analogZoomOut);
-
-        super.setEnabled(true);
     }
 
     /**
@@ -724,7 +739,7 @@ public class OrbitCamera
      */
     private boolean isActive(CameraSignal function) {
         String signalName = signalNames.get(function);
-        if (signalName != null && signals.test(signalName)) {
+        if (signalName != null && signalTracker.test(signalName)) {
             return true;
         } else {
             return false;
