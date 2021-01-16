@@ -53,5 +53,5 @@ public enum ChaseOption {
      *
      * If the target moves, maintain a constant distance and elevation from it.
      */
-    StrictChase;
+    StrictFollow;
 }
