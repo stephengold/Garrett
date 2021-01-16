@@ -356,6 +356,61 @@ public class OrbitCamera
         zoomMultiplier = multiplier;
     }
     // *************************************************************************
+    // AnalogListener methods
+
+    /**
+     * Callback to receive an analog input event.
+     *
+     * @param eventName the name of the input event (not null, not empty)
+     * @param reading the input reading (&ge;0)
+     * @param tpf the time interval between frames (in seconds, &ge;0)
+     */
+    @Override
+    public void onAnalog(String eventName, float reading, float tpf) {
+        Validate.nonEmpty(eventName, "event name");
+        Validate.nonNegative(reading, "reading");
+        Validate.nonNegative(tpf, "time per frame");
+        assert isEnabled();
+
+        boolean isDragToOrbit = isActive(CameraSignal.DragToOrbit);
+        switch (eventName) {
+            case analogOrbitCcw:
+                if (isDragToOrbit) {
+                    yawAnalogSum += reading;
+                }
+                break;
+
+            case analogOrbitCw:
+                if (isDragToOrbit) {
+                    yawAnalogSum -= reading;
+                }
+                break;
+
+            case analogOrbitDown:
+                if (isDragToOrbit) {
+                    pitchAnalogSum += reading;
+                }
+                break;
+
+            case analogOrbitUp:
+                if (isDragToOrbit) {
+                    pitchAnalogSum -= reading;
+                }
+                break;
+
+            case analogZoomIn:
+                zoomAnalogSum += reading;
+                break;
+
+            case analogZoomOut:
+                zoomAnalogSum -= reading;
+                break;
+
+            default:
+                throw new IllegalArgumentException(eventName);
+        }
+    }
+    // *************************************************************************
     // BaseAppState methods
 
     /**
@@ -599,61 +654,6 @@ public class OrbitCamera
             float zoomFactor = FastMath.exp(zoomMultiplier * zoomAnalogSum);
             magnify(zoomFactor);
             zoomAnalogSum = 0f;
-        }
-    }
-    // *************************************************************************
-    // AnalogListener methods - TODO re-order methods
-
-    /**
-     * Callback to receive an analog input event.
-     *
-     * @param eventName the name of the input event (not null, not empty)
-     * @param reading the input reading (&ge;0)
-     * @param tpf the time interval between frames (in seconds, &ge;0)
-     */
-    @Override
-    public void onAnalog(String eventName, float reading, float tpf) {
-        Validate.nonEmpty(eventName, "event name");
-        Validate.nonNegative(reading, "reading");
-        Validate.nonNegative(tpf, "time per frame");
-        assert isEnabled();
-
-        boolean isDragToOrbit = isActive(CameraSignal.DragToOrbit);
-        switch (eventName) {
-            case analogOrbitCcw:
-                if (isDragToOrbit) {
-                    yawAnalogSum += reading;
-                }
-                break;
-
-            case analogOrbitCw:
-                if (isDragToOrbit) {
-                    yawAnalogSum -= reading;
-                }
-                break;
-
-            case analogOrbitDown:
-                if (isDragToOrbit) {
-                    pitchAnalogSum += reading;
-                }
-                break;
-
-            case analogOrbitUp:
-                if (isDragToOrbit) {
-                    pitchAnalogSum -= reading;
-                }
-                break;
-
-            case analogZoomIn:
-                zoomAnalogSum += reading;
-                break;
-
-            case analogZoomOut:
-                zoomAnalogSum -= reading;
-                break;
-
-            default:
-                throw new IllegalArgumentException(eventName);
         }
     }
     // *************************************************************************
