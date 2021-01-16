@@ -386,7 +386,9 @@ public class OrbitCamera
      */
     @Override
     protected void onDisable() {
-        disable();
+        if (isEnabled()) {
+            disable();
+        }
     }
 
     /**
