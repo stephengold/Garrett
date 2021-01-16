@@ -235,8 +235,8 @@ public class OrbitCamera
     /**
      * Alter the offset.
      *
-     * @param desiredOffset the desired offset from the target vehicle (in world
-     * coordintes)
+     * @param desiredOffset the desired offset from the target (in world
+     * coordinates)
      */
     public void setOffset(Vector3f desiredOffset) {
         Validate.finite(desiredOffset, "offset");
@@ -264,6 +264,16 @@ public class OrbitCamera
     public void setPoleExclusionAngle(float minAngle) {
         Validate.inRange(minAngle, "minimum angle", 0f, FastMath.HALF_PI);
         maxAbsDot = Math.cos(minAngle);
+    }
+
+    /**
+     * Alter the preferred range.
+     *
+     * @param range the desired distance (in world units, &gt;0)
+     */
+    public void setPreferredRange(float range) {
+        Validate.positive(range, "range");
+        this.preferredRange = range;
     }
 
     /**
