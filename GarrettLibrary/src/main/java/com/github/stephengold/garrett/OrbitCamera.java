@@ -508,31 +508,9 @@ public class OrbitCamera
         target.target(tmpTargetLocation);
         if (!xrayVision) {
             /*
-             * Test the sightline for obstructions, from target to camera.
+             * Test the sightline for obstructions.
              */
-            float rayRange = Math.max(range, preferredRange);
-            tmpLook.mult(-rayRange, offset);
-            tmpTargetLocation.add(offset, tmpCameraLocation);
-            List<PhysicsRayTestResult> hits = collisionSpace.rayTestRaw(
-                    tmpTargetLocation, tmpCameraLocation);
-
-            float minFraction = 1f;
-            for (PhysicsRayTestResult hit : hits) {
-                PhysicsCollisionObject pco = hit.getCollisionObject();
-                boolean isObstruction = (pco != targetPco)
-                        && (obstructionFilter == null
-                        || obstructionFilter.displayObject(pco));
-                if (isObstruction) {
-                    float hitFraction = hit.getHitFraction();
-                    if (hitFraction < minFraction) {
-                        minFraction = hitFraction;
-                    }
-                }
-            }
-            float obstructRange = rayRange * minFraction;
-            if (obstructRange < range) {
-                range = obstructRange;
-            }
+            range = testSightline(range, targetPco);
         }
         /*
          * Calculate the new camera offset and apply it to the Camera.
@@ -696,5 +674,49 @@ public class OrbitCamera
         } else {
             return false;
         }
+    }
+
+    /**
+     * Test the sightline for obstructions, from the target to the camera, using
+     * the obstructionFilter (if any). May modify the "offset" and
+     * "tmpCameraLocation" fields.
+     *
+     * @param range the distance between the target and the camera (in world
+     * units, &ge;0)
+     * @param targetPco the collision object of the target (not null)
+     * @return a modified distance (in world units, &ge;0)
+     */
+    private float testSightline(float range, PhysicsCollisionObject targetPco) {
+        CollisionSpace collisionSpace = targetPco.getCollisionSpace();
+        if (collisionSpace == null) {
+            return range;
+        }
+
+        float rayRange = Math.max(range, preferredRange);
+        tmpLook.mult(-rayRange, offset);
+        tmpTargetLocation.add(offset, tmpCameraLocation);
+        List<PhysicsRayTestResult> hits = collisionSpace.rayTestRaw(
+                tmpTargetLocation, tmpCameraLocation);
+
+        float minFraction = 1f;
+        for (PhysicsRayTestResult hit : hits) {
+            PhysicsCollisionObject pco = hit.getCollisionObject();
+            boolean isObstruction = (pco != targetPco)
+                    && (obstructionFilter == null
+                    || obstructionFilter.displayObject(pco));
+            if (isObstruction) {
+                float hitFraction = hit.getHitFraction();
+                if (hitFraction < minFraction) {
+                    minFraction = hitFraction;
+                }
+            }
+        }
+
+        float obstructRange = rayRange * minFraction;
+        if (obstructRange < range) {
+            range = obstructRange;
+        }
+
+        return range;
     }
 }
