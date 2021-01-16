@@ -30,7 +30,7 @@
 package com.github.stephengold.garrett;
 
 /**
- * Enumerate the chase options for OrbitCamera.
+ * Enumerate chase-behavior options for OrbitCamera.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -39,7 +39,7 @@ public enum ChaseOption {
     // values
 
     /**
-     * Ignore the direction the target vehicle is facing.
+     * Ignore the target's forward direction.
      *
      * Freely orbit the target, including left/right, based on user input.
      *
@@ -47,7 +47,7 @@ public enum ChaseOption {
      */
     FreeOrbit,
     /**
-     * Stay directly behind the target vehicle.
+     * Stay directly behind the target.
      *
      * Orbit the target based on user input, but only up/down.
      *
