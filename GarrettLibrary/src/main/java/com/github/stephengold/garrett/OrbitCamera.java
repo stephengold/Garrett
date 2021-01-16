@@ -102,8 +102,8 @@ public class OrbitCamera
     /**
      * map functions to signal names
      */
-    final private EnumMap<OcFunction, String> signalNames
-            = new EnumMap<>(OcFunction.class);
+    final private EnumMap<CameraSignal, String> signalNames
+            = new EnumMap<>(CameraSignal.class);
     /**
      * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
      */
@@ -189,13 +189,13 @@ public class OrbitCamera
         /*
          * Initialize some signal names.
          */
-        signalNames.put(OcFunction.Back, "FLYCAM_Backward");
-        signalNames.put(OcFunction.DragToOrbit, "cameraDrag");
-        signalNames.put(OcFunction.Forward, "FLYCAM_Forward");
-        signalNames.put(OcFunction.OrbitCcw, "FLYCAM_StrafeRight");
-        signalNames.put(OcFunction.OrbitCw, "FLYCAM_StrafeLeft");
-        signalNames.put(OcFunction.OrbitDown, "FLYCAM_Lower");
-        signalNames.put(OcFunction.OrbitUp, "FLYCAM_Rise");
+        signalNames.put(CameraSignal.Back, "FLYCAM_Backward");
+        signalNames.put(CameraSignal.DragToOrbit, "cameraDrag");
+        signalNames.put(CameraSignal.Forward, "FLYCAM_Forward");
+        signalNames.put(CameraSignal.OrbitCcw, "FLYCAM_StrafeRight");
+        signalNames.put(CameraSignal.OrbitCw, "FLYCAM_StrafeLeft");
+        signalNames.put(CameraSignal.OrbitDown, "FLYCAM_Lower");
+        signalNames.put(CameraSignal.OrbitUp, "FLYCAM_Rise");
 
         assert !isEnabled();
     }
@@ -312,7 +312,7 @@ public class OrbitCamera
      * @param function which function to alter (not null)
      * @param signalName the desired signal name (may be null)
      */
-    public void setSignalName(OcFunction function, String signalName) {
+    public void setSignalName(CameraSignal function, String signalName) {
         Validate.nonNull(function, "function");
         signalNames.put(function, signalName);
     }
@@ -405,7 +405,7 @@ public class OrbitCamera
         /*
          * Hide the cursor if dragging.
          */
-        boolean cursorVisible = !isActive(OcFunction.DragToOrbit);
+        boolean cursorVisible = !isActive(CameraSignal.DragToOrbit);
         inputManager.setCursorVisible(cursorVisible);
         /*
          * Sum the discrete inputs (signals).
@@ -414,7 +414,7 @@ public class OrbitCamera
         int orbitUpSign = 0;
         int orbitCwSign = 0;
         int zoomSignalDirection = 0;
-        for (OcFunction function : OcFunction.values()) {
+        for (CameraSignal function : CameraSignal.values()) {
             if (isActive(function)) {
                 switch (function) {
                     case Back:
@@ -534,7 +534,7 @@ public class OrbitCamera
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
-        boolean xrayVision = isActive(OcFunction.Xray);
+        boolean xrayVision = isActive(CameraSignal.Xray);
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
             if (forwardSum > 0 || xrayVision) {
@@ -595,7 +595,7 @@ public class OrbitCamera
         Validate.nonNegative(tpf, "time per frame");
         assert isEnabled();
 
-        boolean isDragToOrbit = isActive(OcFunction.DragToOrbit);
+        boolean isDragToOrbit = isActive(CameraSignal.DragToOrbit);
         switch (eventName) {
             case analogOrbitCcw:
                 if (isDragToOrbit) {
@@ -722,7 +722,7 @@ public class OrbitCamera
     /**
      * Test whether the specified camera function (signal) is active.
      */
-    private boolean isActive(OcFunction function) {
+    private boolean isActive(CameraSignal function) {
         String signalName = signalNames.get(function);
         if (signalName != null && signals.test(signalName)) {
             return true;

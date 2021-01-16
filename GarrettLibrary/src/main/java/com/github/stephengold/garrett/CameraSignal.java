@@ -34,7 +34,7 @@ package com.github.stephengold.garrett;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-public enum OcFunction {
+public enum CameraSignal {
     // *************************************************************************
     // values
 
