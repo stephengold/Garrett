@@ -189,17 +189,6 @@ public class OrbitCamera
 
         this.camera = camera;
         this.signalTracker = tracker;
-        /*
-         * Initialize some signal names.
-         */
-        signalNames.put(CameraSignal.Back, "FLYCAM_Backward");
-        signalNames.put(CameraSignal.DragToOrbit, "cameraDrag");
-        signalNames.put(CameraSignal.Forward, "FLYCAM_Forward");
-        signalNames.put(CameraSignal.OrbitCcw, "FLYCAM_StrafeRight");
-        signalNames.put(CameraSignal.OrbitCw, "FLYCAM_StrafeLeft");
-        signalNames.put(CameraSignal.OrbitDown, "FLYCAM_Lower");
-        signalNames.put(CameraSignal.OrbitUp, "FLYCAM_Rise");
-
         super.setEnabled(false);
     }
     // *************************************************************************
