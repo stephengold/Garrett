@@ -92,11 +92,11 @@ public class OrbitCamera
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
      */
-    final private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
+    private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
     /**
      * configured target-chasing behavior (not null)
      */
-    final private ChaseOption chaseOption;
+    private ChaseOption chaseOption = ChaseOption.FreeOrbit;
     /**
      * maximum magnitude of the dot product between the camera's look direction
      * and its preferred "up" direction (default=cos(0.3))
@@ -181,22 +181,14 @@ public class OrbitCamera
      * @param camera the Camera to control (not null, alias created)
      * @param tracker the status tracker for named signals (not null, alias
      * created)
-     * @param chaseOption to configure chase behavior (not null)
-     * @param obstructionFilter to determine which collision objects obstruct
-     * the camera's view (alias created) or null to treat all non-target PCOs as
-     * obstructions
      */
-    public OrbitCamera(Camera camera, SignalTracker tracker,
-            ChaseOption chaseOption,
-            BulletDebugAppState.DebugAppStateFilter obstructionFilter) {
+    public OrbitCamera(Camera camera, SignalTracker tracker) {
         super();
         Validate.nonNull(camera, "camera");
-        Validate.nonNull(chaseOption, "chase option");
+        Validate.nonNull(tracker, "tracker");
 
         this.camera = camera;
         this.signalTracker = tracker;
-        this.chaseOption = chaseOption;
-        this.obstructionFilter = obstructionFilter;
         /*
          * Initialize some signal names.
          */
@@ -208,7 +200,7 @@ public class OrbitCamera
         signalNames.put(CameraSignal.OrbitDown, "FLYCAM_Lower");
         signalNames.put(CameraSignal.OrbitUp, "FLYCAM_Rise");
 
-        setEnabled(false);
+        super.setEnabled(false);
     }
     // *************************************************************************
     // new methods exposed
@@ -240,6 +232,16 @@ public class OrbitCamera
     }
 
     /**
+     * Alter the ChaseOption.
+     *
+     * @param desiredOption the desired enum value (not null)
+     */
+    public void setChaseOption(ChaseOption desiredOption) {
+        Validate.nonNull(desiredOption, "desired option");
+        this.chaseOption = desiredOption;
+    }
+
+    /**
      * Alter the range of the camera's focal zoom.
      *
      * @param max the desired maximum magnification (&gt;min, 1&rarr;45deg
@@ -259,6 +261,18 @@ public class OrbitCamera
         if (isInitialized() && isEnabled()) {
             MyCamera.setYTangent(camera, frustumYTangent);
         }
+    }
+
+    /**
+     * Alter the obstruction filter.
+     *
+     * @param filter the desired filter to determine which collision objects
+     * obstruct the camera's view (alias created) or null to treat all
+     * non-target PCOs as obstructions
+     */
+    public void setObstructionFilter(
+            BulletDebugAppState.DebugAppStateFilter filter) {
+        this.obstructionFilter = filter;
     }
 
     /**
@@ -441,9 +455,7 @@ public class OrbitCamera
      */
     @Override
     protected void onDisable() {
-        if (isEnabled()) {
-            disable();
-        }
+        disable();
     }
 
     /**
