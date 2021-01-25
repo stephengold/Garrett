@@ -156,7 +156,7 @@ public class OrbitCamera
     /**
      * camera's offset relative to the Target (in world coordinates)
      */
-    final private static Vector3f offset = new Vector3f(); // TODO static??
+    final private Vector3f offset = new Vector3f();
     /**
      * camera's preferred "up" direction (unit vector in world coordinates)
      */
