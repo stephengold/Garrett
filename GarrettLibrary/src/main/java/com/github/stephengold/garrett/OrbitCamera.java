@@ -321,6 +321,18 @@ public class OrbitCamera
     }
 
     /**
+     * Alter the offset and preferred range to reflect the current locations of
+     * the Camera and the Target.
+     */
+    public void setRangeAndOffset() {
+        tmpCameraLocation.set(camera.getLocation());
+        target.target(tmpTargetLocation);
+        tmpCameraLocation.subtract(tmpTargetLocation, offset);
+
+        preferredRange = offset.length();
+    }
+
+    /**
      * Alter which signal is assigned to the specified function.
      *
      * @param function which function to alter (not null)
@@ -697,10 +709,7 @@ public class OrbitCamera
         /*
          * Initialize the camera offset and preferred range.
          */
-        tmpCameraLocation.set(camera.getLocation());
-        target.target(tmpTargetLocation);
-        tmpCameraLocation.subtract(tmpTargetLocation, offset);
-        preferredRange = offset.length();
+        setRangeAndOffset();
 
         float yDegrees;
         if (camera.isParallelProjection()) {
