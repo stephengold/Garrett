@@ -326,7 +326,7 @@ public class OrbitCamera
      */
     public void setRangeAndOffset() {
         tmpCameraLocation.set(camera.getLocation());
-        target.target(tmpTargetLocation);
+        target.locateTarget(tmpTargetLocation);
         tmpCameraLocation.subtract(tmpTargetLocation, offset);
 
         preferredRange = offset.length();
@@ -356,7 +356,7 @@ public class OrbitCamera
             logger.log(Level.INFO, "{0} is the new target.", target);
 
             tmpCameraLocation.set(camera.getLocation());
-            target.target(tmpTargetLocation);
+            target.locateTarget(tmpTargetLocation);
             preferredRange = tmpCameraLocation.distance(tmpTargetLocation);
         }
     }
@@ -642,7 +642,7 @@ public class OrbitCamera
             range = maxRange;
         }
 
-        target.target(tmpTargetLocation);
+        target.locateTarget(tmpTargetLocation);
         if (!xrayVision) {
             /*
              * Test the sightline for obstructions.

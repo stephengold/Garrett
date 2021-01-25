@@ -33,8 +33,8 @@ import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.math.Vector3f;
 
 /**
- * An interface to determine the location and forward direction of a camera
- * target that's part of a collision object.
+ * Determine the location and forward direction of a camera target that's part
+ * of a collision object.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -61,5 +61,5 @@ public interface Target {
      * @param storeResult storage for the result (modified if not null)
      * @return the world location vector (either storeResult or a new instance)
      */
-    Vector3f target(Vector3f storeResult);
+    Vector3f locateTarget(Vector3f storeResult);
 }
