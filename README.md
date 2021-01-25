@@ -35,11 +35,19 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 
 ## How to build Garrett from source
 
- 1. Install a Java Development Kit (JDK), if you don't already have one.
- 2. Download and extract the source code from GitHub:
+ 1. Install a [Java Development Kit (JDK)][openJDK],
+    if you don't already have one.
+ 2. Download and extract the Garrett source code from GitHub:
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
      + `cd Garrett`
+     + `git checkout -b latest 0.1.0`
+   + using a web browser:
+     + browse to https://github.com/stephengold/Garrett/releases/latest
+     + follow the "Source code (zip)" link
+     + save the ZIP file
+     + extract the contents of the saved ZIP file
+     + `cd` to the extracted directory/folder
  3. Set the `JAVA_HOME` environment variable:
    + using Bash:  `export JAVA_HOME="` *path to your JDK* `"`
    + using Windows Command Prompt:  `set JAVA_HOME="` *path to your JDK* `"`
@@ -63,12 +71,13 @@ You can install the Maven artifacts to your local cache:
 [git]: https://git-scm.com "Git"
 [github]: https://github.com "GitHub"
 [gradle]: https://gradle.org "Gradle Project"
-[jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
+[jme]: http://jmonkeyengine.org  "jMonkeyEngine Project"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
 [minie]: https://github.com/stephengold/Minie "Minie Project"
 [mint]: https://linuxmint.com "Linux Mint Project"
 [netbeans]: https://netbeans.org "NetBeans Project"
+[openJDK]: https://openjdk.java.net "OpenJDK Project"
 [utilities]: https://github.com/stephengold/jme3-utilities "Jme3-utilities Project"
 
 <a name="acks"/>
