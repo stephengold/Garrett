@@ -125,7 +125,7 @@ public class OrbitCamera
      */
     private float pitchAnalogSum = 0f;
     /**
-     * distance from the target if the camera had X-ray vision
+     * distance from the Target if the Camera had X-ray vision
      */
     private float preferredRange = 10f;
     /**
@@ -154,7 +154,7 @@ public class OrbitCamera
      */
     private Target target = null;
     /**
-     * camera's offset relative to the target (in world coordinates)
+     * camera's offset relative to the Target (in world coordinates)
      */
     final private static Vector3f offset = new Vector3f(); // TODO static??
     /**
@@ -176,7 +176,7 @@ public class OrbitCamera
 
     /**
      * Instantiate a disabled AppState that will cause the specified Camera to
-     * orbit (and optionally chase) the specified Target.
+     * orbit (and optionally chase) a Target.
      *
      * @param camera the Camera to control (not null, alias created)
      * @param tracker the status tracker for named signals (not null, alias
@@ -276,9 +276,9 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the offset.
+     * Alter the offset of the Camera from the Target.
      *
-     * @param desiredOffset the desired offset from the target (in world
+     * @param desiredOffset the desired offset from the Target (in world
      * coordinates)
      */
     public void setOffset(Vector3f desiredOffset) {
@@ -297,7 +297,7 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the size of the pole-exclusion cone, which keeps the camera from
+     * Alter the size of the pole-exclusion cone, which keeps the Camera from
      * looking too near the preferred "up" direction or its opposite.
      *
      * @param minAngle the minimum angle between the camera axis and the
@@ -345,7 +345,7 @@ public class OrbitCamera
     /**
      * Alter which Target is being orbited.
      *
-     * @param target the desired target (not null, alias created)
+     * @param target the desired Target (not null, alias created)
      */
     public void setTarget(Target target) {
         Validate.nonNull(target, "target");
@@ -761,13 +761,13 @@ public class OrbitCamera
     }
 
     /**
-     * Test the sightline for obstructions, from the target to the camera, using
+     * Test the sightline for obstructions, from the Target to the Camera, using
      * the obstructionFilter (if any). May modify the "offset" and
      * "tmpCameraLocation" fields.
      *
-     * @param range the distance between the target and the camera (in world
+     * @param range the distance between the Target and the Camera (in world
      * units, &ge;0)
-     * @param targetPco the collision object of the target (not null)
+     * @param targetPco the collision object of the Target (not null)
      * @return a modified distance (in world units, &ge;0)
      */
     private float testSightline(float range, PhysicsCollisionObject targetPco) {
