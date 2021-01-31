@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.1.1 released on TBD
+## Version 0.1.1 released on 30 January 2021
 
 + Don't "lock in" a particular Minie build, so developers can use the "big3"
   build if they wish.
