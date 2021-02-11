@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.1.2 released on TBD
+## Version 0.1.2 released on 11 February 2021
 
 + Published to MavenCentral instead of JCenter.
 + Upgraded the Heart library to v6.4.2 and the Minie library to v4.0.0
