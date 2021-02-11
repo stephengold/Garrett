@@ -7,11 +7,11 @@ plugins {
     id 'maven-publish'
 }
 
-description = 'the Garrett library for jMonkeyEngine'
+description = 'a camera-controller library for jMonkeyEngine'
 ext {
     artifact = 'Garrett'
     version = garrettVersion
-    baseName = "${artifact}-${version}" // for POM and class JAR
+    baseName = "${artifact}-${version}"
 }
 
 jar { archiveBaseName = project.ext.baseName }
@@ -29,7 +29,7 @@ task('pom', type: Copy) {
     dependsOn 'generatePomFileForMavenPublication'
     from "${buildDir}/publications/maven/pom-default.xml"
     into "${buildDir}/libs"
-    rename '.*', baseName + '.pom'
+    rename 'pom-default.xml', baseName + '.pom'
 }
 
 publishToMavenLocal.doLast {
@@ -42,6 +42,13 @@ publishing {
             artifactId artifact
             from components.java
             pom {
+                description = project.description
+                developers {
+                    developer {
+                        email = 'sgold@sonic.net'
+                        name = 'Stephen Gold'
+                    }
+                }
                 licenses {
                     license {
                         distribution = 'repo'
@@ -49,6 +56,13 @@ publishing {
                         url = 'https://opensource.org/licenses/BSD-3-Clause'
                     }
                 }
+                name = 'com.github.stephengold:' + artifact
+                scm {
+                    connection = 'scm:git:git://github.com/stephengold/Garrett.git'
+                    developerConnection = 'scm:git:ssh://github.com:stephengold/Garrett.git'
+                    url = 'https://github.com/stephengold/Garrett/tree/master'
+                }
+                url = 'https://github.com/stephengold/Garrett'
             }
             version project.ext.version
         }
