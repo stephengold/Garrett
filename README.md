@@ -41,7 +41,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
      + `cd Garrett`
-     + `git checkout -b latest 0.1.2`
+     + `git checkout -b latest 0.1.3`
    + using a web browser:
      + browse to https://github.com/stephengold/Garrett/releases/latest
      + follow the "Source code (zip)" link
