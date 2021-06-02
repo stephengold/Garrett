@@ -11,3 +11,6 @@ subprojects {
 task('publishToMavenLocal') {
     dependsOn ':GarrettLibrary:publishToMavenLocal'
 }
+task('release') {
+    dependsOn ':GarrettLibrary:publishMavenPublicationToOSSRHRepository'
+}
