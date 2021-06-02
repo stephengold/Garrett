@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.1.3 released on TBD
+## Version 0.1.3 released on 2 June 2021
 
 + Upgraded JMonkeyEngine to v3.4.0-stable.
 + Upgraded the Heart library to v6.4.4 and the Minie library to v4.1.1
