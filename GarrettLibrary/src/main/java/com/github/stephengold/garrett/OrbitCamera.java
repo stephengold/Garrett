@@ -204,6 +204,24 @@ public class OrbitCamera
     }
 
     /**
+     * Access the obstruction filter.
+     *
+     * @return the pre-existing instance, or null if none
+     */
+    public BulletDebugAppState.DebugAppStateFilter getObstructionFilter() {
+        return obstructionFilter;
+    }
+
+    /**
+     * Access the Target being orbited.
+     *
+     * @return the pre-existing instance, or null if none
+     */
+    public Target getTarget() {
+        return target;
+    }
+
+    /**
      * Magnify the view by the specified factor.
      *
      * @param factor the factor to increase magnification (&gt;0)
