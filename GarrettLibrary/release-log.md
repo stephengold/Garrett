@@ -1,8 +1,8 @@
 # release log for the Garrett Library
 
-## Version 0.1.4 released on TBD
+## Version 0.1.4 released on 3 July 2021
 
-+ Bugfix: `Float.isFinite()` isn't compatibility with Java v7
++ Bugfix: `Float.isFinite()` isn't compatible with Java v7
 + Added the `getObstructionFilter()` and `getTarget()` methods
   to the `OrbitCamera` class.
 + Upgraded the Minie library to v4.2.0
