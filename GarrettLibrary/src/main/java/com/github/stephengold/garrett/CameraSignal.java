@@ -77,5 +77,5 @@ public enum CameraSignal {
     /**
      * de-magnify the scene
      */
-    ZoomOut;
+    ZoomOut
 }
