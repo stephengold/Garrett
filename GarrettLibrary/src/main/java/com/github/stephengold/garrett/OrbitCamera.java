@@ -777,20 +777,20 @@ public class OrbitCamera
     }
 
     /**
-     * Test whether the specified floating-point value is finite. (Float.isFinite() was added in Java v8.)
-     * TODO use MyMath
+     * Test whether the specified floating-point value is finite.
+     * (Float.isFinite() was added in Java v8.) TODO use MyMath
      *
      * @param value the value to test
      * @return true if finite, false if NaN or infinity
      */
     private static boolean isFinite(float value) {
-         if (Float.isInfinite(value)) {
-             return false;
-         } else if (Float.isNaN(value)) {
-             return false;
-         } else {
-             return true;
-         }
+        if (Float.isInfinite(value)) {
+            return false;
+        } else if (Float.isNaN(value)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
