@@ -382,7 +382,7 @@ public class OrbitCamera
     /**
      * Alter the analog input multiplier for focal zoom.
      *
-     * @param multiplier the desired multipler (in log units per click,
+     * @param multiplier the desired multiplier (in log units per click,
      * default=0.3)
      */
     public void setZoomMultiplier(float multiplier) {
@@ -613,10 +613,10 @@ public class OrbitCamera
             double rejL2 = MyVector3f.lengthSquared(tmpRej);
             if (rejL2 > 0.0) { // not directly above or below
                 double newDot = MyMath.clamp(dot, maxAbsDot);
-                double projCoeff = newDot / dot;
-                double rejCoeff = Math.sqrt((1.0 - newDot * newDot) / rejL2);
-                tmpProj.mult((float) projCoeff, tmpLook);
-                MyVector3f.accumulateScaled(tmpLook, tmpRej, (float) rejCoeff);
+                double projCoefficient = newDot / dot;
+                double rejCoefficient = Math.sqrt((1.0 - newDot * newDot) / rejL2);
+                tmpProj.mult((float) projCoefficient, tmpLook);
+                MyVector3f.accumulateScaled(tmpLook, tmpRej, (float) rejCoefficient);
             } else {
                 MyVector3f.generateBasis(tmpLook, tmpProj, tmpRej);
                 tmpLook.set(tmpProj);
