@@ -9,6 +9,7 @@ Complete source code (in Java) is provided under
 ## Contents of this document
 
  + [Features](#features)
+ + [How to add Garrett to an existing project](#add)
  + [Conventions](#conventions)
  + [How to build Garrett from source](#build)
 
@@ -18,6 +19,44 @@ Complete source code (in Java) is provided under
 
  + OrbitCamera: a physics-based, 4-DOF camera that chases and orbits a target,
    jumping forward as needed to maintain a clear line of sight
+
+[Jump to table of contents](#toc)
+
+<a name="add"/>
+
+## How to add Garrett to an existing project
+
+For projects built using Maven or [Gradle], it is sufficient to specify the
+dependency on the Garrett Library.  The build tools should automatically
+resolve the remaining dependencies .
+
+### Gradle-built projects
+
+Add to the project’s "build.gradle" file:
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        compile 'com.github.stephengold:Garrett:0.1.4'
+    }
+
+### Maven-built projects
+
+Add to the project’s "pom.xml" file:
+
+    <repositories>
+      <repository>
+        <id>mvnrepository</id>
+        <url>https://repo1.maven.org/maven2/</url>
+      </repository>
+    </repositories>
+
+    <dependency>
+      <groupId>com.github.stephengold</groupId>
+      <artifactId>Garrett</artifactId>
+      <version>0.1.4</version>
+    </dependency>
 
 [Jump to table of contents](#toc)
 
@@ -41,7 +80,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
      + `cd Garrett`
-     + `git checkout -b latest 0.1.3`
+     + `git checkout -b latest 0.1.4`
    + using a web browser:
      + browse to https://github.com/stephengold/Garrett/releases/latest
      + follow the "Source code (zip)" link
