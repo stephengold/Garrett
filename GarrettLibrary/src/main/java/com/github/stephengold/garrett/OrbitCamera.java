@@ -632,7 +632,7 @@ public class OrbitCamera
             float thetaForward = FastMath.atan2(tmpRej.x, tmpRej.z);
             float thetaLook = FastMath.atan2(tmpLook.x, tmpLook.z);
             float angle = thetaForward - thetaLook;
-            if (Float.isFinite(angle)) {
+            if (isFinite(angle)) {
                 tmpRotation.fromAngles(0f, angle, 0f);
                 tmpRotation.mult(tmpLook, tmpLook);
             }
@@ -774,6 +774,23 @@ public class OrbitCamera
         } else {
             return false;
         }
+    }
+
+    /**
+     * Test whether the specified floating-point value is finite. (Float.isFinite() was added in Java v8.)
+     * TODO use MyMath
+     *
+     * @param value the value to test
+     * @return true if finite, false if NaN or infinity
+     */
+    private static boolean isFinite(float value) {
+         if (Float.isInfinite(value)) {
+             return false;
+         } else if (Float.isNaN(value)) {
+             return false;
+         } else {
+             return true;
+         }
     }
 
     /**
