@@ -830,10 +830,8 @@ public class OrbitCamera
         }
 
         float obstructRange = rayRange * minFraction;
-        if (obstructRange < range) {
-            range = obstructRange;
-        }
+        float result = Math.min(obstructRange, range);
 
-        return range;
+        return result;
     }
 }
