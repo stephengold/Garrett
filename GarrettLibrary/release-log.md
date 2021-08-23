@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.1.5 released on TBD
+## Version 0.1.5 released on 23 August 2021
 
 Upgraded the Heart library to v7.0.0 and the Minie library to v4.3.0
 

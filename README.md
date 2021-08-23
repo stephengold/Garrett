@@ -26,9 +26,15 @@ Complete source code (in Java) is provided under
 
 ## How to add Garrett to an existing project
 
-For projects built using Maven or [Gradle], it is sufficient to specify the
-dependency on the Garrett Library.  The build tools should automatically
-resolve the remaining dependencies.
+The Garrett Library depends on [Minie].
+However, the Minie dependency is intentionally omitted from Garrett's POM
+so developers can specify *which* Minie library should be used.
+
+For projects built using Maven or [Gradle], it is *not* sufficient to specify the
+dependency on the Garrett Library.
+You must also explicitly specify the Minie dependency.
+The following examples specify "+big3",
+but "+debug" or the default Minie library should also work.
 
 ### Gradle-built projects
 
@@ -38,7 +44,8 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.stephengold:Garrett:0.1.4'
+        compile 'com.github.stephengold:Garrett:0.1.5'
+        compile 'com.github.stephengold:Minie:4.3.0+big3'
     }
 
 ### Maven-built projects
@@ -55,7 +62,13 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.stephengold</groupId>
+      <artifactId>Minie</artifactId>
+      <version>4.3.0+big3</version>
     </dependency>
 
 [Jump to table of contents](#toc)
@@ -80,7 +93,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
      + `cd Garrett`
-     + `git checkout -b latest 0.1.4`
+     + `git checkout -b latest 0.1.5`
    + using a web browser:
      + browse to https://github.com/stephengold/Garrett/releases/latest
      + follow the "Source code (zip)" link
@@ -99,8 +112,12 @@ After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
 You can install the Maven artifacts to your local repository:
- + using Bash or PowerShell:  `./gradlew publishToMavenLocal`
- + using Windows Command Prompt:  `.\gradlew publishToMavenLocal`
+ + using Bash or PowerShell:  `./gradlew install`
+ + using Windows Command Prompt:  `.\gradlew install`
+
+You can restore the project to a pristine state:
+ + using Bash or PowerShell: `./gradlew clean`
+ + using Windows Command Prompt: `.\gradlew clean`
 
 [Jump to table of contents](#toc)
 
@@ -133,7 +150,7 @@ software developers:
     + the [Git] revision-control system and GitK commit viewer
     + the [Firefox] web browser
     + the [Gradle] build tool
-    + the Java compiler, standard doclet, and runtime environment
+    + the Java compiler, standard doclet, and virtual machine
     + [jMonkeyEngine][jme] and the jME3 Software Development Kit
     + the [Linux Mint][mint] operating system
     + LWJGL, the Lightweight Java Game Library
