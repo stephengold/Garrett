@@ -1,5 +1,9 @@
 # release log for the Garrett Library
 
+## Version 0.1.5 released on TBD
+
+Upgraded the Heart library to v7.0.0 and the Minie library to v4.3.0
+
 ## Version 0.1.4 released on 3 July 2021
 
 + Bugfix: `Float.isFinite()` isn't compatible with Java v7
