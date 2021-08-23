@@ -2,20 +2,20 @@ The [Garrett Project][garrett] provides a collection of camera controllers for t
 [jMonkeyEngine game engine][jme].
 
 Complete source code (in Java) is provided under
-[a BSD license][license].
+[a 3-clause BSD license][license].
 
 <a name="toc"/>
 
 ## Contents of this document
 
- + [Features](#features)
- + [How to add Garrett to an existing project](#add)
- + [Conventions](#conventions)
- + [How to build Garrett from source](#build)
++ [Important features](#features)
++ [How to add Garrett to an existing project](#add)
++ [Conventions](#conventions)
++ [How to build Garrett from source](#build)
 
 <a name="features"/>
 
-## Features
+## Important features
 
  + OrbitCamera: a physics-based, 4-DOF camera that chases and orbits a target,
    jumping forward as needed to maintain a clear line of sight
@@ -28,7 +28,7 @@ Complete source code (in Java) is provided under
 
 For projects built using Maven or [Gradle], it is sufficient to specify the
 dependency on the Garrett Library.  The build tools should automatically
-resolve the remaining dependencies .
+resolve the remaining dependencies.
 
 ### Gradle-built projects
 
@@ -90,15 +90,16 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
  3. Set the `JAVA_HOME` environment variable:
    + using Bash:  `export JAVA_HOME="` *path to your JDK* `"`
    + using Windows Command Prompt:  `set JAVA_HOME="` *path to your JDK* `"`
- 4. Run the Gradle wrapper:
-   + using Bash:  `./gradlew build`
+   + using PowerShell: `$env:JAVA_HOME = '` *path to your JDK* `'`
+ 4. Run the [Gradle] wrapper:
+   + using Bash or PowerShell:  `./gradlew build`
    + using Windows Command Prompt:  `.\gradlew build`
 
 After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
-You can install the Maven artifacts to your local cache:
- + using Bash:  `./gradlew publishToMavenLocal`
+You can install the Maven artifacts to your local repository:
+ + using Bash or PowerShell:  `./gradlew publishToMavenLocal`
  + using Windows Command Prompt:  `.\gradlew publishToMavenLocal`
 
 [Jump to table of contents](#toc)
@@ -110,13 +111,14 @@ You can install the Maven artifacts to your local cache:
 [git]: https://git-scm.com "Git"
 [github]: https://github.com "GitHub"
 [gradle]: https://gradle.org "Gradle Project"
-[jme]: http://jmonkeyengine.org  "jMonkeyEngine Project"
+[jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
 [minie]: https://github.com/stephengold/Minie "Minie Project"
 [mint]: https://linuxmint.com "Linux Mint Project"
 [netbeans]: https://netbeans.org "NetBeans Project"
 [openJDK]: https://openjdk.java.net "OpenJDK Project"
+[sonatype]: https://www.sonatype.com "Sonatype"
 [utilities]: https://github.com/stephengold/jme3-utilities "Jme3-utilities Project"
 
 <a name="acks"/>
@@ -138,7 +140,7 @@ software developers:
     + the [Markdown] document-conversion tool
     + the [NetBeans] integrated development environment
 
-I am grateful to [Github]
+I am grateful to [Github] and [Sonatype]
 for providing free hosting for this project
 and many other open-source projects.
 
