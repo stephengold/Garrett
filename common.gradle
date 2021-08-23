@@ -21,7 +21,7 @@ ext {
     garrettVersion = '0.1.5-SNAPSHOT'
     heartVersion = '7.0.0'
     jmonkeyengineVersion = '3.4.0-stable'
-    minieVersion = '4.2.0'
+    minieVersion = '4.3.0'
 }
 
 repositories {
