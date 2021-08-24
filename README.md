@@ -121,23 +121,6 @@ You can restore the project to a pristine state:
 
 [Jump to table of contents](#toc)
 
-[ant]: https://ant.apache.org "Apache Ant Project"
-[bsd3]: https://opensource.org/licenses/BSD-3-Clause "3-Clause BSD License"
-[firefox]: https://www.mozilla.org/en-US/firefox "Firefox"
-[garrett]: https://github.com/stephengold/Garrett "Garrett Project"
-[git]: https://git-scm.com "Git"
-[github]: https://github.com "GitHub"
-[gradle]: https://gradle.org "Gradle Project"
-[jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
-[license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
-[markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
-[minie]: https://github.com/stephengold/Minie "Minie Project"
-[mint]: https://linuxmint.com "Linux Mint Project"
-[netbeans]: https://netbeans.org "NetBeans Project"
-[openJDK]: https://openjdk.java.net "OpenJDK Project"
-[sonatype]: https://www.sonatype.com "Sonatype"
-[utilities]: https://github.com/stephengold/jme3-utilities "Jme3-utilities Project"
-
 <a name="acks"/>
 
 ## Acknowledgments
@@ -167,3 +150,20 @@ If I've misattributed anything or left anyone out, please let me know so I can
 correct the situation: sgold@sonic.net
 
 [Jump to table of contents](#toc)
+
+[ant]: https://ant.apache.org "Apache Ant Project"
+[bsd3]: https://opensource.org/licenses/BSD-3-Clause "3-Clause BSD License"
+[firefox]: https://www.mozilla.org/en-US/firefox "Firefox"
+[garrett]: https://github.com/stephengold/Garrett "Garrett Project"
+[git]: https://git-scm.com "Git"
+[github]: https://github.com "GitHub"
+[gradle]: https://gradle.org "Gradle Project"
+[jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
+[license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
+[markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
+[minie]: https://github.com/stephengold/Minie "Minie Project"
+[mint]: https://linuxmint.com "Linux Mint Project"
+[netbeans]: https://netbeans.org "NetBeans Project"
+[openJDK]: https://openjdk.java.net "OpenJDK Project"
+[sonatype]: https://www.sonatype.com "Sonatype"
+[utilities]: https://github.com/stephengold/jme3-utilities "Jme3-utilities Project"
