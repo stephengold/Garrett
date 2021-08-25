@@ -188,7 +188,7 @@ public class OrbitCamera
         Validate.nonNull(tracker, "tracker");
 
         this.camera = camera;
-        this.signalTracker = tracker;
+        signalTracker = tracker;
         super.setEnabled(false);
     }
     // *************************************************************************
@@ -245,7 +245,7 @@ public class OrbitCamera
      */
     public void setChaseOption(ChaseOption desiredOption) {
         Validate.nonNull(desiredOption, "desired option");
-        this.chaseOption = desiredOption;
+        chaseOption = desiredOption;
     }
 
     /**
@@ -277,9 +277,8 @@ public class OrbitCamera
      * obstruct the camera's view (alias created) or null to treat all
      * non-target PCOs as obstructions
      */
-    public void setObstructionFilter(
-            BulletDebugAppState.DebugAppStateFilter filter) {
-        this.obstructionFilter = filter;
+    public void setObstructionFilter(BulletDebugAppState.DebugAppStateFilter filter) {
+        obstructionFilter = filter;
     }
 
     /**
@@ -323,7 +322,7 @@ public class OrbitCamera
      */
     public void setPreferredRange(float range) {
         Validate.positive(range, "range");
-        this.preferredRange = range;
+        preferredRange = range;
     }
 
     /**
