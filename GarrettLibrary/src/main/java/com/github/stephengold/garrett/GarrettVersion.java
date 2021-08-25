@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-public class GarrettVersion {
+final public class GarrettVersion {
     // *************************************************************************
     // constants and loggers
 
