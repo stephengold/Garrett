@@ -89,14 +89,14 @@ public class OrbitCamera
      */
     final private Camera camera;
     /**
+     * configured target-chasing behavior (not null)
+     */
+    private ChaseOption chaseOption = ChaseOption.FreeOrbit;
+    /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
      */
     private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
-    /**
-     * configured target-chasing behavior (not null)
-     */
-    private ChaseOption chaseOption = ChaseOption.FreeOrbit;
     /**
      * maximum magnitude of the dot product between the camera's look direction
      * and its preferred "up" direction (default=cos(0.3))
