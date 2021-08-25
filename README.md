@@ -1,5 +1,5 @@
-The [Garrett Project][garrett] provides a collection of camera controllers for the
-[jMonkeyEngine game engine][jme].
+The [Garrett Project][garrett] provides a collection of camera controllers for
+[the jMonkeyEngine (JME) game engine][jme].
 
 Complete source code (in Java) is provided under
 [a 3-clause BSD license][license].
@@ -95,7 +95,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
      + `cd Garrett`
      + `git checkout -b latest 0.1.5`
    + using a web browser:
-     + browse to https://github.com/stephengold/Garrett/releases/latest
+     + browse to [the latest release][latest]
      + follow the "Source code (zip)" link
      + save the ZIP file
      + extract the contents of the saved ZIP file
@@ -111,7 +111,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
-You can install the Maven artifacts to your local repository:
+You can install the Maven artifacts to your local Maven repository:
  + using Bash or PowerShell:  `./gradlew install`
  + using Windows Command Prompt:  `.\gradlew install`
 
@@ -138,18 +138,20 @@ software developers:
     + the [Linux Mint][mint] operating system
     + LWJGL, the Lightweight Java Game Library
     + the [Markdown] document-conversion tool
+    + Microsoft Windows
     + the [NetBeans] integrated development environment
 
-I am grateful to [Github] and [Sonatype]
+I am grateful to [GitHub] and [Sonatype]
 for providing free hosting for this project
 and many other open-source projects.
 
 I'm also grateful to my dear Holly, for keeping me sane.
 
-If I've misattributed anything or left anyone out, please let me know so I can
+If I've misattributed anything or left anyone out, please let me know, so I can
 correct the situation: sgold@sonic.net
 
 [Jump to table of contents](#toc)
+
 
 [ant]: https://ant.apache.org "Apache Ant Project"
 [bsd3]: https://opensource.org/licenses/BSD-3-Clause "3-Clause BSD License"
@@ -159,6 +161,7 @@ correct the situation: sgold@sonic.net
 [github]: https://github.com "GitHub"
 [gradle]: https://gradle.org "Gradle Project"
 [jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
+[latest]: https://github.com/stephengold/Garrett/releases/latest "latest release"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
 [minie]: https://github.com/stephengold/Minie "Minie Project"
