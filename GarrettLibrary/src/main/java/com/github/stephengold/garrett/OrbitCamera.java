@@ -371,10 +371,7 @@ public class OrbitCamera
         if (target != this.target) {
             this.target = target;
             logger.log(Level.INFO, "{0} is the new target.", target);
-
-            tmpCameraLocation.set(camera.getLocation());
-            target.locateTarget(tmpTargetLocation);
-            preferredRange = tmpCameraLocation.distance(tmpTargetLocation);
+            setRangeAndOffset();
         }
     }
 
