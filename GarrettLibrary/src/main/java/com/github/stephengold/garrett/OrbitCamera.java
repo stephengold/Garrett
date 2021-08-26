@@ -584,7 +584,7 @@ public class OrbitCamera
             float factor = range / offset.length();
             offset.multLocal(factor);
         }
-        if (chaseOption == ChaseOption.StrictFollow) {
+        if (chaseOption.isStrictAzimuth()) {
             yawAnalogSum = 0f;
         }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
@@ -618,18 +618,14 @@ public class OrbitCamera
                 tmpLook.set(tmpProj);
             }
         }
-        if (chaseOption == ChaseOption.StrictFollow) {
-            /*
-             * Rotate the "look" direction to stay directly behind the Target.
-             */
+        if (chaseOption.isStrictAzimuth()) {
             target.forwardDirection(tmpRej);
-            assert preferredUpDirection.equals(Vector3f.UNIT_Y) :
-                    preferredUpDirection;
-            float thetaForward = FastMath.atan2(tmpRej.x, tmpRej.z);
-            float thetaLook = FastMath.atan2(tmpLook.x, tmpLook.z);
-            float angle = thetaForward - thetaLook;
-            if (MyMath.isFinite(angle)) {
-                tmpRotation.fromAngles(0f, angle, 0f);
+            float azimuthTarget = FastMath.atan2(tmpRej.x, tmpRej.z);
+            float azimuthSetpoint = azimuthTarget + chaseOption.deltaTheta();
+            float azimuthActual = FastMath.atan2(tmpLook.x, tmpLook.z);
+            float azimuthError = azimuthSetpoint - azimuthActual;
+            if (MyMath.isFinite(azimuthError)) {
+                tmpRotation.fromAngles(0f, azimuthError, 0f);
                 tmpRotation.mult(tmpLook, tmpLook);
             }
         }
@@ -715,11 +711,8 @@ public class OrbitCamera
             throw new IllegalStateException("No target has been set.");
         }
 
-        if (chaseOption == ChaseOption.FreeOrbit) {
-            camera.setName("orbit camera");
-        } else {
-            camera.setName("chase camera");
-        }
+        String name = chaseOption.cameraName();
+        camera.setName(name);
         /*
          * Initialize the camera offset and preferred range.
          */
