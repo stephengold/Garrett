@@ -56,8 +56,8 @@ import jme3utilities.math.MyVector3f;
 /**
  * An AppState to control a 4 degree-of-freedom Camera that orbits (and
  * optionally chases) a Target, jumping forward as needed to maintain a clear
- * line of sight in the target's CollisionSpace. Two chasing behaviors are
- * implemented: FreeOrbit and StrictFollow.
+ * line of sight in the target's CollisionSpace. A continuum of chasing
+ * behaviors is implemented.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -89,10 +89,6 @@ public class OrbitCamera
      */
     final private Camera camera;
     /**
-     * configured target-chasing behavior (not null)
-     */
-    private ChaseOption chaseOption = ChaseOption.FreeOrbit;
-    /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
      */
@@ -107,6 +103,17 @@ public class OrbitCamera
      */
     final private EnumMap<CameraSignal, String> signalNames
             = new EnumMap<>(CameraSignal.class);
+    /**
+     * time constant for horizontal rotation (in seconds, 0 &rarr; locked on
+     * deltaAzimuthSetpoint, +Infinity &rarr; free horizontal rotation)
+     */
+    private float azimuthTau = Float.POSITIVE_INFINITY;
+    /**
+     * setpoint for the azimuth difference between the Camera and the Target (in
+     * radians, 0 &rarr;camera following target, Pi/2 &rarr; camera on target's
+     * right flank)
+     */
+    private float deltaAzimuthSetpoint = 0f;
     /**
      * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
      */
@@ -149,6 +156,11 @@ public class OrbitCamera
      * status of named signals
      */
     final private SignalTracker signalTracker;
+    /**
+     * name applied to the Camera when this controller becomes attached and
+     * enabled
+     */
+    private String cameraName;
     /**
      * what's being orbited, or null if none
      */
@@ -195,12 +207,38 @@ public class OrbitCamera
     // new methods exposed
 
     /**
-     * Determine the configured ChaseOption.
+     * Determine the time constant for horizonal rotation.
      *
-     * @return the enum value
+     * @return the time constant (in seconds, &ge;0, 0 &rarr; locked on
+     * deltaAzimuth, +Infinity &rarr; free horizontal rotation)
      */
-    public ChaseOption getChaseOption() {
-        return chaseOption;
+    public float azimuthTau() {
+        assert azimuthTau >= 0f : azimuthTau;
+        return azimuthTau;
+    }
+
+    /**
+     * Determine the name applied to the Camera when this controller becomes
+     * attached and enabled.
+     *
+     * @return name the name
+     */
+    public String cameraName() {
+        return cameraName;
+    }
+
+    /**
+     * Determine the steady-state azimuth difference between the Camera and the
+     * Target.
+     *
+     * @return the setpoint angle (in radians, &gt;-2*Pi, &lt;2*Pi, 0
+     * &rarr;camera following target, Pi/2 &rarr; camera on target's right
+     * flank)
+     */
+    public float deltaAzimuth() {
+        assert deltaAzimuthSetpoint >= -FastMath.TWO_PI : deltaAzimuthSetpoint;
+        assert deltaAzimuthSetpoint <= FastMath.TWO_PI : deltaAzimuthSetpoint;
+        return deltaAzimuthSetpoint;
     }
 
     /**
@@ -222,6 +260,27 @@ public class OrbitCamera
     }
 
     /**
+     * Test whether the camera's horizontal rotation is influenced by the
+     * Target.
+     *
+     * @return true if free of influence, otherwise false
+     */
+    public boolean isAzimuthFree() {
+        boolean result = (azimuthTau == Float.POSITIVE_INFINITY);
+        return result;
+    }
+
+    /**
+     * Test whether the camera's horizontal rotation is locked to the Target.
+     *
+     * @return true if rotation is locked, otherwise false
+     */
+    public boolean isAzimuthLocked() {
+        boolean result = (azimuthTau == 0f);
+        return result;
+    }
+
+    /**
      * Magnify the view by the specified factor.
      *
      * @param factor the factor to increase magnification (&gt;0)
@@ -239,13 +298,50 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the ChaseOption.
+     * Alter the time constant for horizonal rotation.
+     * <p>
+     * Allowed only when the controller is NOT attached and enabled.
      *
-     * @param desiredOption the desired enum value (not null)
+     * @param timeConstant the desired time constant (in seconds, &ge;0, 0
+     * &rarr; locked on the setpoint, +Infinity &rarr; free horizontal rotation,
+     * default=+Infinity)
      */
-    public void setChaseOption(ChaseOption desiredOption) {
-        Validate.nonNull(desiredOption, "desired option");
-        chaseOption = desiredOption;
+    public void setAzimuthTau(float timeConstant) {
+        Validate.nonNegative(timeConstant, "time constant");
+
+        if (isInitialized() && isEnabled()) {
+            throw new IllegalStateException("Cannot alter the time constant "
+                    + "while the controller is attached and enabled.");
+        }
+        azimuthTau = timeConstant;
+    }
+
+    /**
+     * Alter the name applied to the Camera when this controller becomes
+     * attached and enabled.
+     * <p>
+     * Allowed only when the controller is NOT attached and enabled.
+     *
+     * @param name the desired name (default=null)
+     */
+    public void setCameraName(String name) {
+        if (isInitialized() && isEnabled()) {
+            throw new IllegalStateException("Cannot alter the camera name "
+                    + "while the controller is attached and enabled.");
+        }
+        cameraName = name;
+    }
+
+    /**
+     * Alter the azimuth difference between the Camera and the Target.
+     *
+     * @param angle the desired angle (in radians, &gt;-2*Pi, &lt;2*Pi, 0
+     * &rarr;camera following target, Pi/2 &rarr; camera on target's right
+     * flank, default=0)
+     */
+    public void setDeltaAzimuth(float angle) {
+        Validate.inRange(angle, "angle", -FastMath.TWO_PI, FastMath.TWO_PI);
+        deltaAzimuthSetpoint = angle;
     }
 
     /**
@@ -584,7 +680,7 @@ public class OrbitCamera
             float factor = range / offset.length();
             offset.multLocal(factor);
         }
-        if (chaseOption.isStrictAzimuth()) {
+        if (isAzimuthLocked()) {
             yawAnalogSum = 0f;
         }
         if (pitchAnalogSum != 0f || yawAnalogSum != 0f) {
@@ -618,15 +714,29 @@ public class OrbitCamera
                 tmpLook.set(tmpProj);
             }
         }
-        if (chaseOption.isStrictAzimuth()) {
+        if (!isAzimuthFree()) {
+            /*
+             * Rotate the camera horizontally
+             * based on the target's forward direction.
+             */
             target.forwardDirection(tmpRej);
-            float azimuthTarget = FastMath.atan2(tmpRej.x, tmpRej.z);
-            float azimuthSetpoint = azimuthTarget + chaseOption.deltaTheta();
-            float azimuthActual = FastMath.atan2(tmpLook.x, tmpLook.z);
-            float azimuthError = azimuthSetpoint - azimuthActual;
-            if (MyMath.isFinite(azimuthError)) {
-                tmpRotation.fromAngles(0f, azimuthError, 0f);
-                tmpRotation.mult(tmpLook, tmpLook);
+            float targetAzimuth = FastMath.atan2(tmpRej.x, tmpRej.z);
+            float cameraAzimuth = FastMath.atan2(tmpLook.x, tmpLook.z);
+            float deltaAzimuth = cameraAzimuth - targetAzimuth;
+            if (MyMath.isFinite(deltaAzimuth)) {
+                float azimuthError = deltaAzimuthSetpoint - deltaAzimuth;
+                azimuthError = MyMath.standardizeAngle(azimuthError);
+                if (azimuthError != 0f) {
+                    float yTurnAngle;
+                    if (isAzimuthLocked()) {
+                        yTurnAngle = azimuthError;
+                    } else {
+                        float gain = 1f - FastMath.exp(-tpf / azimuthTau);
+                        yTurnAngle = gain * azimuthError;
+                    }
+                    tmpRotation.fromAngles(0f, yTurnAngle, 0f);
+                    tmpRotation.mult(tmpLook, tmpLook);
+                }
             }
         }
         /*
@@ -690,7 +800,7 @@ public class OrbitCamera
          * Configure the analog inputs.
          */
         InputManager inputManager = getApplication().getInputManager();
-        if (chaseOption == ChaseOption.FreeOrbit) {
+        if (isAzimuthFree()) {
             inputManager.deleteMapping(analogOrbitCcw);
             inputManager.deleteMapping(analogOrbitCw);
         }
@@ -711,8 +821,7 @@ public class OrbitCamera
             throw new IllegalStateException("No target has been set.");
         }
 
-        String name = chaseOption.cameraName();
-        camera.setName(name);
+        camera.setName(cameraName);
         /*
          * Initialize the camera offset and preferred range.
          */
@@ -733,7 +842,7 @@ public class OrbitCamera
          * Configure the analog inputs.
          */
         InputManager inputManager = getApplication().getInputManager();
-        if (chaseOption == ChaseOption.FreeOrbit) {
+        if (isAzimuthFree()) {
             inputManager.addMapping(analogOrbitCcw,
                     new MouseAxisTrigger(MouseInput.AXIS_X, false));
             inputManager.addMapping(analogOrbitCw,
