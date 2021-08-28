@@ -774,9 +774,9 @@ public class OrbitCamera
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
         boolean xrayVision
-                = obstructionResponse.equals(ObstructionResponse.XRay)
+                = obstructionResponse == ObstructionResponse.XRay
                 || isActive(CameraSignal.Xray);
-        boolean jumpy = obstructionResponse.equals(ObstructionResponse.Warp);
+        boolean jumpy = obstructionResponse == ObstructionResponse.Warp;
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
             if (forwardSum > 0 || xrayVision) {
@@ -804,13 +804,13 @@ public class OrbitCamera
                 float rayRange = Math.max(range, preferredRange);
                 range = testSightline(rayRange, targetPco);
             } else {
-                assert obstructionResponse.equals(ObstructionResponse.Clip) :
+                assert obstructionResponse == ObstructionResponse.Clip :
                         obstructionResponse;
                 near = range - testSightline(range, targetPco);
                 near = FastMath.clamp(near, preferredClip, far);
             }
         }
-        if (obstructionResponse.equals(ObstructionResponse.Clip)) {
+        if (obstructionResponse == ObstructionResponse.Clip) {
             MyCamera.setNearFar(camera, near, far);
         }
         /*
