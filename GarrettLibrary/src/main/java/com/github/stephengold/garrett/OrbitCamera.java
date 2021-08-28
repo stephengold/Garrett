@@ -379,7 +379,7 @@ public class OrbitCamera
      *
      * @param filter the desired filter to determine which collision objects
      * obstruct the camera's view (alias created) or null to treat all
-     * non-target PCOs as obstructions
+     * non-target PCOs as obstructions (default=null)
      */
     public void setObstructionFilter(BulletDebugAppState.DebugAppStateFilter filter) {
         obstructionFilter = filter;
@@ -388,7 +388,7 @@ public class OrbitCamera
     /**
      * Alter how the controller responds to an obstructed line of sight.
      *
-     * @param response the desired response (not null)
+     * @param response the desired response (not null, default=Clip)
      */
     public void setObstructionResponse(ObstructionResponse response) {
         Validate.nonNull(response, "response");
@@ -452,7 +452,8 @@ public class OrbitCamera
     /**
      * Alter the preferred "up" direction.
      *
-     * @param direction the desired direction (not null, not zero)
+     * @param direction the desired direction (not null, not zero,
+     * default=(0,1,0))
      */
     public void setPreferredUpDirection(Vector3f direction) {
         Validate.nonZero(direction, "direction");
