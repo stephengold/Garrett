@@ -54,10 +54,10 @@ import jme3utilities.math.MyMath;
 import jme3utilities.math.MyVector3f;
 
 /**
- * An AppState to control a 4 degree-of-freedom Camera that orbits (and
- * optionally chases) a Target, jumping forward as needed to maintain a clear
- * line of sight in the target's CollisionSpace. A continuum of chasing
- * behaviors is implemented.
+ * An AppState to control a physics-based, 4 degree-of-freedom Camera. The
+ * controlled Camera orbits a specified Target, optionally clipping or jumping
+ * forward to maintain a clear line of sight in the target's CollisionSpace. A
+ * continuum of chasing behaviors is implemented.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -132,7 +132,11 @@ public class OrbitCamera
      */
     private float pitchAnalogSum = 0f;
     /**
-     * distance from the Target if the Camera had X-ray vision
+     * distance to the near clipping plane if the Camera had X-ray vision
+     */
+    private float preferredClip = 0.1f;
+    /**
+     * distance to the Target if the Camera had X-ray vision
      */
     private float preferredRange = 10f;
     /**
@@ -148,6 +152,10 @@ public class OrbitCamera
      * analog zoom input multiplier (in log units per click)
      */
     private float zoomMultiplier = 0.3f;
+    /**
+     * configured response to obstructed line-of-sight
+     */
+    private ObstructionResponse obstructionResponse = ObstructionResponse.Clip;
     /**
      * reusable Quaternion
      */
@@ -378,6 +386,16 @@ public class OrbitCamera
     }
 
     /**
+     * Alter how the controller responds to an obstructed line of sight.
+     *
+     * @param response the desired response (not null)
+     */
+    public void setObstructionResponse(ObstructionResponse response) {
+        Validate.nonNull(response, "response");
+        obstructionResponse = response;
+    }
+
+    /**
      * Alter the offset of the Camera from the Target.
      *
      * @param desiredOffset the desired offset from the Target (in world
@@ -409,6 +427,16 @@ public class OrbitCamera
     public void setPoleExclusionAngle(float minAngle) {
         Validate.inRange(minAngle, "minimum angle", 0f, FastMath.HALF_PI);
         maxAbsDot = Math.cos(minAngle);
+    }
+
+    /**
+     * Alter the preferred distance to the near clipping plane.
+     *
+     * @param distance the desired distance (in world units, &gt;0)
+     */
+    public void setPreferredClip(float distance) {
+        Validate.positive(distance, "distance");
+        preferredClip = distance;
     }
 
     /**
@@ -745,29 +773,45 @@ public class OrbitCamera
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
-        boolean xrayVision = isActive(CameraSignal.Xray);
+        boolean xrayVision
+                = obstructionResponse.equals(ObstructionResponse.XRay)
+                || isActive(CameraSignal.Xray);
+        boolean jumpy = obstructionResponse.equals(ObstructionResponse.Warp);
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
             if (forwardSum > 0 || xrayVision) {
                 preferredRange = range;
             }
-        } else if (range < preferredRange) {
+        } else if (jumpy && range < preferredRange) { // jump backward
             range = preferredRange;
         }
         /*
          * Limit the range to reduce the risk of far-plane clipping.
          */
-        float maxRange = 0.5f * camera.getFrustumFar();
+        float far = camera.getFrustumFar();
+        float maxRange = 0.5f * far;
         if (range > maxRange) {
             range = maxRange;
         }
 
+        float near = preferredClip;
         target.locateTarget(tmpTargetLocation);
         if (!xrayVision) {
             /*
              * Test the sightline for obstructions.
              */
-            range = testSightline(range, targetPco);
+            if (jumpy) {
+                float rayRange = Math.max(range, preferredRange);
+                range = testSightline(rayRange, targetPco);
+            } else {
+                assert obstructionResponse.equals(ObstructionResponse.Clip) :
+                        obstructionResponse;
+                near = range - testSightline(range, targetPco);
+                near = FastMath.clamp(near, preferredClip, far);
+            }
+        }
+        if (obstructionResponse.equals(ObstructionResponse.Clip)) {
+            MyCamera.setNearFar(camera, near, far);
         }
         /*
          * Calculate the new camera offset and apply it to the Camera.
@@ -876,7 +920,8 @@ public class OrbitCamera
 
     /**
      * Test the sightline for obstructions, from the Target to the Camera, using
-     * the obstructionFilter (if any). May modify the "offset" and
+     * the obstructionFilter (if any). Requires that "tmpLook" and
+     * "tmpTargetLocation" be initialized on entry. May modify the "offset" and
      * "tmpCameraLocation" fields.
      *
      * @param range the distance between the Target and the Camera (in world
@@ -890,8 +935,7 @@ public class OrbitCamera
             return range;
         }
 
-        float rayRange = Math.max(range, preferredRange);
-        tmpLook.mult(-rayRange, offset);
+        tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
         List<PhysicsRayTestResult> hits = collisionSpace.rayTestRaw(
                 tmpTargetLocation, tmpCameraLocation);
@@ -910,7 +954,7 @@ public class OrbitCamera
             }
         }
 
-        float obstructRange = rayRange * minFraction;
+        float obstructRange = range * minFraction;
         float result = Math.min(obstructRange, range);
 
         return result;
