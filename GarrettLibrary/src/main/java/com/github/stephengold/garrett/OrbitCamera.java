@@ -229,10 +229,27 @@ public class OrbitCamera
      * Determine the name applied to the Camera when this controller becomes
      * attached and enabled.
      *
-     * @return name the name
+     * @return the name
      */
     public String cameraName() {
         return cameraName;
+    }
+
+    /**
+     * Copy the preferred "up" direction.
+     *
+     * @param storeResult storage for the result (modified if not null)
+     * @return a direction vector (either storeResult or a new vector)
+     */
+    public Vector3f copyPreferredUpDirection(Vector3f storeResult) {
+        Vector3f result;
+        if (storeResult == null) {
+            result = preferredUpDirection.clone();
+        } else {
+            result = storeResult.set(preferredUpDirection);
+        }
+
+        return result;
     }
 
     /**
@@ -256,6 +273,16 @@ public class OrbitCamera
      */
     public BulletDebugAppState.DebugAppStateFilter getObstructionFilter() {
         return obstructionFilter;
+    }
+
+    /**
+     * Determine the controller's response to an obstructed line-of-sight.
+     *
+     * @return the enum value (not null)
+     */
+    public ObstructionResponse getObstructionResponse() {
+        assert obstructionResponse != null;
+        return obstructionResponse;
     }
 
     /**
@@ -303,6 +330,16 @@ public class OrbitCamera
         if (isInitialized() && isEnabled()) {
             MyCamera.setYTangent(camera, frustumYTangent);
         }
+    }
+
+    /**
+     * Determine the orbital rate.
+     *
+     * @return the rate (in radians per second, &ge;0)
+     */
+    public float orbitRate() {
+        assert orbitRate >= 0f : orbitRate;
+        return orbitRate;
     }
 
     /**
@@ -503,11 +540,22 @@ public class OrbitCamera
     /**
      * Alter the analog input multiplier for focal zoom.
      *
-     * @param multiplier the desired multiplier (in log units per click,
+     * @param multiplier the desired multiplier (in log units per click, &gt;0,
      * default=0.3)
      */
     public void setZoomMultiplier(float multiplier) {
+        Validate.positive(multiplier, "multiplier");
         zoomMultiplier = multiplier;
+    }
+
+    /**
+     * Determine the analog input multiplier for focal zoom.
+     *
+     * @return the multiplier (in log units per click)
+     */
+    public float zoomMultiplier() {
+        assert zoomMultiplier > 0f : zoomMultiplier;
+        return zoomMultiplier;
     }
     // *************************************************************************
     // AnalogListener methods
