@@ -215,7 +215,7 @@ public class OrbitCamera
     // new methods exposed
 
     /**
-     * Determine the time constant for horizonal rotation.
+     * Determine the time constant for horizontal rotation.
      *
      * @return the time constant (in seconds, &ge;0, 0 &rarr; locked on
      * deltaAzimuth, +Infinity &rarr; free horizontal rotation)
@@ -306,7 +306,7 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the time constant for horizonal rotation.
+     * Alter the time constant for horizontal rotation.
      * <p>
      * Allowed only when the controller is NOT attached and enabled.
      *
