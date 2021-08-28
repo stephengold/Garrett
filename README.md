@@ -17,8 +17,11 @@ Complete source code (in Java) is provided under
 
 ## Important features
 
- + OrbitCamera: a physics-based, 4-DOF camera that chases and orbits a target,
-   jumping forward as needed to maintain a clear line of sight
+ + `OrbitCamera`: a physics-based, 4 degree-of-freedom camera controller.
+  The controlled camera orbits a specified target,
+  optionally clipping or jumping forward
+  to maintain a clear line of sight in the target's CollisionSpace.
+  A continuum of chasing behaviors is implemented.
 
 [Jump to table of contents](#toc)
 
@@ -44,7 +47,7 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.stephengold:Garrett:0.1.5'
+        compile 'com.github.stephengold:Garrett:0.2.0'
         compile 'com.github.stephengold:Minie:4.3.0+big3'
     }
 
@@ -62,7 +65,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.1.5</version>
+      <version>0.2.0</version>
     </dependency>
 
     <dependency>
@@ -93,7 +96,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
    + using Git:
      + `git clone https://github.com/stephengold/Garrett.git`
      + `cd Garrett`
-     + `git checkout -b latest 0.1.5`
+     + `git checkout -b latest 0.2.0`
    + using a web browser:
      + browse to [the latest release][latest]
      + follow the "Source code (zip)" link

@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.2.0 relased on TBD
+## Version 0.2.0 relased on 28 August 2021
 
 + Replace `ChaseOption` with a continuum of time constants and setpoints.
   (API changes!)
