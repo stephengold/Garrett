@@ -1,5 +1,12 @@
 # release log for the Garrett Library
 
+## Version 0.2.0 relased on TBD
+
++ Replace `ChaseOption` with a continuum of time constants and setpoints.
+  (API changes!)
++ Add options to `OrbitCamera` to ignore line-of-sight obstructions
+  or respond by clipping instead of warping forward.
+
 ## Version 0.1.5 released on 23 August 2021
 
 Upgraded the Heart library to v7.0.0 and the Minie library to v4.3.0
