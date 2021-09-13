@@ -47,9 +47,12 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.stephengold:Garrett:0.2.0'
-        compile 'com.github.stephengold:Minie:4.3.0+big3'
+        implementation 'com.github.stephengold:Garrett:0.2.0'
+        implementation 'com.github.stephengold:Minie:4.3.0+big3'
     }
+
+For some older versions of Gradle,
+it's necessary to replace `implementation` with `compile`.
 
 ### Maven-built projects
 
