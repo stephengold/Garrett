@@ -12,6 +12,7 @@ ext {
     artifact = 'Garrett'
     version = garrettVersion
     baseName = "${artifact}-${version}"
+    websiteUrl = 'https://github.com/stephengold/Garrett'
 }
 
 description = 'a camera-controller library for jMonkeyEngine'
@@ -79,9 +80,9 @@ publishing {
                 scm {
                     connection = 'scm:git:git://github.com/stephengold/Garrett.git'
                     developerConnection = 'scm:git:ssh://github.com:stephengold/Garrett.git'
-                    url = 'https://github.com/stephengold/Garrett/tree/master'
+                    url = project.ext.websiteUrl + '/tree/master'
                 }
-                url = 'https://github.com/stephengold/Garrett'
+                url = project.ext.websiteUrl
             }
             version project.ext.version
         }
