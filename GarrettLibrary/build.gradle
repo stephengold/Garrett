@@ -8,20 +8,21 @@ plugins {
     id 'signing'
 }
 
-description = 'a camera-controller library for jMonkeyEngine'
 ext {
     artifact = 'Garrett'
     version = garrettVersion
     baseName = "${artifact}-${version}"
 }
 
+description = 'a camera-controller library for jMonkeyEngine'
+
 jar { archiveBaseName = project.ext.baseName }
 javadocJar { archiveBaseName = project.ext.baseName }
 sourcesJar { archiveBaseName = project.ext.baseName }
 
 dependencies {
-    api 'org.jmonkeyengine:jme3-core:' + jmonkeyengineVersion
     api 'com.github.stephengold:Heart:' + heartVersion
+    api 'org.jmonkeyengine:jme3-core:' + jmonkeyengineVersion
     compileOnly 'com.github.stephengold:Minie:' + minieVersion
 }
 
