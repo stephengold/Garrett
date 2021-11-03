@@ -8,6 +8,7 @@ plugins {
     id 'signing'
 }
 
+description = 'a camera-controller library for jMonkeyEngine'
 ext {
     group = 'com.github.stephengold'
     artifact = 'Garrett'
@@ -15,12 +16,6 @@ ext {
     baseName = "${artifact}-${version}"
     websiteUrl = 'https://github.com/stephengold/Garrett'
 }
-
-description = 'a camera-controller library for jMonkeyEngine'
-
-jar { archiveBaseName = project.ext.baseName }
-javadocJar { archiveBaseName = project.ext.baseName }
-sourcesJar { archiveBaseName = project.ext.baseName }
 
 dependencies {
     api 'com.github.stephengold:Heart:' + heartVersion
@@ -38,6 +33,10 @@ task('release') {
     dependsOn 'publishMavenPublicationToOSSRHRepository'
     description 'Stages Maven artifacts to Sonatype OSSRH.'
 }
+
+jar { archiveBaseName = project.ext.baseName }
+javadocJar { archiveBaseName = project.ext.baseName }
+sourcesJar { archiveBaseName = project.ext.baseName }
 
 build.dependsOn('pom', 'pomAsc')
 task('pom', type: Copy) {
