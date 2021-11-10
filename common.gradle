@@ -27,16 +27,3 @@ repositories {
     mavenCentral()
     maven { url 'https://jcenter.bintray.com' } // for SimMath
 }
-
-// custom tasks for creating source/javadoc JARs
-task sourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    description 'Create a JAR of source files.'
-    from sourceSets.main.allJava
-}
-task javadocJar(type: Jar) {
-    archiveClassifier = 'javadoc'
-    dependsOn 'javadoc'
-    description 'Create a JAR of javadoc.'
-    from javadoc.destinationDir
-}
