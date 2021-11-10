@@ -19,7 +19,7 @@ ext {
 
 dependencies {
     api 'com.github.stephengold:Heart:' + heartVersion
-    api 'org.jmonkeyengine:jme3-core:' + jmonkeyengineVersion
+    api 'org.jmonkeyengine:jme3-core:' + jme3Version
     compileOnly 'com.github.stephengold:Minie:' + minieVersion
 }
 
