@@ -39,13 +39,13 @@ task javadocJar(type: Jar) {
     archiveBaseName = project.ext.baseName
     archiveClassifier = 'javadoc'
     dependsOn 'javadoc'
-    description 'Create a JAR of javadoc.'
+    description 'Creates a JAR of javadoc.'
     from javadoc.destinationDir
 }
 task sourcesJar(type: Jar) {
     archiveBaseName = project.ext.baseName
     archiveClassifier = 'sources'
-    description 'Create a JAR of source files.'
+    description 'Creates a JAR of sourcecode.'
     from sourceSets.main.allJava
 }
 
