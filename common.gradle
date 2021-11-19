@@ -5,8 +5,8 @@ apply plugin: 'java'
 ext { // current versions of various libraries:
     garrettVersion = '0.2.1-SNAPSHOT'
     heartVersion = '7.1.0'
-    jme3Version = '3.4.0-stable'
-    minieVersion = '4.4.0'
+    jme3Version = '3.4.0'
+    minieVersion = '4.5.0'
 }
 
 sourceCompatibility = '1.7'
