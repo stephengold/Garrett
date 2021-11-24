@@ -48,7 +48,7 @@ Add to the project’s "build.gradle" file:
     }
     dependencies {
         implementation 'com.github.stephengold:Garrett:0.2.0'
-        implementation 'com.github.stephengold:Minie:4.3.0+big3'
+        implementation 'com.github.stephengold:Minie:4.5.0+big3'
     }
 
 For some older versions of Gradle,
@@ -74,7 +74,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Minie</artifactId>
-      <version>4.3.0+big3</version>
+      <version>4.5.0+big3</version>
     </dependency>
 
 [Jump to table of contents](#toc)
@@ -117,7 +117,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
-You can install the Maven artifacts to your local Maven repository:
+You can install the artifacts to your local Maven repository:
  + using Bash or PowerShell:  `./gradlew install`
  + using Windows Command Prompt:  `.\gradlew install`
 
