@@ -93,26 +93,26 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 
 ## How to build Garrett from source
 
- 1. Install a [Java Development Kit (JDK)][openJDK],
-    if you don't already have one.
- 2. Download and extract the Garrett source code from GitHub:
-   + using Git:
-     + `git clone https://github.com/stephengold/Garrett.git`
-     + `cd Garrett`
-     + `git checkout -b latest 0.2.0`
-   + using a web browser:
-     + browse to [the latest release][latest]
-     + follow the "Source code (zip)" link
-     + save the ZIP file
-     + extract the contents of the saved ZIP file
-     + `cd` to the extracted directory/folder
- 3. Set the `JAVA_HOME` environment variable:
-   + using Bash:  `export JAVA_HOME="` *path to your JDK* `"`
-   + using Windows Command Prompt:  `set JAVA_HOME="` *path to your JDK* `"`
-   + using PowerShell: `$env:JAVA_HOME = '` *path to your JDK* `'`
- 4. Run the [Gradle] wrapper:
-   + using Bash or PowerShell:  `./gradlew build`
-   + using Windows Command Prompt:  `.\gradlew build`
+1. Install a [Java Development Kit (JDK)][openJDK],
+   if you don't already have one.
+2. Download and extract the Garrett source code from GitHub:
+  + using Git:
+    + `git clone https://github.com/stephengold/Garrett.git`
+    + `cd Garrett`
+    + `git checkout -b latest 0.2.0`
+  + using a web browser:
+    + browse to [the latest release][latest]
+    + follow the "Source code (zip)" link
+    + save the ZIP file
+    + extract the contents of the saved ZIP file
+    + `cd` to the extracted directory/folder
+3. Set the `JAVA_HOME` environment variable:
+  + using Bash:  `export JAVA_HOME="` *path to your JDK* `"`
+  + using Windows Command Prompt:  `set JAVA_HOME="` *path to your JDK* `"`
+  + using PowerShell: `$env:JAVA_HOME = '` *path to your JDK* `'`
+4. Run the [Gradle] wrapper:
+  + using Bash or PowerShell: `./gradlew build`
+  + using Windows Command Prompt: `.\gradlew build`
 
 After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
