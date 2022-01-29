@@ -4,7 +4,7 @@ The [Garrett Project][garrett] provides a collection of camera controllers for
 Complete source code (in Java) is provided under
 [a 3-clause BSD license][license].
 
-<a name="toc"/>
+<a name="toc"></a>
 
 ## Contents of this document
 
@@ -13,7 +13,7 @@ Complete source code (in Java) is provided under
 + [Conventions](#conventions)
 + [How to build Garrett from source](#build)
 
-<a name="features"/>
+<a name="features"></a>
 
 ## Important features
 
@@ -25,7 +25,7 @@ Complete source code (in Java) is provided under
 
 [Jump to table of contents](#toc)
 
-<a name="add"/>
+<a name="add"></a>
 
 ## How to add Garrett to an existing project
 
@@ -79,7 +79,7 @@ Add to the project’s "pom.xml" file:
 
 [Jump to table of contents](#toc)
 
-<a name="conventions"/>
+<a name="conventions"></a>
 
 ## Conventions
 
@@ -89,7 +89,7 @@ Both the source code and the pre-built libraries are compatible with JDK 7.
 
 [Jump to table of contents](#toc)
 
-<a name="build"/>
+<a name="build"></a>
 
 ## How to build Garrett from source
 
@@ -127,7 +127,7 @@ You can restore the project to a pristine state:
 
 [Jump to table of contents](#toc)
 
-<a name="acks"/>
+<a name="acks"></a>
 
 ## Acknowledgments
 
