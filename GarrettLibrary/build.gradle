@@ -18,9 +18,9 @@ ext {
 }
 
 dependencies {
-    api 'com.github.stephengold:Heart:' + heartVersion
+    api heartCoordinates
     api 'org.jmonkeyengine:jme3-core:' + jme3Version
-    compileOnly 'com.github.stephengold:Minie:' + minieVersion
+    compileOnly minieCoordinates
 }
 
 // publishing tasks
