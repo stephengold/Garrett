@@ -13,6 +13,7 @@ Complete source code (in Java) is provided under
 + [How to add Garrett to an existing project](#add)
 + [How to build Garrett from source](#build)
 + [Conventions](#conventions)
++ [Acknowledgments](#acks)
 
 
 <a name="features"></a>
