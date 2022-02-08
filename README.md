@@ -4,6 +4,7 @@ The [Garrett Project][garrett] provides a collection of camera controllers for
 Complete source code (in Java) is provided under
 [a 3-clause BSD license][license].
 
+
 <a name="toc"></a>
 
 ## Contents of this document
@@ -12,6 +13,7 @@ Complete source code (in Java) is provided under
 + [How to add Garrett to an existing project](#add)
 + [Conventions](#conventions)
 + [How to build Garrett from source](#build)
+
 
 <a name="features"></a>
 
@@ -24,6 +26,7 @@ Complete source code (in Java) is provided under
   A continuum of chasing behaviors is implemented.
 
 [Jump to table of contents](#toc)
+
 
 <a name="add"></a>
 
@@ -79,6 +82,7 @@ Add to the project’s "pom.xml" file:
 
 [Jump to table of contents](#toc)
 
+
 <a name="conventions"></a>
 
 ## Conventions
@@ -88,6 +92,7 @@ Classes are located in the `com.github.stephengold.garrett` package.
 Both the source code and the pre-built libraries are compatible with JDK 7.
 
 [Jump to table of contents](#toc)
+
 
 <a name="build"></a>
 
@@ -118,34 +123,34 @@ After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
 You can install the artifacts to your local Maven repository:
- + using Bash or PowerShell:  `./gradlew install`
- + using Windows Command Prompt:  `.\gradlew install`
++ using Bash or PowerShell: `./gradlew install`
++ using Windows Command Prompt: `.\gradlew install`
 
 You can restore the project to a pristine state:
- + using Bash or PowerShell: `./gradlew clean`
- + using Windows Command Prompt: `.\gradlew clean`
++ using Bash or PowerShell: `./gradlew clean`
++ using Windows Command Prompt: `.\gradlew clean`
 
 [Jump to table of contents](#toc)
+
 
 <a name="acks"></a>
 
 ## Acknowledgments
 
 Like most projects, the Garrett Project builds on the work of many who
-have gone before.  I therefore acknowledge the following
-software developers:
+have gone before.  I therefore acknowledge the creators of (and contributors to)
+the following software:
 
- + plus the creators of (and contributors to) the following software:
-    + the [Git] revision-control system and GitK commit viewer
-    + the [Firefox] web browser
-    + the [Gradle] build tool
-    + the Java compiler, standard doclet, and virtual machine
-    + [jMonkeyEngine][jme] and the jME3 Software Development Kit
-    + the [Linux Mint][mint] operating system
-    + LWJGL, the Lightweight Java Game Library
-    + the [Markdown] document-conversion tool
-    + Microsoft Windows
-    + the [NetBeans] integrated development environment
++ the [Git] revision-control system and GitK commit viewer
++ the [Firefox] web browser
++ the [Gradle] build tool
++ the [Java] compiler, standard doclet, and virtual machine
++ [jMonkeyEngine][jme] and the jME3 Software Development Kit
++ the [Linux Mint][mint] operating system
++ LWJGL, the Lightweight Java Game Library
++ the [Markdown] document-conversion tool
++ Microsoft Windows
++ the [NetBeans] integrated development environment
 
 I am grateful to [GitHub] and [Sonatype]
 for providing free hosting for this project
@@ -166,6 +171,7 @@ correct the situation: sgold@sonic.net
 [git]: https://git-scm.com "Git"
 [github]: https://github.com "GitHub"
 [gradle]: https://gradle.org "Gradle Project"
+[java]: https://java.com "Java"
 [jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
 [latest]: https://github.com/stephengold/Garrett/releases/latest "latest release"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
