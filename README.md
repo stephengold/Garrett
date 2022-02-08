@@ -11,8 +11,8 @@ Complete source code (in Java) is provided under
 
 + [Important features](#features)
 + [How to add Garrett to an existing project](#add)
-+ [Conventions](#conventions)
 + [How to build Garrett from source](#build)
++ [Conventions](#conventions)
 
 
 <a name="features"></a>
@@ -83,17 +83,6 @@ Add to the project’s "pom.xml" file:
 [Jump to table of contents](#toc)
 
 
-<a name="conventions"></a>
-
-## Conventions
-
-Classes are located in the `com.github.stephengold.garrett` package.
-
-Both the source code and the pre-built libraries are compatible with JDK 7.
-
-[Jump to table of contents](#toc)
-
-
 <a name="build"></a>
 
 ## How to build Garrett from source
@@ -129,6 +118,17 @@ You can install the artifacts to your local Maven repository:
 You can restore the project to a pristine state:
 + using Bash or PowerShell: `./gradlew clean`
 + using Windows Command Prompt: `.\gradlew clean`
+
+[Jump to table of contents](#toc)
+
+
+<a name="conventions"></a>
+
+## Conventions
+
+Classes are located in the `com.github.stephengold.garrett` package.
+
+Both the source code and the pre-built libraries are compatible with JDK 7.
 
 [Jump to table of contents](#toc)
 
