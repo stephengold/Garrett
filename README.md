@@ -90,7 +90,11 @@ Add to the project’s "pom.xml" file:
 
 1. Install a [Java Development Kit (JDK)][openJDK],
    if you don't already have one.
-2. Download and extract the Garrett source code from GitHub:
+2. Point the `JAVA_HOME` environment variable to your JDK installation:
+  + using Bash: `export JAVA_HOME="` *path to installation* `"`
+  + using Windows Command Prompt: `set JAVA_HOME="` *path to installation* `"`
+  + using PowerShell: `$env:JAVA_HOME = '` *path to installation* `'`
+3. Download and extract the Garrett source code from GitHub:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
@@ -101,10 +105,6 @@ Add to the project’s "pom.xml" file:
     + save the ZIP file
     + extract the contents of the saved ZIP file
     + `cd` to the extracted directory/folder
-3. Set the `JAVA_HOME` environment variable:
-  + using Bash:  `export JAVA_HOME="` *path to your JDK* `"`
-  + using Windows Command Prompt:  `set JAVA_HOME="` *path to your JDK* `"`
-  + using PowerShell: `$env:JAVA_HOME = '` *path to your JDK* `'`
 4. Run the [Gradle] wrapper:
   + using Bash or PowerShell: `./gradlew build`
   + using Windows Command Prompt: `.\gradlew build`
