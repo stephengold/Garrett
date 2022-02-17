@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.3.1 relased on TBD
+## Version 0.3.1 relased on 17 February 2022
 
 + Added appstate ID to the `OrbitCamera` constructor. (API change)
 + Added 4 methods to the `OrbitCamera` class:

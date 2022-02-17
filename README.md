@@ -1,3 +1,5 @@
+# Garrett Project
+
 The [Garrett Project][garrett] provides a collection of camera controllers for
 [the jMonkeyEngine (JME) game engine][jme].
 
@@ -49,9 +51,10 @@ Add to the project’s "build.gradle" file:
 
     repositories {
         mavenCentral()
+        maven { url 'https://jcenter.bintray.com' } // for SimMath
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.2.0'
+        implementation 'com.github.stephengold:Garrett:0.3.1'
         implementation 'com.github.stephengold:Minie:4.6.1+big3'
     }
 
@@ -67,12 +70,17 @@ Add to the project’s "pom.xml" file:
         <id>mvnrepository</id>
         <url>https://repo1.maven.org/maven2/</url>
       </repository>
+      <repository>
+        <id>jcenter</id>
+        <name>jcenter</name>
+        <url>https://jcenter.bintray.com</url>
+      </repository>
     </repositories>
 
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.2.0</version>
+      <version>0.3.1</version>
     </dependency>
 
     <dependency>
@@ -129,7 +137,8 @@ You can restore the project to a pristine state:
 
 Classes are located in the `com.github.stephengold.garrett` package.
 
-Both the source code and the pre-built libraries are compatible with JDK 7.
+The source code is compatible with JDK 7.
+The pre-built libraries are compatible with JDK 8.
 
 [Jump to table of contents](#toc)
 
