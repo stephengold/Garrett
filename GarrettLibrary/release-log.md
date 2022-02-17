@@ -1,13 +1,13 @@
 # release log for the Garrett Library
 
-## Version 0.3.0 relased on TBD
+## Version 0.3.1 relased on TBD
 
-+ Added appstate ID to the OrbitCamera constructor. (API change)
-+ Added 4 methods to OrbitCamera:
-  + copyPreferredUpDirection()
-  + getObstructionResponse() 
-  + orbitRate()
-  + zoomMultiplier()
++ Added appstate ID to the `OrbitCamera` constructor. (API change)
++ Added 4 methods to the `OrbitCamera` class:
+  + `copyPreferredUpDirection()`
+  + `getObstructionResponse()`
+  + `orbitRate()`
+  + `zoomMultiplier()`
 + Upgraded JMonkeyEngine to v3.5.0-stable.
 + Upgraded the Heart library to v7.3.0 and the Minie library to v4.6.1
 
