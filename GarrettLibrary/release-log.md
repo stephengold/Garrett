@@ -1,5 +1,16 @@
 # release log for the Garrett Library
 
+## Version 0.3.0 relased on TBD
+
++ Added appstate ID to the OrbitCamera constructor. (API change)
++ Added 4 methods to OrbitCamera:
+  + copyPreferredUpDirection()
+  + getObstructionResponse() 
+  + orbitRate()
+  + zoomMultiplier()
++ Upgraded JMonkeyEngine to v3.5.0-stable.
++ Upgraded the Heart library to v7.3.0 and the Minie library to v4.6.1
+
 ## Version 0.2.0 relased on 28 August 2021
 
 + Replace `ChaseOption` with a continuum of time constants and setpoints.
