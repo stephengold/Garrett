@@ -198,12 +198,13 @@ public class OrbitCamera
      * Instantiate a disabled AppState that will cause the specified Camera to
      * orbit (and optionally chase) a Target.
      *
+     * @param id the desired unique ID for this AppState
      * @param camera the Camera to control (not null, alias created)
      * @param tracker the status tracker for named signals (not null, alias
      * created)
      */
-    public OrbitCamera(Camera camera, SignalTracker tracker) {
-        super();
+    public OrbitCamera(String id, Camera camera, SignalTracker tracker) {
+        super(id);
         Validate.nonNull(camera, "camera");
         Validate.nonNull(tracker, "tracker");
 
