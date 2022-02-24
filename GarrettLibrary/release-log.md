@@ -1,5 +1,10 @@
 # release log for the Garrett Library
 
+## Version 0.4.0 relased on TBD
+
++ Added the `AffixedCamera` controller class.
++ Stopped disabling `OrbitCamera` during updates.
+
 ## Version 0.3.1 relased on 17 February 2022
 
 + Added appstate ID to the `OrbitCamera` constructor. (API change)
@@ -13,9 +18,9 @@
 
 ## Version 0.2.0 relased on 28 August 2021
 
-+ Replace `ChaseOption` with a continuum of time constants and setpoints.
++ Replaced `ChaseOption` with a continuum of time constants and setpoints.
   (API changes!)
-+ Add options to `OrbitCamera` to ignore line-of-sight obstructions
++ Added options to `OrbitCamera` to ignore line-of-sight obstructions
   or respond by clipping instead of warping forward.
 
 ## Version 0.1.5 released on 23 August 2021
