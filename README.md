@@ -22,6 +22,9 @@ Complete source code (in Java) is provided under
 
 ## Important features
 
+ + A controller that affixes a camera to a rigid body at a specific offset.
+  The controlled camera moves with the rigid body as it translates and rotates.
+
  + `OrbitCamera`: a physics-based, 4 degree-of-freedom camera controller.
   The controlled camera orbits a specified target,
   optionally clipping or jumping forward
@@ -54,7 +57,7 @@ Add to the project’s "build.gradle" file:
         maven { url 'https://jcenter.bintray.com' } // for SimMath
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.3.1'
+        implementation 'com.github.stephengold:Garrett:0.4.0'
         implementation 'com.github.stephengold:Minie:4.6.1+big3'
     }
 
@@ -80,7 +83,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.3.1</version>
+      <version>0.4.0</version>
     </dependency>
 
     <dependency>
@@ -106,7 +109,7 @@ Add to the project’s "pom.xml" file:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
-    + `git checkout -b latest 0.2.0`
+    + `git checkout -b latest 0.4.0`
   + using a web browser:
     + browse to [the latest release][latest]
     + follow the "Source code (zip)" link

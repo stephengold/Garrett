@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.4.0 relased on TBD
+## Version 0.4.0 relased on 24 February 2022
 
 + Added the `AffixedCamera` controller class.
 + Stopped disabling `OrbitCamera` during updates.
