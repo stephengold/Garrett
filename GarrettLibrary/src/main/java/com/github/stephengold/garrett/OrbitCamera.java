@@ -887,7 +887,7 @@ public class OrbitCamera
     // private methods
 
     /**
-     * Disable this camera controller.
+     * Disable this camera controller. Assumes it is initialized and enabled.
      */
     private void disable() {
         /*
@@ -908,11 +908,11 @@ public class OrbitCamera
     }
 
     /**
-     * Enable this camera controller.
+     * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
         if (target == null) {
-            throw new IllegalStateException("No target has been set.");
+            throw new IllegalStateException("No target has been set!");
         }
 
         camera.setName(cameraName);
