@@ -667,17 +667,17 @@ public class OrbitCamera
         super.update(tpf);
 
         if (target == null) {
-            disable();
+            logger.warning("No target has been set!");
             return;
         }
         PhysicsCollisionObject targetPco = target.getTargetPco();
         if (targetPco == null) {
-            disable();
+            logger.warning("The target has no collision object!");
             return;
         }
         CollisionSpace collisionSpace = targetPco.getCollisionSpace();
         if (collisionSpace == null) {
-            disable();
+            logger.warning("The object isn't added to a CollisionSpace!");
             return;
         }
         /*
