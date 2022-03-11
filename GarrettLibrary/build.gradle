@@ -12,7 +12,7 @@ ext {
     group = 'com.github.stephengold'
     artifact = 'Garrett'
     version = garrettVersion
-    baseName = "${artifact}-${version}"
+    baseName = "${artifact}-${version}" // for artifacts
     websiteUrl = 'https://github.com/stephengold/Garrett'
 }
 
@@ -127,6 +127,7 @@ publishing {
     }
 }
 generateMetadataFileForMavenPublication.dependsOn('pom')
+publishMavenPublicationToMavenLocal.dependsOn('build')
 publishMavenPublicationToMavenLocal.doLast {
     println 'installed locally as ' + project.ext.baseName
 }
