@@ -54,11 +54,10 @@ Add to the project’s "build.gradle" file:
 
     repositories {
         mavenCentral()
-        maven { url 'https://jcenter.bintray.com' } // for SimMath
     }
     dependencies {
         implementation 'com.github.stephengold:Garrett:0.4.0'
-        implementation 'com.github.stephengold:Minie:4.6.1+big3'
+        implementation 'com.github.stephengold:Minie:4.9.0+big3'
     }
 
 For some older versions of Gradle,
@@ -73,11 +72,6 @@ Add to the project’s "pom.xml" file:
         <id>mvnrepository</id>
         <url>https://repo1.maven.org/maven2/</url>
       </repository>
-      <repository>
-        <id>jcenter</id>
-        <name>jcenter</name>
-        <url>https://jcenter.bintray.com</url>
-      </repository>
     </repositories>
 
     <dependency>
@@ -89,7 +83,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Minie</artifactId>
-      <version>4.6.1+big3</version>
+      <version>4.9.0+big3</version>
     </dependency>
 
 [Jump to table of contents](#toc)
