@@ -419,7 +419,8 @@ public class OrbitCamera
      * obstruct the camera's view (alias created) or null to treat all
      * non-target PCOs as obstructions (default=null)
      */
-    public void setObstructionFilter(BulletDebugAppState.DebugAppStateFilter filter) {
+    public void setObstructionFilter(
+            BulletDebugAppState.DebugAppStateFilter filter) {
         obstructionFilter = filter;
     }
 
@@ -784,9 +785,11 @@ public class OrbitCamera
             if (rejL2 > 0.0) { // not directly above or below
                 double newDot = MyMath.clamp(dot, maxAbsDot);
                 double projCoefficient = newDot / dot;
-                double rejCoefficient = Math.sqrt((1.0 - newDot * newDot) / rejL2);
+                double rejCoefficient
+                        = Math.sqrt((1.0 - newDot * newDot) / rejL2);
                 tmpProj.mult((float) projCoefficient, tmpLook);
-                MyVector3f.accumulateScaled(tmpLook, tmpRej, (float) rejCoefficient);
+                MyVector3f.accumulateScaled(
+                        tmpLook, tmpRej, (float) rejCoefficient);
             } else {
                 MyVector3f.generateBasis(tmpLook, tmpProj, tmpRej);
                 tmpLook.set(tmpProj);
