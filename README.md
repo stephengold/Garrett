@@ -56,8 +56,8 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.4.0'
-        implementation 'com.github.stephengold:Minie:4.9.0+big3'
+        implementation 'com.github.stephengold:Garrett:0.4.1'
+        implementation 'com.github.stephengold:Minie:5.0.0+big3'
     }
 
 For some older versions of Gradle,
@@ -77,13 +77,13 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.4.0</version>
+      <version>0.4.1</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Minie</artifactId>
-      <version>4.9.0+big3</version>
+      <version>5.0.0+big3</version>
     </dependency>
 
 [Jump to table of contents](#toc)
@@ -103,7 +103,7 @@ Add to the project’s "pom.xml" file:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
-    + `git checkout -b latest 0.4.0`
+    + `git checkout -b latest 0.4.1`
   + using a web browser:
     + browse to [the latest release][latest]
     + follow the "Source code (zip)" link
