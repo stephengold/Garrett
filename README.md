@@ -148,6 +148,7 @@ Like most projects, the Garrett Project builds on the work of many who
 have gone before.  I therefore acknowledge the creators of (and contributors to)
 the following software:
 
++ the [Checkstyle] tool
 + the [Git] revision-control system and GitK commit viewer
 + the [Firefox] web browser
 + the [Gradle] build tool
@@ -173,6 +174,7 @@ correct the situation: sgold@sonic.net
 
 [ant]: https://ant.apache.org "Apache Ant Project"
 [bsd3]: https://opensource.org/licenses/BSD-3-Clause "3-Clause BSD License"
+[checkstyle]: https://checkstyle.org "Checkstyle"
 [firefox]: https://www.mozilla.org/en-US/firefox "Firefox"
 [garrett]: https://github.com/stephengold/Garrett "Garrett Project"
 [git]: https://git-scm.com "Git"
