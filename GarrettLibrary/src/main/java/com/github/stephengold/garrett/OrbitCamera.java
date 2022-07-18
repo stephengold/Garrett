@@ -701,11 +701,6 @@ public class OrbitCamera
                         --forwardSum;
                         break;
 
-                    case DragToOrbit:
-                    case Xray:
-                        // do nothing
-                        break;
-
                     case Forward:
                         ++forwardSum;
                         break;
@@ -735,7 +730,6 @@ public class OrbitCamera
                         break;
 
                     default:
-                        throw new IllegalStateException(function.toString());
                 }
             }
         }

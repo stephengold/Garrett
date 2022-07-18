@@ -460,15 +460,6 @@ public class AffixedCamera
         for (CameraSignal function : CameraSignal.values()) {
             if (isActive(function)) {
                 switch (function) {
-                    case Back:
-                    case DragToOrbit:
-                    case Forward:
-                    case OrbitDown:
-                    case OrbitUp:
-                    case Xray:
-                        // do nothing
-                        break;
-
                     case ZoomIn:
                         ++zoomSignalDirection;
                         break;
@@ -478,7 +469,6 @@ public class AffixedCamera
                         break;
 
                     default:
-                        throw new IllegalStateException(function.toString());
                 }
             }
         }
