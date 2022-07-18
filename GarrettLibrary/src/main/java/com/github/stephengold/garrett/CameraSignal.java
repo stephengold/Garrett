@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2020-2021, Stephen Gold
+ Copyright (c) 2020-2022, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 package com.github.stephengold.garrett;
 
 /**
- * Enumerate the OrbitCamera functions that can be controlled by signals.
+ * Enumerate the camera functions that can be controlled by signals.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -43,7 +43,7 @@ public enum CameraSignal {
      */
     Back,
     /**
-     * activate drag-to-orbit
+     * activate drag-to-orbit mode
      */
     DragToOrbit,
     /**

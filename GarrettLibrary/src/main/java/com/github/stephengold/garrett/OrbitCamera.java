@@ -95,7 +95,7 @@ public class OrbitCamera
     private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
     /**
      * maximum magnitude of the dot product between the camera's look direction
-     * and its preferred "up" direction (default=cos(0.3))
+     * and its preferred "up" direction
      */
     private double maxAbsDot = Math.cos(0.3);
     /**
@@ -123,7 +123,7 @@ public class OrbitCamera
      */
     private float minYTangent = 0.01f;
     /**
-     * orbiting rate (in radians per second, &ge;0, default=0.5)
+     * orbiting rate (in radians per second, &ge;0)
      */
     private float orbitRate = 0.5f;
     /**
@@ -456,7 +456,7 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the size of the pole-exclusion cone, which keeps the Camera from
+     * Alter the size of the pole-exclusion cone, which prevents the Camera from
      * looking too near the preferred "up" direction or its opposite.
      *
      * @param minAngle the minimum angle between the camera axis and the
