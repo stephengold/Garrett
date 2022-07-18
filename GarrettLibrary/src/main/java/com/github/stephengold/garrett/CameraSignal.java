@@ -47,9 +47,29 @@ public enum CameraSignal {
      */
     DragToOrbit,
     /**
+     * activate drag-to-rotate mode
+     */
+    DragToRotate,
+    /**
+     * translate eastward (world +Z direction)
+     */
+    East,
+    /**
      * translate forward (camera's look or +Z direction)
      */
     Forward,
+    /**
+     * enable ghost mode (no contact response)
+     */
+    Ghost,
+    /**
+     * translate (slide or strafe) leftward (camera's +X direction)
+     */
+    Left,
+    /**
+     * translate northward (world +X direction)
+     */
+    North,
     /**
      * orbit counter-clockwise (world +Y axis), moving to the camera's right
      */
@@ -67,7 +87,51 @@ public enum CameraSignal {
      */
     OrbitUp,
     /**
-     * use X-ray vision (no line-of-sight constraint)
+     * enable point-to-look mode
+     */
+    PointToLook,
+    /**
+     * translate in the camera's preferred "down" direction
+     */
+    PreferredDown,
+    /**
+     * translate in the camera's preferred "up" direction
+     */
+    PreferredUp,
+    /**
+     * enable high-mass mode (behave like a battering ram)
+     */
+    Ram,
+    /**
+     * translate (slide or strafe) rightward (camera's -X direction)
+     */
+    Right,
+    /**
+     * translate southward (world -X direction)
+     */
+    South,
+    /**
+     * translate in the camera's actual "down" direction
+     */
+    ViewDown,
+    /**
+     * translate in the camera's actual "up" direction
+     */
+    ViewUp,
+    /**
+     * translate westward (world -Z direction)
+     */
+    West,
+    /**
+     * translate downward (world -Y direction)
+     */
+    WorldDown,
+    /**
+     * translate upward (world +Y direction)
+     */
+    WorldUp,
+    /**
+     * enable X-ray mode (no line-of-sight constraint)
      */
     Xray,
     /**
