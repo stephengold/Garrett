@@ -887,6 +887,7 @@ public class OrbitCamera
      * Disable this camera controller. Assumes it is initialized and enabled.
      */
     private void disable() {
+        assert isInitialized();
         /*
          * Configure the analog inputs.
          */
@@ -908,6 +909,7 @@ public class OrbitCamera
      * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
+        assert isInitialized();
         if (target == null) {
             throw new IllegalStateException("No target has been set!");
         }

@@ -507,6 +507,7 @@ public class AffixedCamera
      * Disable this camera controller. Assumes it is initialized and enabled.
      */
     private void disable() {
+        assert isInitialized();
         /*
          * Configure the analog inputs.
          */
@@ -522,6 +523,7 @@ public class AffixedCamera
      * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
+        assert isInitialized();
         if (rigidBody == null) {
             throw new IllegalStateException("No rigid body has been set!");
         }
