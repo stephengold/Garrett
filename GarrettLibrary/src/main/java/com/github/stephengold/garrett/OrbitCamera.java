@@ -209,7 +209,7 @@ public class OrbitCamera
         Validate.nonNull(tracker, "tracker");
 
         this.camera = camera;
-        signalTracker = tracker;
+        this.signalTracker = tracker;
         super.setEnabled(false);
     }
     // *************************************************************************
@@ -359,7 +359,7 @@ public class OrbitCamera
             throw new IllegalStateException("Cannot alter the time constant "
                     + "while the controller is attached and enabled.");
         }
-        azimuthTau = timeConstant;
+        this.azimuthTau = timeConstant;
     }
 
     /**
@@ -375,7 +375,7 @@ public class OrbitCamera
             throw new IllegalStateException("Cannot alter the camera name "
                     + "while the controller is attached and enabled.");
         }
-        cameraName = name;
+        this.cameraName = name;
     }
 
     /**
@@ -387,7 +387,7 @@ public class OrbitCamera
      */
     public void setDeltaAzimuth(float angle) {
         Validate.inRange(angle, "angle", -FastMath.TWO_PI, FastMath.TWO_PI);
-        deltaAzimuthSetpoint = angle;
+        this.deltaAzimuthSetpoint = angle;
     }
 
     /**
@@ -403,8 +403,8 @@ public class OrbitCamera
         Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
 
         float frustumYTangent = MyCamera.yTangent(camera);
-        minYTangent = 1f / max;
-        maxYTangent = 1f / min;
+        this.minYTangent = 1f / max;
+        this.maxYTangent = 1f / min;
         frustumYTangent
                 = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
         if (isInitialized() && isEnabled()) {
@@ -421,7 +421,7 @@ public class OrbitCamera
      */
     public void setObstructionFilter(
             BulletDebugAppState.DebugAppStateFilter filter) {
-        obstructionFilter = filter;
+        this.obstructionFilter = filter;
     }
 
     /**
@@ -431,7 +431,7 @@ public class OrbitCamera
      */
     public void setObstructionResponse(ObstructionResponse response) {
         Validate.nonNull(response, "response");
-        obstructionResponse = response;
+        this.obstructionResponse = response;
     }
 
     /**
@@ -452,7 +452,7 @@ public class OrbitCamera
      */
     public void setOrbitRate(float rate) {
         Validate.nonNegative(rate, "rate");
-        orbitRate = rate;
+        this.orbitRate = rate;
     }
 
     /**
@@ -465,7 +465,7 @@ public class OrbitCamera
      */
     public void setPoleExclusionAngle(float minAngle) {
         Validate.inRange(minAngle, "minimum angle", 0f, FastMath.HALF_PI);
-        maxAbsDot = Math.cos(minAngle);
+        this.maxAbsDot = Math.cos(minAngle);
     }
 
     /**
@@ -475,7 +475,7 @@ public class OrbitCamera
      */
     public void setPreferredClip(float distance) {
         Validate.positive(distance, "distance");
-        preferredClip = distance;
+        this.preferredClip = distance;
     }
 
     /**
@@ -485,7 +485,7 @@ public class OrbitCamera
      */
     public void setPreferredRange(float range) {
         Validate.positive(range, "range");
-        preferredRange = range;
+        this.preferredRange = range;
     }
 
     /**
@@ -510,7 +510,7 @@ public class OrbitCamera
         target.locateTarget(tmpTargetLocation);
         tmpCameraLocation.subtract(tmpTargetLocation, offset);
 
-        preferredRange = offset.length();
+        this.preferredRange = offset.length();
     }
 
     /**
@@ -547,7 +547,7 @@ public class OrbitCamera
      */
     public void setZoomMultiplier(float multiplier) {
         Validate.positive(multiplier, "multiplier");
-        zoomMultiplier = multiplier;
+        this.zoomMultiplier = multiplier;
     }
 
     /**
@@ -580,34 +580,34 @@ public class OrbitCamera
         switch (eventName) {
             case analogOrbitCcw:
                 if (isDragToOrbit) {
-                    yawAnalogSum += reading;
+                    this.yawAnalogSum += reading;
                 }
                 break;
 
             case analogOrbitCw:
                 if (isDragToOrbit) {
-                    yawAnalogSum -= reading;
+                    this.yawAnalogSum -= reading;
                 }
                 break;
 
             case analogOrbitDown:
                 if (isDragToOrbit) {
-                    pitchAnalogSum += reading;
+                    this.pitchAnalogSum += reading;
                 }
                 break;
 
             case analogOrbitUp:
                 if (isDragToOrbit) {
-                    pitchAnalogSum -= reading;
+                    this.pitchAnalogSum -= reading;
                 }
                 break;
 
             case analogZoomIn:
-                zoomAnalogSum += reading;
+                this.zoomAnalogSum += reading;
                 break;
 
             case analogZoomOut:
-                zoomAnalogSum -= reading;
+                this.zoomAnalogSum -= reading;
                 break;
 
             default:
@@ -769,8 +769,8 @@ public class OrbitCamera
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
             tmpRotation.mult(offset, offset);
 
-            pitchAnalogSum = 0f;
-            yawAnalogSum = 0f;
+            this.pitchAnalogSum = 0f;
+            this.yawAnalogSum = 0f;
         }
         /*
          * Avoid looking too near the preferred "up" direction or its opposite.

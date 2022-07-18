@@ -153,7 +153,7 @@ public class AffixedCamera
         Validate.nonNull(tracker, "tracker");
 
         this.camera = camera;
-        signalTracker = tracker;
+        this.signalTracker = tracker;
         super.setEnabled(false);
     }
     // *************************************************************************
@@ -260,7 +260,7 @@ public class AffixedCamera
             throw new IllegalStateException("Cannot alter the camera name "
                     + "while the controller is attached and enabled.");
         }
-        cameraName = name;
+        this.cameraName = name;
     }
 
     /**
@@ -289,8 +289,8 @@ public class AffixedCamera
         Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
 
         float frustumYTangent = MyCamera.yTangent(camera);
-        minYTangent = 1f / max;
-        maxYTangent = 1f / min;
+        this.minYTangent = 1f / max;
+        this.maxYTangent = 1f / min;
         frustumYTangent
                 = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
         if (isInitialized() && isEnabled()) {
@@ -354,7 +354,7 @@ public class AffixedCamera
      */
     public void setZoomMultiplier(float multiplier) {
         Validate.positive(multiplier, "multiplier");
-        zoomMultiplier = multiplier;
+        this.zoomMultiplier = multiplier;
     }
 
     /**
@@ -385,11 +385,11 @@ public class AffixedCamera
 
         switch (eventName) {
             case analogZoomIn:
-                zoomAnalogSum += reading;
+                this.zoomAnalogSum += reading;
                 break;
 
             case analogZoomOut:
-                zoomAnalogSum -= reading;
+                this.zoomAnalogSum -= reading;
                 break;
 
             default:
