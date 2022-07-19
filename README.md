@@ -3,8 +3,14 @@
 The [Garrett Project][garrett] provides a collection of camera controllers for
 [the jMonkeyEngine (JME) game engine][jme].
 
+It contains 2 sub-projects:
+
+1. GarrettLibrary: the Garrett runtime library
+2. GarrettExamples: example apps that use the library
+
 Complete source code (in Java) is provided under
-[a 3-clause BSD license][license].
+[a BSD 3-Clause license][license].
+
 
 
 <a name="toc"></a>
@@ -25,6 +31,10 @@ Complete source code (in Java) is provided under
  + A controller that affixes a camera to a rigid body at a specific offset.
   The controlled camera moves with the rigid body as it translates and rotates.
 
+ + `DynamicCamera`: a physics-based, 6 degree-of-freedom camera controller.
+  The controlled camera is enclosed in a spherical rigid body
+  that prevents it from penetrating other bodies.
+
  + `OrbitCamera`: a physics-based, 4 degree-of-freedom camera controller.
   The controlled camera orbits a specified target,
   optionally clipping or jumping forward
@@ -42,7 +52,7 @@ The Garrett Library depends on [Minie].
 However, the Minie dependency is intentionally omitted from Garrett's POM
 so developers can specify *which* Minie library should be used.
 
-For projects built using Maven or [Gradle], it is *not* sufficient to specify the
+For projects built using [Maven] or [Gradle], it is *not* sufficient to specify the
 dependency on the Garrett Library.
 You must also explicitly specify the Minie dependency.
 The following examples specify "+big3",
@@ -56,7 +66,7 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.4.1'
+        implementation 'com.github.stephengold:Garrett:0.5.0'
         implementation 'com.github.stephengold:Minie:5.0.0+big3'
     }
 
@@ -77,7 +87,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.4.1</version>
+      <version>0.5.0</version>
     </dependency>
 
     <dependency>
@@ -93,17 +103,20 @@ Add to the project’s "pom.xml" file:
 
 ## How to build Garrett from source
 
-1. Install a [Java Development Kit (JDK)][openJDK],
+1. Install a [Java Development Kit (JDK)][adoptium],
    if you don't already have one.
 2. Point the `JAVA_HOME` environment variable to your JDK installation:
-  + using Bash: `export JAVA_HOME="` *path to installation* `"`
+   (The path might be something like "C:\Program Files\Java\jre1.8.0_301"
+   or "/usr/lib/jvm/java-8-openjdk-amd64/" or
+   "/Library/Java/JavaVirtualMachines/liberica-jdk-17-full.jdk/Contents/Home" .)
+  + using Bash or Zsh: `export JAVA_HOME="` *path to installation* `"`
   + using Windows Command Prompt: `set JAVA_HOME="` *path to installation* `"`
   + using PowerShell: `$env:JAVA_HOME = '` *path to installation* `'`
 3. Download and extract the Garrett source code from GitHub:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
-    + `git checkout -b latest 0.4.1`
+    + `git checkout -b latest 0.5.0`
   + using a web browser:
     + browse to [the latest release][latest]
     + follow the "Source code (zip)" link
@@ -111,18 +124,18 @@ Add to the project’s "pom.xml" file:
     + extract the contents of the saved ZIP file
     + `cd` to the extracted directory/folder
 4. Run the [Gradle] wrapper:
-  + using Bash or PowerShell: `./gradlew build`
+  + using Bash or PowerShell or Zsh: `./gradlew build`
   + using Windows Command Prompt: `.\gradlew build`
 
 After a successful build,
 Maven artifacts will be found in `GarrettLibrary/build/libs`.
 
 You can install the artifacts to your local Maven repository:
-+ using Bash or PowerShell: `./gradlew install`
++ using Bash or PowerShell or Zsh: `./gradlew install`
 + using Windows Command Prompt: `.\gradlew install`
 
 You can restore the project to a pristine state:
-+ using Bash or PowerShell: `./gradlew clean`
++ using Bash or PowerShell or Zsh: `./gradlew clean`
 + using Windows Command Prompt: `.\gradlew clean`
 
 [Jump to table of contents](#toc)
@@ -150,6 +163,7 @@ the following software:
 
 + the [Checkstyle] tool
 + the [Git] revision-control system and GitK commit viewer
++ the [GitKraken] client
 + the [Firefox] web browser
 + the [Gradle] build tool
 + the [Java] compiler, standard doclet, and virtual machine
@@ -172,6 +186,7 @@ correct the situation: sgold@sonic.net
 [Jump to table of contents](#toc)
 
 
+[adoptium]: https://adoptium.net/releases.html "Adoptium Project"
 [ant]: https://ant.apache.org "Apache Ant Project"
 [bsd3]: https://opensource.org/licenses/BSD-3-Clause "3-Clause BSD License"
 [checkstyle]: https://checkstyle.org "Checkstyle"
@@ -179,15 +194,16 @@ correct the situation: sgold@sonic.net
 [garrett]: https://github.com/stephengold/Garrett "Garrett Project"
 [git]: https://git-scm.com "Git"
 [github]: https://github.com "GitHub"
+[gitkraken]: https://www.gitkraken.com "GitKraken client"
 [gradle]: https://gradle.org "Gradle Project"
 [java]: https://java.com "Java"
 [jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
 [latest]: https://github.com/stephengold/Garrett/releases/latest "latest release"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
+[maven]: https://maven.apache.org "Maven Project"
 [minie]: https://github.com/stephengold/Minie "Minie Project"
 [mint]: https://linuxmint.com "Linux Mint Project"
 [netbeans]: https://netbeans.org "NetBeans Project"
-[openJDK]: https://openjdk.java.net "OpenJDK Project"
 [sonatype]: https://www.sonatype.com "Sonatype"
 [utilities]: https://github.com/stephengold/jme3-utilities "Jme3-utilities Project"

@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.5.0 released on TBD
+## Version 0.5.0 released on 18 July 2022
 
 Added the `DynamicCamera` controller class.
 
