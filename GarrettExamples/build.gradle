@@ -6,6 +6,8 @@ plugins {
     id 'application'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+
 dependencies {
     implementation 'org.apache.commons:commons-exec:1.3'
 
