@@ -219,16 +219,15 @@ public class DynamicCamera
         rigidBody = new PhysicsRigidBody(shape, usualMass);
         rigidBody.setApplicationData(this);
         rigidBody.setFriction(0f);
-        /*
-         * Initialize some signal names to imitate FlyByCamera.
-         */
-        signalNames.put(CameraSignal.Back, "FLYCAM_Backward");
-        signalNames.put(CameraSignal.DragToRotate, "cameraDrag");
-        signalNames.put(CameraSignal.Forward, "FLYCAM_Forward");
-        signalNames.put(CameraSignal.Left, "FLYCAM_StrafeLeft");
-        signalNames.put(CameraSignal.Right, "FLYCAM_StrafeRight");
-        signalNames.put(CameraSignal.WorldDown, "FLYCAM_Lower");
-        signalNames.put(CameraSignal.WorldUp, "FLYCAM_Rise");
+
+        // Initialize some signal names use to imitate FlyByCamera.
+        setSignalName(CameraSignal.Back, "FLYCAM_Backward");
+        setSignalName(CameraSignal.DragToRotate, "cameraDrag");
+        setSignalName(CameraSignal.Forward, "FLYCAM_Forward");
+        setSignalName(CameraSignal.Left, "FLYCAM_StrafeLeft");
+        setSignalName(CameraSignal.Right, "FLYCAM_StrafeRight");
+        setSignalName(CameraSignal.WorldDown, "FLYCAM_Lower");
+        setSignalName(CameraSignal.WorldUp, "FLYCAM_Rise");
 
         super.setEnabled(false);
     }
