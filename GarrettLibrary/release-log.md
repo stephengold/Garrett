@@ -1,17 +1,21 @@
 # release log for the Garrett Library
 
-## Version 0.4.1 relased on 11 July 2022
+## Version 0.5.0 released on TBD
+
+Added the `DynamicCamera` controller class.
+
+## Version 0.4.1 released on 11 July 2022
 
 + Upgraded JMonkeyEngine to v3.5.2-stable.
 + Upgraded the Heart library to v8.0.0 and the Minie library to v5.0.0
 + Added the "checkstyle" plugin to the build.
 
-## Version 0.4.0 relased on 24 February 2022
+## Version 0.4.0 released on 24 February 2022
 
 + Added the `AffixedCamera` controller class.
 + Stopped disabling `OrbitCamera` during updates.
 
-## Version 0.3.1 relased on 17 February 2022
+## Version 0.3.1 released on 17 February 2022
 
 + Added appstate ID to the `OrbitCamera` constructor. (API change)
 + Added 4 methods to the `OrbitCamera` class:
@@ -22,7 +26,7 @@
 + Upgraded JMonkeyEngine to v3.5.0-stable.
 + Upgraded the Heart library to v7.3.0 and the Minie library to v4.6.1
 
-## Version 0.2.0 relased on 28 August 2021
+## Version 0.2.0 released on 28 August 2021
 
 + Replaced `ChaseOption` with a continuum of time constants and setpoints.
   (API changes!)
