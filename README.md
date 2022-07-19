@@ -21,6 +21,7 @@ Complete source code (in Java) is provided under
 + [How to add Garrett to an existing project](#add)
 + [How to build Garrett from source](#build)
 + [Conventions](#conventions)
++ [An overview of the example applications](#examples)
 + [Acknowledgments](#acks)
 
 
@@ -28,7 +29,7 @@ Complete source code (in Java) is provided under
 
 ## Important features
 
- + A controller that affixes a camera to a rigid body at a specific offset.
+ + `AffixedCamera`: affixes a camera to a rigid body at a specific offset.
   The controlled camera moves with the rigid body as it translates and rotates.
 
  + `DynamicCamera`: a physics-based, 6 degree-of-freedom camera controller.
@@ -128,7 +129,7 @@ Add to the project’s "pom.xml" file:
   + using Windows Command Prompt: `.\gradlew build`
 
 After a successful build,
-Maven artifacts will be found in `GarrettLibrary/build/libs`.
+Maven artifacts will be found in "GarrettLibrary/build/libs".
 
 You can install the artifacts to your local Maven repository:
 + using Bash or PowerShell or Zsh: `./gradlew install`
@@ -145,10 +146,65 @@ You can restore the project to a pristine state:
 
 ## Conventions
 
-Classes are located in the `com.github.stephengold.garrett` package.
+Library classes are in the `com.github.stephengold.garrett` package.
+Example classes are in the `com.github.stephengold.garrett.examples` package.
 
-The source code is compatible with JDK 7.
-The pre-built libraries are compatible with JDK 8.
+The library source code is compatible with JDK 7.
+The examples and pre-built libraries are compatible with JDK 8.
+
+[Jump to table of contents](#toc)
+
+
+<a name="examples"></a>
+
+## An overview of the example applications
+
+Applications have been created to test and demonstrate
+certain features of Garrett.
+The following apps are found in the GarrettExamples sub-project:
+
+### HelloGarrett
+
+A very simple example of how Garrett maps keys to input signals.
+Using `AffixedCamera`, the camera is affixed to the red sphere.
+
++ up-arrow key or mouse wheel to zoom out
++ down-arrow key or mouse wheel to zoom in
+
+### HelloDynaCam
+
+An example of a camera controlled by `DynamicCamera`.
+
++ drag with the left mouse button (LMB) to rotate the camera
++ drag with the right mouse button (RMB) to rotate in "point-to-look" mode
++ rotate the mouse wheel to zoom in or out
++ "W" key to move the camera forward 
++ "S" key to move the camera backward 
++ left-arrow key or "A" key to strafe left
++ right-arrow key or "D" key to strafe right
++ "Q" key to raise the camera along the world's Y axis
++ "Z" key to lower the camera along the world's Y axis
++ up-arrow key to move the camera upward in view coordinates
++ down-arrow key to move the camera downward in view coordinates
++ hold down the "G" key for "ghost mode", which temporarily disables physics
++ hold down the "R" key for "ram mode", which temporarily increase the mass
+
+### HelloOrbitCam
+
+An example of a camera controlled by `OrbitCamera`.
+The camera orbits the red ball, which is its target.
+
++ drag with the left mouse button (LMB) to orbit the ball on 2 axes
++ up-arrow key or mouse wheel to zoom out
++ down-arrow key or mouse wheel to zoom in
++ "W" key to move the camera forward (toward the ball)
++ "S" key to move the camera backward (away from the ball)
++ left-arrow key or "A" key to orbit left (counter-clockwise, seen from above)
++ right-arrow key or "D" key to orbit right (clockwise, seen from above)
++ "Q" key to orbit upward
++ "Z" key to orbit downward
++ hold down the "X" key for "X-ray mode", which temporarily ignores obstructions
+
 
 [Jump to table of contents](#toc)
 
