@@ -30,6 +30,11 @@ tasks.withType(JavaCompile) { // Java compile-time options:
     }
 }
 
+tasks.withType(JavaExec) { // Java runtime options:
+    classpath sourceSets.main.runtimeClasspath
+    enableAssertions true
+}
+
 repositories {
     //mavenLocal() // to find local SNAPSHOTs of libraries
     mavenCentral()
