@@ -29,21 +29,17 @@
  */
 package com.github.stephengold.garrett;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.bullet.CollisionSpace;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.PhysicsRayTestResult;
 import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,9 +57,7 @@ import jme3utilities.math.MyVector3f;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-public class OrbitCamera
-        extends BaseAppState
-        implements AnalogListener {
+public class OrbitCamera extends CameraController {
     // *************************************************************************
     // constants and loggers
 
@@ -79,15 +73,9 @@ public class OrbitCamera
     final private static String analogOrbitCw = "orbit cw";
     final private static String analogOrbitDown = "orbit down";
     final private static String analogOrbitUp = "orbit up";
-    final private static String analogZoomIn = "zoom in";
-    final private static String analogZoomOut = "zoom out";
     // *************************************************************************
     // fields
 
-    /**
-     * Camera being controlled (not null)
-     */
-    final private Camera camera;
     /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
@@ -99,11 +87,6 @@ public class OrbitCamera
      */
     private double maxAbsDot = Math.cos(0.3);
     /**
-     * map functions to signal names
-     */
-    final private EnumMap<CameraSignal, String> signalNames
-            = new EnumMap<>(CameraSignal.class);
-    /**
      * time constant for horizontal rotation (in seconds, 0 &rarr; locked on
      * deltaAzimuthSetpoint, +Infinity &rarr; free horizontal rotation)
      */
@@ -114,14 +97,6 @@ public class OrbitCamera
      * right flank)
      */
     private float deltaAzimuthSetpoint = 0f;
-    /**
-     * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
-     */
-    private float maxYTangent = 2f;
-    /**
-     * frustum's Y tangent ratio at highest magnification (&gt;0)
-     */
-    private float minYTangent = 0.01f;
     /**
      * orbiting rate (in radians per second, &ge;0)
      */
@@ -145,14 +120,6 @@ public class OrbitCamera
      */
     private float yawAnalogSum = 0f;
     /**
-     * accumulated analog zoom amount since the last update (in clicks)
-     */
-    private float zoomAnalogSum = 0f;
-    /**
-     * analog zoom input multiplier (in log units per click)
-     */
-    private float zoomMultiplier = 0.3f;
-    /**
      * configured response to obstructed line-of-sight
      */
     private ObstructionResponse obstructionResponse = ObstructionResponse.Clip;
@@ -160,15 +127,6 @@ public class OrbitCamera
      * reusable Quaternion
      */
     final private static Quaternion tmpRotation = new Quaternion();
-    /**
-     * status of named signals
-     */
-    final private SignalTracker signalTracker;
-    /**
-     * name applied to the Camera when this controller becomes attached and
-     * enabled
-     */
-    private String cameraName;
     /**
      * what's being orbited, or null if none
      */
@@ -204,13 +162,7 @@ public class OrbitCamera
      * created)
      */
     public OrbitCamera(String id, Camera camera, SignalTracker tracker) {
-        super(id);
-        Validate.nonNull(camera, "camera");
-        Validate.nonNull(tracker, "tracker");
-
-        this.camera = camera;
-        this.signalTracker = tracker;
-        super.setEnabled(false);
+        super(id, camera, tracker);
     }
     // *************************************************************************
     // new methods exposed
@@ -224,16 +176,6 @@ public class OrbitCamera
     public float azimuthTau() {
         assert azimuthTau >= 0f : azimuthTau;
         return azimuthTau;
-    }
-
-    /**
-     * Determine the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     *
-     * @return the name
-     */
-    public String cameraName() {
-        return cameraName;
     }
 
     /**
@@ -317,23 +259,6 @@ public class OrbitCamera
     }
 
     /**
-     * Magnify the view by the specified factor.
-     *
-     * @param factor the factor to increase magnification (&gt;0)
-     */
-    public void magnify(float factor) {
-        Validate.positive(factor, "factor");
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        frustumYTangent /= factor;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
-    }
-
-    /**
      * Determine the orbital rate.
      *
      * @return the rate (in radians per second, &ge;0)
@@ -363,22 +288,6 @@ public class OrbitCamera
     }
 
     /**
-     * Alter the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     * <p>
-     * Allowed only when the controller is NOT attached and enabled.
-     *
-     * @param name the desired name (default=null)
-     */
-    public void setCameraName(String name) {
-        if (isInitialized() && isEnabled()) {
-            throw new IllegalStateException("Cannot alter the camera name "
-                    + "while the controller is attached and enabled.");
-        }
-        this.cameraName = name;
-    }
-
-    /**
      * Alter the azimuth difference between the Camera and the Target.
      *
      * @param angle the desired angle (in radians, &gt;-2*Pi, &lt;2*Pi, 0
@@ -388,28 +297,6 @@ public class OrbitCamera
     public void setDeltaAzimuth(float angle) {
         Validate.inRange(angle, "angle", -FastMath.TWO_PI, FastMath.TWO_PI);
         this.deltaAzimuthSetpoint = angle;
-    }
-
-    /**
-     * Alter the range of the camera's focal zoom.
-     *
-     * @param max the desired maximum magnification (&gt;min, 1&rarr;45deg
-     * Y-angle)
-     * @param min the desired minimum magnification (&gt;0, 1&rarr;45deg
-     * Y-angle)
-     */
-    public void setMaxMinMagnification(float min, float max) {
-        Validate.positive(min, "min magnification");
-        Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        this.minYTangent = 1f / max;
-        this.maxYTangent = 1f / min;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
     }
 
     /**
@@ -506,22 +393,12 @@ public class OrbitCamera
      * the Camera and the Target.
      */
     public void setRangeAndOffset() {
+        Camera camera = getCamera();
         tmpCameraLocation.set(camera.getLocation());
         target.locateTarget(tmpTargetLocation);
         tmpCameraLocation.subtract(tmpTargetLocation, offset);
 
         this.preferredRange = offset.length();
-    }
-
-    /**
-     * Alter which signal is assigned to the specified function.
-     *
-     * @param function which function to alter (not null)
-     * @param signalName the desired signal name (may be null)
-     */
-    public void setSignalName(CameraSignal function, String signalName) {
-        Validate.nonNull(function, "function");
-        signalNames.put(function, signalName);
     }
 
     /**
@@ -538,29 +415,8 @@ public class OrbitCamera
             setRangeAndOffset();
         }
     }
-
-    /**
-     * Alter the analog input multiplier for focal zoom.
-     *
-     * @param multiplier the desired multiplier (in log units per click, &gt;0,
-     * default=0.3)
-     */
-    public void setZoomMultiplier(float multiplier) {
-        Validate.positive(multiplier, "multiplier");
-        this.zoomMultiplier = multiplier;
-    }
-
-    /**
-     * Determine the analog input multiplier for focal zoom.
-     *
-     * @return the multiplier (in log units per click)
-     */
-    public float zoomMultiplier() {
-        assert zoomMultiplier > 0f : zoomMultiplier;
-        return zoomMultiplier;
-    }
     // *************************************************************************
-    // AnalogListener methods
+    // CameraController methods
 
     /**
      * Callback to receive an analog input event.
@@ -603,40 +459,13 @@ public class OrbitCamera
                 break;
 
             case analogZoomIn:
-                this.zoomAnalogSum += reading;
-                break;
-
             case analogZoomOut:
-                this.zoomAnalogSum -= reading;
+                super.onAnalog(eventName, reading, tpf);
                 break;
 
             default:
                 throw new IllegalArgumentException(eventName);
         }
-    }
-    // *************************************************************************
-    // BaseAppState methods
-
-    /**
-     * Callback invoked after this AppState is detached or during application
-     * shutdown if the state is still attached. onDisable() is called before
-     * this cleanup() method if the state is enabled at the time of cleanup.
-     *
-     * @param application the application instance (not null)
-     */
-    @Override
-    protected void cleanup(Application application) {
-        // do nothing
-    }
-
-    /**
-     * Callback invoked after this AppState is attached but before onEnable().
-     *
-     * @param application the application instance (not null)
-     */
-    @Override
-    protected void initialize(Application application) {
-        // do nothing
     }
 
     /**
@@ -654,6 +483,7 @@ public class OrbitCamera
      */
     @Override
     protected void onEnable() {
+        super.onEnable();
         enable();
     }
 
@@ -738,6 +568,7 @@ public class OrbitCamera
          * first the discrete signals and then the analog values.
          */
         float range = offset.length();
+        Camera camera = getCamera();
         if (orbitCwSign != 0 || orbitUpSign != 0) {
             float rootSumSquares = MyMath.hypotenuse(orbitCwSign, orbitUpSign);
             float dist = range * orbitRate * tpf / rootSumSquares;
@@ -875,7 +706,7 @@ public class OrbitCamera
             magnify(zoomFactor);
         }
         if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier * zoomAnalogSum);
+            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
             magnify(zoomFactor);
             zoomAnalogSum = 0f;
         }
@@ -909,18 +740,16 @@ public class OrbitCamera
      * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
-        assert isInitialized();
         if (target == null) {
             throw new IllegalStateException("No target has been set!");
         }
-
-        camera.setName(cameraName);
         /*
          * Initialize the camera offset and preferred range.
          */
         setRangeAndOffset();
 
         float yDegrees;
+        Camera camera = getCamera();
         if (camera.isParallelProjection()) {
             /*
              * Configure perspective.
@@ -953,18 +782,6 @@ public class OrbitCamera
 
         inputManager.addListener(this, analogOrbitDown, analogOrbitUp,
                 analogZoomIn, analogZoomOut);
-    }
-
-    /**
-     * Test whether the specified camera function (signal) is active.
-     */
-    private boolean isActive(CameraSignal function) {
-        String signalName = signalNames.get(function);
-        if (signalName != null && signalTracker.test(signalName)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

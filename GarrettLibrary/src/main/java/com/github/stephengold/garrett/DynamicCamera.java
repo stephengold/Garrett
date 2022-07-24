@@ -29,8 +29,6 @@
  */
 package com.github.stephengold.garrett;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -38,14 +36,12 @@ import com.jme3.bullet.collision.shapes.MultiSphere;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import java.util.EnumMap;
 import java.util.logging.Logger;
 import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
@@ -60,8 +56,8 @@ import jme3utilities.math.MyVector3f;
  * @author Stephen Gold sgold@sonic.net
  */
 public class DynamicCamera
-        extends BaseAppState
-        implements AnalogListener, PhysicsTickListener {
+        extends CameraController
+        implements PhysicsTickListener {
     // *************************************************************************
     // constants and loggers
 
@@ -77,8 +73,6 @@ public class DynamicCamera
     final private static String analogPitchUp = "pitch up";
     final private static String analogYawLeft = "yaw left";
     final private static String analogYawRight = "yaw right";
-    final private static String analogZoomIn = "zoom in";
-    final private static String analogZoomOut = "zoom out";
     /**
      * local copy of {@link com.jme3.math.Vector3f#ZERO}
      */
@@ -87,27 +81,10 @@ public class DynamicCamera
     // fields
 
     /**
-     * Camera being controlled (not null)
-     */
-    final private Camera camera;
-    /**
      * maximum magnitude of the dot product between the camera's look direction
      * and its preferred "up" direction
      */
     private double maxAbsDot = Math.cos(0.3);
-    /**
-     * map functions to signal names
-     */
-    final private EnumMap<CameraSignal, String> signalNames
-            = new EnumMap<>(CameraSignal.class);
-    /**
-     * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
-     */
-    private float maxYTangent = 2f;
-    /**
-     * frustum's Y tangent ratio at highest magnification (&gt;0)
-     */
-    private float minYTangent = 0.01f;
     /**
      * signal-based translation speed (in psu per second, &ge;0)
      */
@@ -135,14 +112,6 @@ public class DynamicCamera
      */
     private float yawAnalogSum = 0f;
     /**
-     * accumulated analog zoom amount since the last update (in clicks)
-     */
-    private float zoomAnalogSum = 0f;
-    /**
-     * analog zoom input multiplier (in log units per click)
-     */
-    private float zoomMultiplier = 0.3f;
-    /**
      * direction for signal-based zoom (in=+1, out=-1)
      */
     private int zoomSignalDirection = 0;
@@ -158,15 +127,6 @@ public class DynamicCamera
      * reusable Quaternion
      */
     final private static Quaternion tmpRotation = new Quaternion();
-    /**
-     * status of named signals
-     */
-    final private SignalTracker signalTracker;
-    /**
-     * name applied to the Camera when this controller becomes attached and
-     * enabled
-     */
-    private String cameraName;
     /**
      * camera's preferred up direction (unit vector in world coordinates)
      */
@@ -200,15 +160,11 @@ public class DynamicCamera
      */
     public DynamicCamera(String id, Camera camera, PhysicsSpace physicsSpace,
             SignalTracker tracker, float usualMass, float ramMass) {
-        super(id);
-        Validate.nonNull(camera, "camera");
+        super(id, camera, tracker);
         Validate.nonNull(physicsSpace, "physics space");
-        Validate.nonNull(tracker, "tracker");
         Validate.positive(usualMass, "usual mass");
         Validate.inRange(ramMass, "ram mass", usualMass, Float.MAX_VALUE);
 
-        this.camera = camera;
-        this.signalTracker = tracker;
         this.physicsSpace = physicsSpace;
         this.usualMass = usualMass;
         this.ramMass = ramMass;
@@ -228,21 +184,9 @@ public class DynamicCamera
         setSignalName(CameraSignal.Right, "FLYCAM_StrafeRight");
         setSignalName(CameraSignal.WorldDown, "FLYCAM_Lower");
         setSignalName(CameraSignal.WorldUp, "FLYCAM_Rise");
-
-        super.setEnabled(false);
     }
     // *************************************************************************
     // new methods exposed
-
-    /**
-     * Determine the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     *
-     * @return the name
-     */
-    public String cameraName() {
-        return cameraName;
-    }
 
     /**
      * Copy the preferred "up" direction.
@@ -262,16 +206,6 @@ public class DynamicCamera
     }
 
     /**
-     * Access the camera that's being controlled.
-     *
-     * @return the pre-existing instance (not null)
-     */
-    public Camera getCamera() {
-        assert camera != null;
-        return camera;
-    }
-
-    /**
      * Access the rigid body that simulates the shell.
      *
      * @return the pre-existing instance (not null)
@@ -279,47 +213,6 @@ public class DynamicCamera
     public PhysicsRigidBody getRigidBody() {
         assert rigidBody != null;
         return rigidBody;
-    }
-
-    /**
-     * Magnify the view by the specified factor.
-     *
-     * @param factor the factor to increase magnification (&gt;0)
-     */
-    public void magnify(float factor) {
-        Validate.positive(factor, "factor");
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        frustumYTangent /= factor;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
-    }
-
-    /**
-     * Return the maximum magnification.
-     *
-     * @return the magnification (&gt;0)
-     */
-    public float maxMagnification() {
-        assert minYTangent > 0f : minYTangent;
-
-        float result = 1f / minYTangent;
-        return result;
-    }
-
-    /**
-     * Return the minimum magnification.
-     *
-     * @return the magnification (&gt;0)
-     */
-    public float minMagnification() {
-        assert maxYTangent > 0f : maxYTangent;
-
-        float result = 1f / maxYTangent;
-        return result;
     }
 
     /**
@@ -353,44 +246,6 @@ public class DynamicCamera
 
         assert result >= 0f : result;
         return result;
-    }
-
-    /**
-     * Alter the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     * <p>
-     * Allowed only when the controller is NOT attached and enabled.
-     *
-     * @param name the desired name (default=null)
-     */
-    public void setCameraName(String name) {
-        if (isInitialized() && isEnabled()) {
-            throw new IllegalStateException("Cannot alter the camera name "
-                    + "while the controller is attached and enabled.");
-        }
-        this.cameraName = name;
-    }
-
-    /**
-     * Alter the range of the camera's focal zoom.
-     *
-     * @param max the desired maximum magnification (&gt;min, 1&rarr;45deg
-     * Y-angle)
-     * @param min the desired minimum magnification (&gt;0, 1&rarr;45deg
-     * Y-angle)
-     */
-    public void setMaxMinMagnification(float min, float max) {
-        Validate.positive(min, "min magnification");
-        Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        this.minYTangent = 1f / max;
-        this.maxYTangent = 1f / min;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
     }
 
     /**
@@ -438,73 +293,56 @@ public class DynamicCamera
         Validate.positive(turnRate, "turn rate");
         this.ptlTurnRate = turnRate;
     }
-
-    /**
-     * Alter which signal is assigned to the specified function.
-     *
-     * @param function which function to alter (not null)
-     * @param signalName the desired signal name (may be null)
-     */
-    public void setSignalName(CameraSignal function, String signalName) {
-        Validate.nonNull(function, "function");
-        signalNames.put(function, signalName);
-    }
-
-    /**
-     * Alter the analog input multiplier for focal zoom.
-     *
-     * @param multiplier the desired multiplier (in log units per click, &gt;0,
-     * default=0.3)
-     */
-    public void setZoomMultiplier(float multiplier) {
-        Validate.positive(multiplier, "multiplier");
-        this.zoomMultiplier = multiplier;
-    }
-
-    /**
-     * Read which signal name is assigned to the specified function.
-     *
-     * @param function which function to read (not null)
-     * @return the signal name, or null if none set for that function
-     */
-    public String signalName(CameraSignal function) {
-        Validate.nonNull(function, "function");
-        String result = signalNames.get(function);
-        return result;
-    }
-
-    /**
-     * Return the analog input multiplier for focal zoom.
-     *
-     * @return the multiplier (in log units per click)
-     */
-    public float zoomMultiplier() {
-        assert zoomMultiplier > 0f : zoomMultiplier;
-        return zoomMultiplier;
-    }
     // *************************************************************************
-    // BaseAppState methods
+    // CameraController methods
 
     /**
-     * Callback invoked after this AppState is detached or during application
-     * shutdown if the state is still attached. onDisable() is called before
-     * this cleanup() method if the state is enabled at the time of cleanup.
+     * Callback to receive an analog input event.
      *
-     * @param application the application instance (not null)
+     * @param eventName the name of the input event (not null, not empty)
+     * @param reading the input reading (&ge;0)
+     * @param tpf the time interval between frames (in seconds, &ge;0)
      */
     @Override
-    protected void cleanup(Application application) {
-        // do nothing
-    }
+    public void onAnalog(String eventName, float reading, float tpf) {
+        Validate.nonEmpty(eventName, "event name");
+        Validate.nonNegative(reading, "reading");
+        Validate.nonNegative(tpf, "time per frame");
+        assert isEnabled();
 
-    /**
-     * Callback invoked after this AppState is attached but before onEnable().
-     *
-     * @param application the application instance (not null)
-     */
-    @Override
-    protected void initialize(Application application) {
-        // do nothing
+        switch (eventName) {
+            case analogPitchDown:
+                if (isDragging()) {
+                    this.pitchAnalogSum += reading;
+                }
+                break;
+
+            case analogPitchUp:
+                if (isDragging()) {
+                    this.pitchAnalogSum -= reading;
+                }
+                break;
+
+            case analogYawLeft:
+                if (isDragging()) {
+                    this.yawAnalogSum += reading;
+                }
+                break;
+
+            case analogYawRight:
+                if (isDragging()) {
+                    this.yawAnalogSum -= reading;
+                }
+                break;
+
+            case analogZoomIn:
+            case analogZoomOut:
+                super.onAnalog(eventName, reading, tpf);
+                break;
+
+            default:
+                throw new IllegalArgumentException(eventName);
+        }
     }
 
     /**
@@ -522,6 +360,7 @@ public class DynamicCamera
      */
     @Override
     protected void onEnable() {
+        super.onEnable();
         enable();
     }
 
@@ -544,6 +383,7 @@ public class DynamicCamera
          * Update the camera's location to match the rigid body.
          */
         rigidBody.getPhysicsLocation(tmpLocation);
+        Camera camera = getCamera();
         camera.setLocation(tmpLocation);
         /*
          * Update the camera's direction.
@@ -611,63 +451,9 @@ public class DynamicCamera
             magnify(zoomFactor);
         }
         if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier * zoomAnalogSum);
+            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
             magnify(zoomFactor);
             zoomAnalogSum = 0f;
-        }
-    }
-    // *************************************************************************
-    // AnalogListener methods
-
-    /**
-     * Callback to receive an analog input event.
-     *
-     * @param eventName the name of the input event (not null, not empty)
-     * @param reading the input reading (&ge;0)
-     * @param tpf the time interval between frames (in seconds, &ge;0)
-     */
-    @Override
-    public void onAnalog(String eventName, float reading, float tpf) {
-        Validate.nonEmpty(eventName, "event name");
-        Validate.nonNegative(reading, "reading");
-        Validate.nonNegative(tpf, "time per frame");
-        assert isEnabled();
-
-        switch (eventName) {
-            case analogPitchDown:
-                if (isDragging()) {
-                    pitchAnalogSum += reading;
-                }
-                break;
-
-            case analogPitchUp:
-                if (isDragging()) {
-                    pitchAnalogSum -= reading;
-                }
-                break;
-
-            case analogYawLeft:
-                if (isDragging()) {
-                    yawAnalogSum += reading;
-                }
-                break;
-
-            case analogYawRight:
-                if (isDragging()) {
-                    yawAnalogSum -= reading;
-                }
-                break;
-
-            case analogZoomIn:
-                zoomAnalogSum += reading;
-                break;
-
-            case analogZoomOut:
-                zoomAnalogSum -= reading;
-                break;
-
-            default:
-                throw new IllegalArgumentException(eventName);
         }
     }
     // *************************************************************************
@@ -745,9 +531,7 @@ public class DynamicCamera
      * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
-        assert isInitialized();
-
-        camera.setName(cameraName);
+        Camera camera = getCamera();
         Vector3f location = camera.getLocation();
         rigidBody.setPhysicsLocation(location);
 
@@ -789,18 +573,6 @@ public class DynamicCamera
     }
 
     /**
-     * Test whether the specified camera function (signal) is active.
-     */
-    private boolean isActive(CameraSignal function) {
-        String signalName = signalNames.get(function);
-        if (signalName != null && signalTracker.test(signalName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Test whether a dragging function is active.
      */
     private boolean isDragging() {
@@ -812,6 +584,7 @@ public class DynamicCamera
      * Update the size of the rigid body.
      */
     private void updateRigidBodySize() {
+        Camera camera = getCamera();
         assert !camera.isParallelProjection();
         float left = camera.getFrustumLeft();
         float top = camera.getFrustumTop();
@@ -835,6 +608,7 @@ public class DynamicCamera
      * Also update the zoomSignalDirection field.
      */
     private void updateVelocity() {
+        Camera camera = getCamera();
         camera.getDirection(tmpLook);
         camera.getLeft(tmpLeft);
         camera.getUp(tmpUp);

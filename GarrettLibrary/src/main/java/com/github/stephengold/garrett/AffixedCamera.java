@@ -29,18 +29,14 @@
  */
 package com.github.stephengold.garrett;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import java.util.EnumMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.MyCamera;
@@ -52,9 +48,7 @@ import jme3utilities.Validate;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-public class AffixedCamera
-        extends BaseAppState
-        implements AnalogListener {
+public class AffixedCamera extends CameraController {
     // *************************************************************************
     // constants and loggers
 
@@ -63,39 +57,9 @@ public class AffixedCamera
      */
     final public static Logger logger
             = Logger.getLogger(AffixedCamera.class.getName());
-    /**
-     * names of analog events
-     */
-    final private static String analogZoomIn = "zoom in";
-    final private static String analogZoomOut = "zoom out";
     // *************************************************************************
     // fields
 
-    /**
-     * Camera being controlled (not null)
-     */
-    final private Camera camera;
-    /**
-     * map functions to signal names
-     */
-    final private EnumMap<CameraSignal, String> signalNames
-            = new EnumMap<>(CameraSignal.class);
-    /**
-     * frustum's Y tangent ratio at lowest magnification (&gt;minYTangent)
-     */
-    private float maxYTangent = 2f;
-    /**
-     * frustum's Y tangent ratio at highest magnification (&gt;0)
-     */
-    private float minYTangent = 0.01f;
-    /**
-     * accumulated analog zoom amount since the last update (in clicks)
-     */
-    private float zoomAnalogSum = 0f;
-    /**
-     * analog zoom input multiplier (in log units per click)
-     */
-    private float zoomMultiplier = 0.3f;
     /**
      * what the camera is affixed to
      */
@@ -104,15 +68,6 @@ public class AffixedCamera
      * reusable Quaternion
      */
     final private static Quaternion tmpRotation = new Quaternion();
-    /**
-     * status of named signals
-     */
-    final private SignalTracker signalTracker;
-    /**
-     * name applied to the Camera when this controller becomes attached and
-     * enabled
-     */
-    private String cameraName;
     /**
      * camera's "look" direction relative to the rigid body (unit vector in
      * local coordinates)
@@ -148,26 +103,10 @@ public class AffixedCamera
      * created)
      */
     public AffixedCamera(String id, Camera camera, SignalTracker tracker) {
-        super(id);
-        Validate.nonNull(camera, "camera");
-        Validate.nonNull(tracker, "tracker");
-
-        this.camera = camera;
-        this.signalTracker = tracker;
-        super.setEnabled(false);
+        super(id, camera, tracker);
     }
     // *************************************************************************
     // new methods exposed
-
-    /**
-     * Determine the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     *
-     * @return the name
-     */
-    public String cameraName() {
-        return cameraName;
-    }
 
     /**
      * Copy the "look" direction (in local coordinates).
@@ -231,39 +170,6 @@ public class AffixedCamera
     }
 
     /**
-     * Magnify the view by the specified factor.
-     *
-     * @param factor the factor to increase magnification (&gt;0)
-     */
-    public void magnify(float factor) {
-        Validate.positive(factor, "factor");
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        frustumYTangent /= factor;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
-    }
-
-    /**
-     * Alter the name applied to the Camera when this controller becomes
-     * attached and enabled.
-     * <p>
-     * Allowed only when the controller is NOT attached and enabled.
-     *
-     * @param name the desired name (default=null)
-     */
-    public void setCameraName(String name) {
-        if (isInitialized() && isEnabled()) {
-            throw new IllegalStateException("Cannot alter the camera name "
-                    + "while the controller is attached and enabled.");
-        }
-        this.cameraName = name;
-    }
-
-    /**
      * Alter the "look" direction.
      *
      * @param direction the desired direction (in local coordinates, not null,
@@ -274,28 +180,6 @@ public class AffixedCamera
 
         lookDirection.set(direction);
         lookDirection.normalizeLocal();
-    }
-
-    /**
-     * Alter the range of the camera's focal zoom.
-     *
-     * @param max the desired maximum magnification (&gt;min, 1&rarr;45deg
-     * Y-angle)
-     * @param min the desired minimum magnification (&gt;0, 1&rarr;45deg
-     * Y-angle)
-     */
-    public void setMaxMinMagnification(float min, float max) {
-        Validate.positive(min, "min magnification");
-        Validate.inRange(max, "max magnification", min, Float.MAX_VALUE);
-
-        float frustumYTangent = MyCamera.yTangent(camera);
-        this.minYTangent = 1f / max;
-        this.maxYTangent = 1f / min;
-        frustumYTangent
-                = FastMath.clamp(frustumYTangent, minYTangent, maxYTangent);
-        if (isInitialized() && isEnabled()) {
-            MyCamera.setYTangent(camera, frustumYTangent);
-        }
     }
 
     /**
@@ -323,17 +207,6 @@ public class AffixedCamera
     }
 
     /**
-     * Alter which signal is assigned to the specified function.
-     *
-     * @param function which function to alter (not null)
-     * @param signalName the desired signal name (may be null)
-     */
-    public void setSignalName(CameraSignal function, String signalName) {
-        Validate.nonNull(function, "function");
-        signalNames.put(function, signalName);
-    }
-
-    /**
      * Alter the "up" direction.
      *
      * @param direction the desired direction (in local coordinates, not null,
@@ -344,81 +217,6 @@ public class AffixedCamera
 
         upDirection.set(direction);
         upDirection.normalizeLocal();
-    }
-
-    /**
-     * Alter the analog input multiplier for focal zoom.
-     *
-     * @param multiplier the desired multiplier (in log units per click, &gt;0,
-     * default=0.3)
-     */
-    public void setZoomMultiplier(float multiplier) {
-        Validate.positive(multiplier, "multiplier");
-        this.zoomMultiplier = multiplier;
-    }
-
-    /**
-     * Determine the analog input multiplier for focal zoom.
-     *
-     * @return the multiplier (in log units per click)
-     */
-    public float zoomMultiplier() {
-        assert zoomMultiplier > 0f : zoomMultiplier;
-        return zoomMultiplier;
-    }
-    // *************************************************************************
-    // AnalogListener methods
-
-    /**
-     * Callback to receive an analog input event.
-     *
-     * @param eventName the name of the input event (not null, not empty)
-     * @param reading the input reading (&ge;0)
-     * @param tpf the time interval between frames (in seconds, &ge;0)
-     */
-    @Override
-    public void onAnalog(String eventName, float reading, float tpf) {
-        Validate.nonEmpty(eventName, "event name");
-        Validate.nonNegative(reading, "reading");
-        Validate.nonNegative(tpf, "time per frame");
-        assert isEnabled();
-
-        switch (eventName) {
-            case analogZoomIn:
-                this.zoomAnalogSum += reading;
-                break;
-
-            case analogZoomOut:
-                this.zoomAnalogSum -= reading;
-                break;
-
-            default:
-                throw new IllegalArgumentException(eventName);
-        }
-    }
-    // *************************************************************************
-    // BaseAppState methods
-
-    /**
-     * Callback invoked after this AppState is detached or during application
-     * shutdown if the state is still attached. onDisable() is called before
-     * this cleanup() method if the state is enabled at the time of cleanup.
-     *
-     * @param application the application instance (not null)
-     */
-    @Override
-    protected void cleanup(Application application) {
-        // do nothing
-    }
-
-    /**
-     * Callback invoked after this AppState is attached but before onEnable().
-     *
-     * @param application the application instance (not null)
-     */
-    @Override
-    protected void initialize(Application application) {
-        // do nothing
     }
 
     /**
@@ -436,6 +234,7 @@ public class AffixedCamera
      */
     @Override
     protected void onEnable() {
+        super.onEnable();
         enable();
     }
 
@@ -478,6 +277,7 @@ public class AffixedCamera
         rigidBody.getPhysicsRotation(tmpRotation);
         tmpRotation.mult(lookDirection, tmpLook);
         tmpRotation.mult(upDirection, tmpUp);
+        Camera camera = getCamera();
         camera.lookAtDirection(tmpLook, tmpUp);
         /*
          * Update the camera's location.
@@ -495,7 +295,7 @@ public class AffixedCamera
             magnify(zoomFactor);
         }
         if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier * zoomAnalogSum);
+            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
             magnify(zoomFactor);
             zoomAnalogSum = 0f;
         }
@@ -523,13 +323,12 @@ public class AffixedCamera
      * Enable this camera controller. Assumes it is initialized and disabled.
      */
     private void enable() {
-        assert isInitialized();
         if (rigidBody == null) {
             throw new IllegalStateException("No rigid body has been set!");
         }
 
-        camera.setName(cameraName);
         float yDegrees;
+        Camera camera = getCamera();
         if (camera.isParallelProjection()) {
             /*
              * Configure perspective.
@@ -550,17 +349,5 @@ public class AffixedCamera
                 new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
 
         inputManager.addListener(this, analogZoomIn, analogZoomOut);
-    }
-
-    /**
-     * Test whether the specified camera function (signal) is active.
-     */
-    private boolean isActive(CameraSignal function) {
-        String signalName = signalNames.get(function);
-        if (signalName != null && signalTracker.test(signalName)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
