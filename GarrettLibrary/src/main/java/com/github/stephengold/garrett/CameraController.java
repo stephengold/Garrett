@@ -45,7 +45,7 @@ import jme3utilities.Validate;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-abstract public class CameraController
+abstract class CameraController
         extends BaseAppState
         implements AnalogListener {
     // *************************************************************************
@@ -110,7 +110,8 @@ abstract public class CameraController
      * @param tracker the status tracker for named signals (not null, alias
      * created)
      */
-    public CameraController(String id, Camera camera, SignalTracker tracker) {
+    protected CameraController(
+            String id, Camera camera, SignalTracker tracker) {
         super(id);
         Validate.nonNull(camera, "camera");
         Validate.nonNull(tracker, "tracker");
