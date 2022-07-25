@@ -57,9 +57,12 @@ abstract class CameraController
     final public static Logger logger0
             = Logger.getLogger(CameraController.class.getName());
     /**
-     * names of analog events
+     * name of analog event for zooming in
      */
     final protected static String analogZoomIn = "zoom in";
+    /**
+     * name of analog event for zooming out
+     */
     final protected static String analogZoomOut = "zoom out";
     // *************************************************************************
     // fields
