@@ -54,6 +54,8 @@ import jme3utilities.math.MyVector3f;
  * controlled Camera orbits a specified Target, optionally clipping or jumping
  * forward to maintain a clear line of sight in the target's CollisionSpace. A
  * continuum of chasing behaviors is implemented.
+ * <p>
+ * Implements DragToOrbit and Xray modes.
  *
  * @author Stephen Gold sgold@sonic.net
  */

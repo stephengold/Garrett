@@ -231,7 +231,7 @@ abstract class CameraController
      *
      * @param function which function to alter (not null)
      * @param state the desired default state (true&rarr;active,
-     * false&rarr;inactive)
+     * false&rarr;inactive, default=false)
      */
     public void setDefaultState(CameraSignal function, boolean state) {
         Validate.nonNull(function, "function");

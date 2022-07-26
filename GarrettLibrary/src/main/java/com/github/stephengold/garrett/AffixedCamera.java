@@ -43,7 +43,7 @@ import jme3utilities.SignalTracker;
 import jme3utilities.Validate;
 
 /**
- * An AppState to control a Camera affixed to a rigid body.
+ * An AppState to control a Camera affixed to (mounted on) a rigid body.
  *
  * @author Stephen Gold sgold@sonic.net
  */

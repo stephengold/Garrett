@@ -52,6 +52,8 @@ import jme3utilities.math.MyVector3f;
 /**
  * An AppState to control a 6 degree-of-freedom, perspective-projection Camera
  * enclosed in a dynamic spherical shell.
+ * <p>
+ * Implements Ghost, Ram, and PointToLook modes.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -116,7 +118,7 @@ public class DynamicCamera
      */
     private int zoomSignalDirection = 0;
     /**
-     * rigid body being controlled (not null)
+     * dynamic rigid sphere surrounding the camera (not null)
      */
     final private PhysicsRigidBody rigidBody;
     /**
@@ -173,10 +175,12 @@ public class DynamicCamera
         this.usualMass = usualMass;
         this.ramMass = ramMass;
         /*
-         * Create the shell.
+         * Create the collision shape,
+         * which will be scaled to contain the near clipping plane.
          */
         CollisionShape shape = new MultiSphere(1f); // scalable shape
 
+        // Create the dynamic rigid sphere.
         this.rigidBody = new PhysicsRigidBody(shape, usualMass);
         rigidBody.setApplicationData(this);
         rigidBody.setFriction(0f);
@@ -210,7 +214,7 @@ public class DynamicCamera
     }
 
     /**
-     * Access the rigid body that simulates the shell.
+     * Access the rigid sphere that simulates the shell.
      *
      * @return the pre-existing instance (not null)
      */
@@ -249,7 +253,7 @@ public class DynamicCamera
     }
 
     /**
-     * Determine the radius of the rigid body.
+     * Determine the radius of the rigid sphere.
      *
      * @return the radius (in psu, &ge;0)
      */
@@ -300,7 +304,7 @@ public class DynamicCamera
     /**
      * Alter the turn rate for point-to-look.
      *
-     * @param turnRate the desired turn rate (in radians/sec, &gt;0)
+     * @param turnRate the desired turn rate (in radians/sec, &gt;0, default=1)
      */
     public void setPtlTurnRate(float turnRate) {
         Validate.positive(turnRate, "turn rate");
@@ -406,7 +410,7 @@ public class DynamicCamera
         boolean cursorVisible = !isActive(CameraSignal.PointToLook);
         inputManager.setCursorVisible(cursorVisible);
         /*
-         * Update the camera's location to match the rigid body.
+         * Update the camera's location to match the rigid sphere.
          */
         rigidBody.getPhysicsLocation(tmpLocation);
         Camera camera = getCamera();
@@ -577,7 +581,7 @@ public class DynamicCamera
     }
 
     /**
-     * Update the size of the rigid body.
+     * Update the size of the rigid sphere.
      */
     private void updateRigidBodySize() {
         Camera camera = getCamera();
