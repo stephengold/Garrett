@@ -114,9 +114,12 @@ public class HelloGarrett extends SimpleApplication {
         fix.setSignalName(CameraSignal.ZoomOut, "cameraOut");
 
         // Map keyboard keys to the named camera-input signals.
+        mapKeyToSignal(KeyInput.KEY_W, "cameraIn");
         mapKeyToSignal(KeyInput.KEY_UP, "cameraIn");
         mapKeyToSignal(KeyInput.KEY_EQUALS, "cameraIn");
         mapKeyToSignal(KeyInput.KEY_ADD, "cameraIn");
+
+        mapKeyToSignal(KeyInput.KEY_S, "cameraOut");
         mapKeyToSignal(KeyInput.KEY_DOWN, "cameraOut");
         mapKeyToSignal(KeyInput.KEY_MINUS, "cameraOut");
         mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraOut");
