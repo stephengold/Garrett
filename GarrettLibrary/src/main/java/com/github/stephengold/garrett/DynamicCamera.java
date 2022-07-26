@@ -458,7 +458,7 @@ public class DynamicCamera
         }
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
-        
+
         applyFocalZoom(zoomSignalDirection, tpf);
     }
     // *************************************************************************
