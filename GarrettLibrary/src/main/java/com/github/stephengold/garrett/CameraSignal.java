@@ -43,13 +43,9 @@ public enum CameraSignal {
      */
     Back,
     /**
-     * activate drag-to-orbit mode
+     * enable drag-to-orbit mode
      */
     DragToOrbit,
-    /**
-     * activate drag-to-rotate mode
-     */
-    DragToRotate,
     /**
      * translate eastward (world +Z direction)
      */
