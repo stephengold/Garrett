@@ -418,9 +418,7 @@ public class DynamicCamera
              * Rotate the look direction based on accumulated
              * pitch and yaw inputs.
              */
-            float frustumYTangent = MyCamera.yTangent(camera);
-            float multiplier = camera.getHeight() * frustumYTangent / 1024f;
-            multiplier *= ptlTurnRate;
+            float multiplier = ptlTurnRate * camera.getHeight() / 1024f;
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
