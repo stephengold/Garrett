@@ -336,7 +336,7 @@ final public class DemoSpace {
         );
         PhysicsRigidBody result
                 = new PhysicsRigidBody(pyramidShape, PhysicsBody.massForStatic);
-        float y = floorY + yBase;
+        float y = floorY - yBase;
         result.setPhysicsLocation(new Vector3f(0f, y, -20f));
 
         // Configure the debug visualization.
