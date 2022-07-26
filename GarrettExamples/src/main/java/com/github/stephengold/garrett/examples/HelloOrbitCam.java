@@ -146,7 +146,11 @@ public class HelloOrbitCam extends SimpleApplication {
         mapKeyToSignal(KeyInput.KEY_Q, "cameraOrbitUp");
         mapKeyToSignal(KeyInput.KEY_X, "cameraXray");
         mapKeyToSignal(KeyInput.KEY_UP, "cameraZoomIn");
+        mapKeyToSignal(KeyInput.KEY_EQUALS, "cameraZoomIn");
+        mapKeyToSignal(KeyInput.KEY_ADD, "cameraZoomIn");
         mapKeyToSignal(KeyInput.KEY_DOWN, "cameraZoomOut");
+        mapKeyToSignal(KeyInput.KEY_MINUS, "cameraZoomOut");
+        mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraZoomOut");
 
         // Attach and enable the camera controller.
         boolean success = stateManager.attach(orbit);

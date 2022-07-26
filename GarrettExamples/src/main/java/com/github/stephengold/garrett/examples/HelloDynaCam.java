@@ -127,6 +127,8 @@ public class HelloDynaCam extends SimpleApplication {
         dyna.setSignalName(CameraSignal.Ram, "ram");
         dyna.setSignalName(CameraSignal.ViewDown, "viewDown");
         dyna.setSignalName(CameraSignal.ViewUp, "viewUp");
+        dyna.setSignalName(CameraSignal.ZoomIn, "cameraZoomIn");
+        dyna.setSignalName(CameraSignal.ZoomOut, "cameraZoomOut");
         /*
          * Map keyboard keys and mouse buttons
          * to the added camera-input signals.
@@ -136,6 +138,10 @@ public class HelloDynaCam extends SimpleApplication {
         mapKeyToSignal(KeyInput.KEY_R, "ram");
         mapKeyToSignal(KeyInput.KEY_DOWN, "viewDown");
         mapKeyToSignal(KeyInput.KEY_UP, "viewUp");
+        mapKeyToSignal(KeyInput.KEY_EQUALS, "cameraZoomIn");
+        mapKeyToSignal(KeyInput.KEY_ADD, "cameraZoomIn");
+        mapKeyToSignal(KeyInput.KEY_MINUS, "cameraZoomOut");
+        mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraZoomOut");
 
         // Attach and enable the camera controller.
         boolean success = stateManager.attach(dyna);
