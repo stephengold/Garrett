@@ -39,7 +39,6 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import java.util.logging.Logger;
@@ -95,9 +94,9 @@ public class DynamicCamera
      */
     private float pitchAnalogSum = 0f;
     /**
-     * turn rate for signal-based point-to-look (in radians/sec)
+     * relative turn rate for point-to-look
      */
-    private float ptlTurnRate = 0.5f;
+    private float ptlTurnRate = 1f;
     /**
      * mass of shell when ramming (&gt;0)
      */
@@ -178,7 +177,6 @@ public class DynamicCamera
 
         // Initialize some signal names use to imitate FlyByCamera.
         setSignalName(CameraSignal.Back, "FLYCAM_Backward");
-        setSignalName(CameraSignal.DragToRotate, "cameraDrag");
         setSignalName(CameraSignal.Forward, "FLYCAM_Forward");
         setSignalName(CameraSignal.Left, "FLYCAM_StrafeLeft");
         setSignalName(CameraSignal.Right, "FLYCAM_StrafeRight");
@@ -228,7 +226,7 @@ public class DynamicCamera
     /**
      * Return the turn rate for point-to-look.
      *
-     * @return the turn rate (in radians/sec, &gt;0)
+     * @return the relative turn rate (&gt;0, default=1)
      */
     public float ptlTurnRate() {
         assert ptlTurnRate > 0f : ptlTurnRate;
@@ -310,27 +308,28 @@ public class DynamicCamera
         Validate.nonNegative(tpf, "time per frame");
         assert isEnabled();
 
+        boolean isPointToLook = isActive(CameraSignal.PointToLook);
         switch (eventName) {
             case analogPitchDown:
-                if (isDragging()) {
+                if (isPointToLook) {
                     this.pitchAnalogSum += reading;
                 }
                 break;
 
             case analogPitchUp:
-                if (isDragging()) {
+                if (isPointToLook) {
                     this.pitchAnalogSum -= reading;
                 }
                 break;
 
             case analogYawLeft:
-                if (isDragging()) {
+                if (isPointToLook) {
                     this.yawAnalogSum += reading;
                 }
                 break;
 
             case analogYawRight:
-                if (isDragging()) {
+                if (isPointToLook) {
                     this.yawAnalogSum -= reading;
                 }
                 break;
@@ -377,7 +376,7 @@ public class DynamicCamera
          * Hide the cursor if dragging.
          */
         InputManager inputManager = getApplication().getInputManager();
-        boolean cursorVisible = !isDragging();
+        boolean cursorVisible = !isActive(CameraSignal.PointToLook);
         inputManager.setCursorVisible(cursorVisible);
         /*
          * Update the camera's location to match the rigid body.
@@ -389,33 +388,17 @@ public class DynamicCamera
          * Update the camera's direction.
          */
         camera.getDirection(tmpLook);
-        if (isActive(CameraSignal.PointToLook)) {
-            /*
-             * point-to-look is active: update based on the cursor position
-             */
-            Ray ray = MyCamera.mouseRay(camera, inputManager);
-            Vector3f newDir = ray.getDirection();
-            Vector3f delta = newDir.subtractLocal(tmpLook);
-            float deltaLength = delta.length();
-            float maxTurn = ptlTurnRate * tpf;
-            if (deltaLength > maxTurn) {
-                float deltaCoeff = maxTurn / deltaLength;
-                MyVector3f.accumulateScaled(tmpLook, delta, deltaCoeff);
-            } else {
-                tmpLook.set(newDir);
-            }
-        } else {
-            /*
-             * Rotate the look direction based on accumulated
-             * pitch and yaw inputs.
-             */
-            float frustumYTangent = MyCamera.yTangent(camera);
-            float multiplier = camera.getHeight() * frustumYTangent / 1024f;
-            float pitchAngle = multiplier * pitchAnalogSum;
-            float yawAngle = multiplier * yawAnalogSum;
-            tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
-            tmpRotation.mult(tmpLook, tmpLook);
-        }
+        /*
+         * Rotate the look direction based on accumulated
+         * pitch and yaw inputs.
+         */
+        float frustumYTangent = MyCamera.yTangent(camera);
+        float multiplier = camera.getHeight() * frustumYTangent / 1024f;
+        multiplier *= ptlTurnRate;
+        float pitchAngle = multiplier * pitchAnalogSum;
+        float yawAngle = multiplier * yawAnalogSum;
+        tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
+        tmpRotation.mult(tmpLook, tmpLook);
         tmpLook.normalizeLocal();
         pitchAnalogSum = 0f;
         yawAnalogSum = 0f;
@@ -570,14 +553,6 @@ public class DynamicCamera
 
         inputManager.addListener(this, analogPitchDown, analogPitchUp,
                 analogYawLeft, analogYawRight, analogZoomIn, analogZoomOut);
-    }
-
-    /**
-     * Test whether a dragging function is active.
-     */
-    private boolean isDragging() {
-        boolean result = isActive(CameraSignal.DragToRotate);
-        return result;
     }
 
     /**
