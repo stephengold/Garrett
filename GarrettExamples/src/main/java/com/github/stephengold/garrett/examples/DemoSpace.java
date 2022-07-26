@@ -67,6 +67,18 @@ final public class DemoSpace {
     // constants and loggers
 
     /**
+     * debug color for static boxes
+     */
+    private final static ColorRGBA gray = new ColorRGBA(0.1f, 0.1f, 0.1f, 1f);
+    /**
+     * Y coordinate of the floor (in physics space)
+     */
+    private final static float floorY = -2.25f;
+    /**
+     * half the thickness of boxes (in physics-space units)
+     */
+    private final static float halfThickness = 0.25f;
+    /**
      * message logger for this class
      */
     final public static Logger logger
@@ -90,14 +102,15 @@ final public class DemoSpace {
      * @return the new instance
      */
     public static PhysicsRigidBody addGrayBox(Application app) {
-        CollisionShape boxShape = new BoxCollisionShape(1f, 2.25f, 0.25f);
+        CollisionShape boxShape
+                = new BoxCollisionShape(1f, -floorY, halfThickness);
         PhysicsRigidBody result
                 = new PhysicsRigidBody(boxShape, PhysicsBody.massForStatic);
 
         // Configure the debug visualization.
         AssetManager assetManager = app.getAssetManager();
         Material boxMaterial = new Material(assetManager, Materials.UNSHADED);
-        boxMaterial.setColor("Color", new ColorRGBA(0.1f, 0.1f, 0.1f, 1f));
+        boxMaterial.setColor("Color", gray);
         result.setDebugMaterial(boxMaterial);
 
         PhysicsSpace physicsSpace = getPhysicsSpace(app);
@@ -168,7 +181,7 @@ final public class DemoSpace {
      * @return the new instance
      */
     public static PhysicsRigidBody addTiledPlane(Application app) {
-        Plane plane = new Plane(Vector3f.UNIT_Y, -2.25f);
+        Plane plane = new Plane(Vector3f.UNIT_Y, floorY);
         PlaneCollisionShape shape = new PlaneCollisionShape(plane);
         PhysicsRigidBody result
                 = new PhysicsRigidBody(shape, PhysicsBody.massForStatic);
@@ -225,7 +238,8 @@ final public class DemoSpace {
         );
         PhysicsRigidBody result
                 = new PhysicsRigidBody(pyramidShape, PhysicsBody.massForStatic);
-        result.setPhysicsLocation(new Vector3f(0f, -1.75f, -20f));
+        float y = floorY + yBase;
+        result.setPhysicsLocation(new Vector3f(0f, y, -20f));
 
         // Configure the debug visualization.
         AssetManager assetManager = app.getAssetManager();
