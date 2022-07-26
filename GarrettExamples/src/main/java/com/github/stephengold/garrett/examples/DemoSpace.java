@@ -38,9 +38,12 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.HullCollisionShape;
 import com.jme3.bullet.collision.shapes.PlaneCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.bullet.joints.HingeJoint;
+import com.jme3.bullet.joints.JointEnd;
 import com.jme3.bullet.objects.PhysicsBody;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.bullet.util.DebugShapeFactory;
@@ -56,6 +59,7 @@ import com.jme3.renderer.Renderer;
 import com.jme3.texture.Texture;
 import java.util.EnumMap;
 import java.util.logging.Logger;
+import jme3utilities.MeshNormals;
 
 /**
  * A utility class to populate a PhysicsSpace for demos.
@@ -70,6 +74,18 @@ final public class DemoSpace {
      * debug color for static boxes
      */
     private final static ColorRGBA gray = new ColorRGBA(0.1f, 0.1f, 0.1f, 1f);
+    /**
+     * X coordinate of the door's center (in physics space)
+     */
+    private final static float doorCenterX = 8f;
+    /**
+     * half the height of the door (in physics-space units)
+     */
+    private final static float doorHalfHeight = 2f;
+    /**
+     * half the width of the door (in physics-space units)
+     */
+    private final static float doorHalfWidth = 2f;
     /**
      * Y coordinate of the floor (in physics space)
      */
@@ -93,6 +109,88 @@ final public class DemoSpace {
     }
     // *************************************************************************
     // new methods exposed
+
+    /**
+     * Create a blue, dynamic body with a box shape and a hinge joint and add it
+     * to the space.
+     *
+     * @param app the application (not null)
+     * @return a new dynamic rigid body
+     */
+    public static PhysicsRigidBody addBlueDoor(Application app) {
+        BoxCollisionShape shape = new BoxCollisionShape(
+                doorHalfWidth, doorHalfHeight, halfThickness);
+        float mass = 1000f;
+        PhysicsRigidBody result = new PhysicsRigidBody(shape, mass);
+        result.setPhysicsLocation(
+                new Vector3f(doorCenterX, floorY + doorHalfHeight, 0f));
+
+        // Disable sleep (deactivation).
+        result.setEnableSleep(false);
+
+        // Configure the debug visualization.
+        AssetManager assetManager = app.getAssetManager();
+        Material doorMaterial = new Material(assetManager, Materials.UNSHADED);
+        doorMaterial.setColor("Color", new ColorRGBA(0.1f, 0.1f, 1f, 1f));
+        result.setDebugMaterial(doorMaterial);
+        result.setDebugMeshNormals(MeshNormals.Facet);
+
+        // Add a single-ended physics joint to constrain the door's motion.
+        Vector3f pivotInDoor = new Vector3f(-doorHalfWidth, 0f, 0f);
+        float x = doorCenterX - doorHalfWidth;
+        Vector3f pivotInWorld = new Vector3f(x, floorY + doorHalfHeight, 0f);
+        HingeJoint joint = new HingeJoint(result, pivotInDoor, pivotInWorld,
+                Vector3f.UNIT_Y, Vector3f.UNIT_Y, JointEnd.B);
+        float lowLimitAngle = -FastMath.HALF_PI;
+        float highLimitAngle = +FastMath.HALF_PI;
+        joint.setLimit(lowLimitAngle, highLimitAngle);
+
+        PhysicsSpace physicsSpace = getPhysicsSpace(app);
+        physicsSpace.addCollisionObject(result);
+        physicsSpace.addJoint(joint);
+
+        return result;
+    }
+
+    /**
+     * Create and configure a gray, static doorframe and add it at to the
+     * physics space.
+     *
+     * @param app the application (not null)
+     * @return a new static rigid body
+     */
+    public static PhysicsRigidBody addDoorframe(Application app) {
+        float frameHalfWidth = 0.5f;
+        BoxCollisionShape jambShape = new BoxCollisionShape(
+                frameHalfWidth, doorHalfHeight, halfThickness);
+
+        float lintelLength = doorHalfWidth + 2 * frameHalfWidth;
+        BoxCollisionShape lintelShape = new BoxCollisionShape(
+                lintelLength, frameHalfWidth, halfThickness);
+
+        CompoundCollisionShape shape = new CompoundCollisionShape();
+        shape.addChildShape(jambShape, doorHalfWidth + frameHalfWidth, 0f, 0f);
+        shape.addChildShape(jambShape, -doorHalfWidth - frameHalfWidth, 0f, 0f);
+        shape.addChildShape(
+                lintelShape, 0f, doorHalfHeight + frameHalfWidth, 0f);
+
+        PhysicsRigidBody result
+                = new PhysicsRigidBody(shape, PhysicsBody.massForStatic);
+        result.setPhysicsLocation(
+                new Vector3f(doorCenterX, floorY + doorHalfHeight, 0f));
+
+        // Configure the debug visualization.
+        AssetManager assetManager = app.getAssetManager();
+        Material grayMaterial = new Material(assetManager, Materials.UNSHADED);
+        grayMaterial.setColor("Color", gray);
+        result.setDebugMaterial(grayMaterial);
+        result.setDebugMeshNormals(MeshNormals.Facet);
+
+        PhysicsSpace physicsSpace = getPhysicsSpace(app);
+        physicsSpace.addCollisionObject(result);
+
+        return result;
+    }
 
     /**
      * Create and configure a gray, static box and add it at the origin of the
