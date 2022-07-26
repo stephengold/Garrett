@@ -232,8 +232,8 @@ final public class DemoSpace {
         CollisionShape pyramidShape = new HullCollisionShape(
                 +2f, yBase, +2f,
                 -2f, yBase, +2f,
-                +2f, yBase, +2f,
-                -2f, yBase, +2f,
+                +2f, yBase, -2f,
+                -2f, yBase, -2f,
                 0f, 1f, 0f
         );
         PhysicsRigidBody result
