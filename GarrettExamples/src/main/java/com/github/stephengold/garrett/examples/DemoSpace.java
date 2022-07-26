@@ -361,13 +361,13 @@ final public class DemoSpace {
      * @return the new instance
      */
     public static PhysicsRigidBody addYellowPyramid(Application app) {
-        float yBase = -0.5f;
+        float yBase = -1.5f;
         CollisionShape pyramidShape = new HullCollisionShape(
-                +2f, yBase, +2f,
-                -2f, yBase, +2f,
-                +2f, yBase, -2f,
-                -2f, yBase, -2f,
-                0f, 1f, 0f
+                +6f, yBase, +6f,
+                -6f, yBase, +6f,
+                +6f, yBase, -6f,
+                -6f, yBase, -6f,
+                0f, 3f, 0f
         );
         PhysicsRigidBody result
                 = new PhysicsRigidBody(pyramidShape, PhysicsBody.massForStatic);
