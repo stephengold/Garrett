@@ -130,7 +130,7 @@ public class HelloDynaCam extends SimpleApplication {
          * to the added camera-input signals.
          */
         mapKeyToSignal(KeyInput.KEY_G, "ghost");
-        mapButtonToSignal(MouseInput.BUTTON_RIGHT, "pointToLook");
+        mapKeyToSignal(KeyInput.KEY_LSHIFT, "pointToLook");
         mapKeyToSignal(KeyInput.KEY_R, "ram");
         mapKeyToSignal(KeyInput.KEY_DOWN, "viewDown");
         mapKeyToSignal(KeyInput.KEY_UP, "viewUp");
