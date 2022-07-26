@@ -48,6 +48,8 @@ import com.jme3.bullet.objects.PhysicsBody;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.bullet.util.DebugShapeFactory;
 import com.jme3.bullet.util.PlaneDmiListener;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
@@ -56,13 +58,17 @@ import com.jme3.math.Plane;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Limits;
 import com.jme3.renderer.Renderer;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Spatial;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.texture.Texture;
 import java.util.EnumMap;
 import java.util.logging.Logger;
 import jme3utilities.MeshNormals;
 
 /**
- * A utility class to populate a PhysicsSpace for demos.
+ * A utility class to populate a PhysicsSpace for demos and tutorial apps.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -70,10 +76,6 @@ final public class DemoSpace {
     // *************************************************************************
     // constants and loggers
 
-    /**
-     * debug color for static boxes
-     */
-    private final static ColorRGBA gray = new ColorRGBA(0.1f, 0.1f, 0.1f, 1f);
     /**
      * X coordinate of the door's center (in physics space)
      */
@@ -129,9 +131,7 @@ final public class DemoSpace {
         result.setEnableSleep(false);
 
         // Configure the debug visualization.
-        AssetManager assetManager = app.getAssetManager();
-        Material doorMaterial = new Material(assetManager, Materials.UNSHADED);
-        doorMaterial.setColor("Color", new ColorRGBA(0.1f, 0.1f, 1f, 1f));
+        Material doorMaterial = createLitMaterial(app, 0.1f, 0.1f, 1f);
         result.setDebugMaterial(doorMaterial);
         result.setDebugMeshNormals(MeshNormals.Facet);
 
@@ -180,9 +180,7 @@ final public class DemoSpace {
                 new Vector3f(doorCenterX, floorY + doorHalfHeight, 0f));
 
         // Configure the debug visualization.
-        AssetManager assetManager = app.getAssetManager();
-        Material grayMaterial = new Material(assetManager, Materials.UNSHADED);
-        grayMaterial.setColor("Color", gray);
+        Material grayMaterial = createLitMaterial(app, 0.1f, 0.1f, 0.1f);
         result.setDebugMaterial(grayMaterial);
         result.setDebugMeshNormals(MeshNormals.Facet);
 
@@ -190,6 +188,45 @@ final public class DemoSpace {
         physicsSpace.addCollisionObject(result);
 
         return result;
+    }
+
+    /**
+     * Add background, lighting, and shadows to the specified scene.
+     *
+     * @param app the application (not null)
+     * @param scene where to add the lights (not null)
+     */
+    public static void addLighting(Application app, Spatial scene) {
+        // Set the viewport's background color to light blue.
+        ViewPort viewPort = app.getViewPort();
+        ColorRGBA skyColor = new ColorRGBA(0.1f, 0.2f, 0.4f, 1f);
+        viewPort.setBackgroundColor(skyColor);
+
+        // Add an ambient light.
+        ColorRGBA ambientColor = new ColorRGBA(0.1f, 0.1f, 0.1f, 1f);
+        AmbientLight ambient = new AmbientLight(ambientColor);
+        scene.addLight(ambient);
+        ambient.setName("ambient");
+
+        // Add a direct light.
+        ColorRGBA directColor = ColorRGBA.White.clone();
+        Vector3f direction = new Vector3f(-7f, -3f, -4f).normalizeLocal();
+        DirectionalLight sun = new DirectionalLight(direction, directColor);
+        scene.addLight(sun);
+        sun.setName("sun");
+
+        // Render shadows based on the directional light.
+        viewPort.clearProcessors();
+        AssetManager assetManager = app.getAssetManager();
+        int shadowMapSize = 4_096; // in pixels
+        int numSplits = 3;
+        DirectionalLightShadowRenderer sr = new DirectionalLightShadowRenderer(
+                assetManager, shadowMapSize, numSplits);
+        sr.setEdgeFilteringMode(EdgeFilteringMode.PCFPOISSON);
+        sr.setEdgesThickness(5);
+        sr.setLight(sun);
+        sr.setShadowIntensity(0.6f);
+        viewPort.addProcessor(sr);
     }
 
     /**
@@ -206,10 +243,9 @@ final public class DemoSpace {
                 = new PhysicsRigidBody(boxShape, PhysicsBody.massForStatic);
 
         // Configure the debug visualization.
-        AssetManager assetManager = app.getAssetManager();
-        Material boxMaterial = new Material(assetManager, Materials.UNSHADED);
-        boxMaterial.setColor("Color", gray);
+        Material boxMaterial = createLitMaterial(app, 0.1f, 0.1f, 0.1f);
         result.setDebugMaterial(boxMaterial);
+        result.setDebugMeshNormals(MeshNormals.Facet);
 
         PhysicsSpace physicsSpace = getPhysicsSpace(app);
         physicsSpace.addCollisionObject(result);
@@ -232,10 +268,9 @@ final public class DemoSpace {
         result.setPhysicsLocation(new Vector3f(0f, 0f, 3f));
 
         // Configure the debug visualization.
-        AssetManager assetManager = app.getAssetManager();
-        Material ballMaterial = new Material(assetManager, Materials.UNSHADED);
-        ballMaterial.setColor("Color", new ColorRGBA(0.5f, 0f, 0f, 1f));
+        Material ballMaterial = createLitMaterial(app, 0.5f, 0f, 0f);
         result.setDebugMaterial(ballMaterial);
+        result.setDebugMeshNormals(MeshNormals.Sphere);
         result.setDebugMeshResolution(DebugShapeFactory.highResolution);
 
         PhysicsSpace physicsSpace = getPhysicsSpace(app);
@@ -340,13 +375,34 @@ final public class DemoSpace {
         result.setPhysicsLocation(new Vector3f(0f, y, -20f));
 
         // Configure the debug visualization.
-        AssetManager assetManager = app.getAssetManager();
-        Material yellow = new Material(assetManager, Materials.UNSHADED);
-        yellow.setColor("Color", new ColorRGBA(1f, 0.9f, 0.2f, 1f));
+        Material yellow = createLitMaterial(app, 1f, 0.9f, 0.2f);
         result.setDebugMaterial(yellow);
+        result.setDebugMeshNormals(MeshNormals.Facet);
 
         PhysicsSpace physicsSpace = getPhysicsSpace(app);
         physicsSpace.addCollisionObject(result);
+
+        return result;
+    }
+
+    /**
+     * Create a single-sided lit material with the specified reflectivities.
+     *
+     * @param app the application (not null, unaffected)
+     * @param red the desired reflectivity for red light (&ge;0, &le;1)
+     * @param green the desired reflectivity for green light (&ge;0, &le;1)
+     * @param blue the desired reflectivity for blue light (&ge;0, &le;1)
+     * @return a new instance (not null)
+     */
+    public static Material createLitMaterial(
+            Application app, float red, float green, float blue) {
+        AssetManager assetManager = app.getAssetManager();
+        Material result = new Material(assetManager, Materials.LIGHTING);
+        result.setBoolean("UseMaterialColors", true);
+
+        float opacity = 1f;
+        result.setColor("Ambient", new ColorRGBA(red, green, blue, opacity));
+        result.setColor("Diffuse", new ColorRGBA(red, green, blue, opacity));
 
         return result;
     }

@@ -39,6 +39,7 @@ import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.scene.Node;
 import jme3utilities.SignalTracker;
 
 /**
@@ -85,6 +86,14 @@ public class HelloDynaCam extends SimpleApplication {
 
         // Visualize what occurs in physics space.
         bulletAppState.setDebugEnabled(true);
+
+        // Add lighting and shadows to the debug scene.
+        SimpleApplication app = this;
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode) -> {
+            DemoSpace.addLighting(app, physicsDebugRootNode);
+        });
+//        bulletAppState.setDebugShadowMode(
+//                RenderQueue.ShadowMode.CastAndReceive);
 
         // Populate the PhysicsSpace.
         PhysicsRigidBody doorBody = DemoSpace.addBlueDoor(this);
