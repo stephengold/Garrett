@@ -425,19 +425,8 @@ public class DynamicCamera
         }
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
-        /*
-         * Apply focal zoom, if any:
-         * first the discrete signals and then the analog values.
-         */
-        if (zoomSignalDirection != 0) {
-            float zoomFactor = FastMath.exp(zoomSignalDirection * tpf);
-            magnify(zoomFactor);
-        }
-        if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
-            magnify(zoomFactor);
-            zoomAnalogSum = 0f;
-        }
+        
+        applyFocalZoom(zoomSignalDirection, tpf);
     }
     // *************************************************************************
     // PhysicsTickListener methods

@@ -307,6 +307,27 @@ abstract class CameraController
     // protected methods
 
     /**
+     * Apply focal zoom, if any: first the discrete signals and then the analog
+     * values.
+     *
+     * @param zoomSignalDirection the zoom direction requested by discrete
+     * signals (+1 to zoom in, -1 to zoom out)
+     * @param tpf the time interval between frames (in seconds, &ge;0)
+     */
+    protected void applyFocalZoom(int zoomSignalDirection, float tpf) {
+        if (zoomSignalDirection != 0) {
+            float zoomFactor = FastMath.exp(zoomSignalDirection * tpf);
+            magnify(zoomFactor);
+        }
+
+        if (zoomAnalogSum != 0f) {
+            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
+            magnify(zoomFactor);
+            this.zoomAnalogSum = 0f;
+        }
+    }
+
+    /**
      * Test whether the specified camera function is active.
      *
      * @param function which function to test (not null)

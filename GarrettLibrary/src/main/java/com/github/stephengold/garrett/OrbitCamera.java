@@ -697,19 +697,8 @@ public class OrbitCamera extends CameraController {
         tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
         camera.setLocation(tmpCameraLocation);
-        /*
-         * Apply focal zoom, if any:
-         * first the discrete signals and then the analog values.
-         */
-        if (zoomSignalDirection != 0) {
-            float zoomFactor = FastMath.exp(zoomSignalDirection * tpf);
-            magnify(zoomFactor);
-        }
-        if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
-            magnify(zoomFactor);
-            zoomAnalogSum = 0f;
-        }
+
+        applyFocalZoom(zoomSignalDirection, tpf);
     }
     // *************************************************************************
     // private methods
