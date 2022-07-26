@@ -124,8 +124,8 @@ public class HelloDynaCam extends SimpleApplication {
         dyna.setSignalName(CameraSignal.Ghost, "ghost");
         dyna.setSignalName(CameraSignal.PointToLook, "pointToLook");
         dyna.setSignalName(CameraSignal.Ram, "ram");
-        dyna.setSignalName(CameraSignal.ViewUp, "viewUp");
         dyna.setSignalName(CameraSignal.ViewDown, "viewDown");
+        dyna.setSignalName(CameraSignal.ViewUp, "viewUp");
         /*
          * Map keyboard keys and mouse buttons
          * to the added camera-input signals.
