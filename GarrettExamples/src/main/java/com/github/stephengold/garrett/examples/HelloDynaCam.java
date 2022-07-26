@@ -118,6 +118,7 @@ public class HelloDynaCam extends SimpleApplication {
         DynamicCamera dyna = new DynamicCamera(
                 "dyna", cam, physicsSpace, signalTracker, usualMass, ramMass);
         dyna.setMoveSpeed(6f);
+        dyna.setPtlTurnRate(4f);
 
         // Add some camera-input signals that aren't automatically named.
         dyna.setSignalName(CameraSignal.Ghost, "ghost");
