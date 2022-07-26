@@ -176,7 +176,8 @@ public class DynamicCamera
          * Create the shell.
          */
         CollisionShape shape = new MultiSphere(1f); // scalable shape
-        rigidBody = new PhysicsRigidBody(shape, usualMass);
+
+        this.rigidBody = new PhysicsRigidBody(shape, usualMass);
         rigidBody.setApplicationData(this);
         rigidBody.setFriction(0f);
 
