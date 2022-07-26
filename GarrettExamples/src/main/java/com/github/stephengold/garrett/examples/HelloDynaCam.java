@@ -37,10 +37,8 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import jme3utilities.SignalTracker;
 
 /**
@@ -105,7 +103,6 @@ public class HelloDynaCam extends SimpleApplication {
          * that will be named automatically
          * when the camera controller is instantiated.
          */
-        mapButtonToSignal(MouseInput.BUTTON_LEFT, "cameraDrag");
         mapKeyToSignal(KeyInput.KEY_W, CameraInput.FLYCAM_FORWARD);
         mapKeyToSignal(KeyInput.KEY_A, CameraInput.FLYCAM_STRAFELEFT);
         mapKeyToSignal(KeyInput.KEY_D, CameraInput.FLYCAM_STRAFERIGHT);
@@ -145,29 +142,6 @@ public class HelloDynaCam extends SimpleApplication {
     }
     // *************************************************************************
     // private methods
-
-    /**
-     * Add an input mapping that causes the SignalTracker to track the specified
-     * mouse button.
-     *
-     * @param buttonId the mouse button to be tracked
-     * @param signalName name for the input signal (not null) mappings to the
-     * same signal
-     */
-    private void mapButtonToSignal(int buttonId, String signalName) {
-        signalTracker.add(signalName);
-
-        int sourceIndex = numTriggers;
-        ActionListener actionListener = (action, keyPressed, tpf) -> {
-            signalTracker.setActive(signalName, sourceIndex, keyPressed);
-        };
-        String action = "signal " + signalName;
-        inputManager.addListener(actionListener, action);
-
-        MouseButtonTrigger trigger = new MouseButtonTrigger(buttonId);
-        inputManager.addMapping(action, trigger);
-        ++numTriggers;
-    }
 
     /**
      * Add an input mapping that causes the SignalTracker to track the specified
