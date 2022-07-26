@@ -34,6 +34,7 @@ import com.github.stephengold.garrett.DynamicCamera;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -88,9 +89,14 @@ public class HelloDynaCam extends SimpleApplication {
         bulletAppState.setDebugEnabled(true);
 
         // Populate the PhysicsSpace.
+        PhysicsRigidBody doorBody = DemoSpace.addBlueDoor(this);
+        PhysicsRigidBody doorFrameBody = DemoSpace.addDoorframe(this);
         DemoSpace.addGrayBox(this);
         DemoSpace.addTiledPlane(this);
         DemoSpace.addYellowPyramid(this);
+
+        // Disable collisions between the door and the door frame.
+        doorBody.addToIgnoreList(doorFrameBody);
 
         // Disable JMonkeyEngine's FlyByCamera, which would otherwise interfere.
         flyCam.setEnabled(false);
