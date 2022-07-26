@@ -41,6 +41,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
@@ -126,6 +127,10 @@ public class DynamicCamera
      * reusable Quaternion
      */
     final private static Quaternion tmpRotation = new Quaternion();
+    /**
+     * what's being watched, or null if none
+     */
+    private Target target = null;
     /**
      * camera's preferred up direction (unit vector in world coordinates)
      */
@@ -214,6 +219,15 @@ public class DynamicCamera
     }
 
     /**
+     * Access the Target being watched.
+     *
+     * @return the pre-existing instance, or null if none
+     */
+    public Target getTarget() {
+        return target;
+    }
+
+    /**
      * Return the translation speed.
      *
      * @return the speed (in psu per second, &ge;0)
@@ -290,6 +304,18 @@ public class DynamicCamera
     public void setPtlTurnRate(float turnRate) {
         Validate.positive(turnRate, "turn rate");
         this.ptlTurnRate = turnRate;
+    }
+
+    /**
+     * Alter which Target is being watched.
+     *
+     * @param target the desired Target (alias created) or null for none
+     */
+    public void setTarget(Target target) {
+        if (target != this.target) {
+            this.target = target;
+            logger.log(Level.INFO, "{0} is the new target.", target);
+        }
     }
     // *************************************************************************
     // CameraController methods
@@ -384,27 +410,34 @@ public class DynamicCamera
         rigidBody.getPhysicsLocation(tmpLocation);
         Camera camera = getCamera();
         camera.setLocation(tmpLocation);
-        /*
-         * Update the camera's direction.
-         */
-        camera.getDirection(tmpLook);
-        /*
-         * Rotate the look direction based on accumulated
-         * pitch and yaw inputs.
-         */
-        float frustumYTangent = MyCamera.yTangent(camera);
-        float multiplier = camera.getHeight() * frustumYTangent / 1024f;
-        multiplier *= ptlTurnRate;
-        float pitchAngle = multiplier * pitchAnalogSum;
-        float yawAngle = multiplier * yawAnalogSum;
-        tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
-        tmpRotation.mult(tmpLook, tmpLook);
-        tmpLook.normalizeLocal();
-        pitchAnalogSum = 0f;
-        yawAnalogSum = 0f;
+
+        // Update the camera's direction.
+        if (target == null) {
+            camera.getDirection(tmpLook);
+            /*
+             * Rotate the look direction based on accumulated
+             * pitch and yaw inputs.
+             */
+            float frustumYTangent = MyCamera.yTangent(camera);
+            float multiplier = camera.getHeight() * frustumYTangent / 1024f;
+            multiplier *= ptlTurnRate;
+            float pitchAngle = multiplier * pitchAnalogSum;
+            float yawAngle = multiplier * yawAnalogSum;
+            tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
+            tmpRotation.mult(tmpLook, tmpLook);
+
+        } else { // Look at the target.
+            target.locateTarget(tmpLook);
+            tmpLook.subtractLocal(tmpLocation);
+            MyVector3f.normalizeLocal(tmpLook);
+        }
+
+        this.pitchAnalogSum = 0f;
+        this.yawAnalogSum = 0f;
         /*
          * Avoid looking too near the preferred "up" direction or its opposite.
          */
+        tmpLook.normalizeLocal();
         double dot = MyVector3f.dot(tmpLook, preferredUpDirection);
         if (Math.abs(dot) > maxAbsDot) {
             preferredUpDirection.mult((float) dot, tmpProj);
