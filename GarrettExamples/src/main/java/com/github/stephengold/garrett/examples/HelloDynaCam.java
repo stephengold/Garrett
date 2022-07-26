@@ -40,6 +40,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.scene.Node;
+import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
 
 /**
@@ -107,6 +108,14 @@ public class HelloDynaCam extends SimpleApplication {
 
         // Disable JMonkeyEngine's FlyByCamera, which would otherwise interfere.
         flyCam.setEnabled(false);
+
+        // The first-person viewpoint benefits from a wider field of view.
+        cam.setFov(60f); // in degrees, default=45
+        /*
+         * The size of the rigid sphere will be strongly influenced
+         * by the distance to the near clipping plane.
+         */
+        MyCamera.setNearFar(cam, 0.2f, 200f);
         /*
          * Map keyboard keys and mouse buttons to the camera-input signals
          * that will be named automatically
@@ -128,7 +137,8 @@ public class HelloDynaCam extends SimpleApplication {
                 "dyna", cam, physicsSpace, signalTracker, usualMass, ramMass);
         dyna.setDefaultState(CameraSignal.PointToLook, true);
         dyna.setMoveSpeed(6f); // default=1
-        dyna.setPtlTurnRate(4f);
+        dyna.setPoleExclusionAngle(1.2f); // default=0.3
+        dyna.setPtlTurnRate(2f); // default=1
 
         // Add some camera-input signals that aren't automatically named.
         dyna.setSignalName(CameraSignal.Ghost, "ghost");
