@@ -229,9 +229,9 @@ final public class DemoSpace {
 
         // Configure the debug visualization.
         AssetManager assetManager = app.getAssetManager();
-        Material boxMaterial = new Material(assetManager, Materials.UNSHADED);
-        boxMaterial.setColor("Color", new ColorRGBA(1f, 0.9f, 0.2f, 1f));
-        result.setDebugMaterial(boxMaterial);
+        Material yellow = new Material(assetManager, Materials.UNSHADED);
+        yellow.setColor("Color", new ColorRGBA(1f, 0.9f, 0.2f, 1f));
+        result.setDebugMaterial(yellow);
 
         PhysicsSpace physicsSpace = getPhysicsSpace(app);
         physicsSpace.addCollisionObject(result);
