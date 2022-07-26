@@ -117,6 +117,7 @@ public class HelloDynaCam extends SimpleApplication {
         float ramMass = 100f;
         DynamicCamera dyna = new DynamicCamera(
                 "dyna", cam, physicsSpace, signalTracker, usualMass, ramMass);
+        dyna.setDefaultState(CameraSignal.PointToLook, true);
         dyna.setMoveSpeed(6f);
         dyna.setPtlTurnRate(4f);
 
