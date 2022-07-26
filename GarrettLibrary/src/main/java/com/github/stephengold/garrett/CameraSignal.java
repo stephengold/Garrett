@@ -43,7 +43,7 @@ public enum CameraSignal {
      */
     Back,
     /**
-     * enable drag-to-orbit mode
+     * enable (or disable) drag-to-orbit mode
      */
     DragToOrbit,
     /**
@@ -55,7 +55,7 @@ public enum CameraSignal {
      */
     Forward,
     /**
-     * enable ghost mode (no contact response)
+     * enable (or disable) ghost mode (no contact response)
      */
     Ghost,
     /**
@@ -83,7 +83,7 @@ public enum CameraSignal {
      */
     OrbitUp,
     /**
-     * enable point-to-look mode
+     * enable (or disable) point-to-look mode
      */
     PointToLook,
     /**
@@ -95,7 +95,7 @@ public enum CameraSignal {
      */
     PreferredUp,
     /**
-     * enable high-mass mode (behave like a battering ram)
+     * enable (or disable) high-mass mode (behave like a battering ram)
      */
     Ram,
     /**
@@ -127,7 +127,7 @@ public enum CameraSignal {
      */
     WorldUp,
     /**
-     * enable X-ray mode (no line-of-sight constraint)
+     * enable (or disable) X-ray mode (no line-of-sight constraint)
      */
     Xray,
     /**

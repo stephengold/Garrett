@@ -72,6 +72,12 @@ abstract class CameraController
      */
     final private Camera camera;
     /**
+     * map modal functions to their default states (true&rarr;active,
+     * false&rarr;inactive)
+     */
+    final private EnumMap<CameraSignal, Boolean> defaultStates
+            = new EnumMap<>(CameraSignal.class);
+    /**
      * map functions to signal names
      */
     final private EnumMap<CameraSignal, String> signalNames
@@ -134,6 +140,23 @@ abstract class CameraController
      */
     public String cameraName() {
         return cameraName;
+    }
+
+    /**
+     * Return the default state of the specified modal function.
+     *
+     * @param function which function to query (not null)
+     * @return true for active, otherwise false
+     */
+    public boolean defaultState(CameraSignal function) {
+        Validate.nonNull(function, "function");
+
+        Boolean defaultState = defaultStates.get(function);
+        if (defaultState == null) {
+            return false;
+        } else {
+            return defaultState;
+        }
     }
 
     /**
@@ -201,6 +224,18 @@ abstract class CameraController
                     + "while the controller is attached and enabled.");
         }
         this.cameraName = name;
+    }
+
+    /**
+     * Alter the default state of the specified modal function.
+     *
+     * @param function which function to alter (not null)
+     * @param state the desired default state (true&rarr;active,
+     * false&rarr;inactive)
+     */
+    public void setDefaultState(CameraSignal function, boolean state) {
+        Validate.nonNull(function, "function");
+        defaultStates.put(function, state);
     }
 
     /**
@@ -272,20 +307,21 @@ abstract class CameraController
     // protected methods
 
     /**
-     * Test whether the specified camera function (signal) is active.
+     * Test whether the specified camera function is active.
      *
-     * @param function which function to test (no null)
+     * @param function which function to test (not null)
      * @return true if active, otherwise false
      */
     protected boolean isActive(CameraSignal function) {
         assert function != null;
 
+        boolean result = defaultState(function);
         String signalName = signalNames.get(function);
         if (signalName != null && signalTracker.test(signalName)) {
-            return true;
-        } else {
-            return false;
+            result = !result;
         }
+
+        return result;
     }
     // *************************************************************************
     // AnalogListener methods
