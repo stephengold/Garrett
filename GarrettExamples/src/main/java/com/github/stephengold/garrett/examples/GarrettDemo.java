@@ -400,9 +400,10 @@ public class GarrettDemo extends AcorusDemo {
 
         // Add lighting and shadows to the debug scene.
         AcorusDemo app = this;
-        bulletAppState.setDebugInitListener((Node physicsDebugRootNode) -> {
-            DemoSpace.addLighting(app, physicsDebugRootNode);
-        });
+        bulletAppState.setDebugInitListener(
+                (Node physicsDebugRootNode)
+                -> DemoSpace.addLighting(app, physicsDebugRootNode)
+        );
     }
 
     private void nextObstructionResponse() {

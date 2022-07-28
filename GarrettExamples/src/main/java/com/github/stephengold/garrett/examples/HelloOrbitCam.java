@@ -94,9 +94,10 @@ public class HelloOrbitCam extends SimpleApplication {
 
         // Add lighting and shadows to the debug scene.
         SimpleApplication app = this;
-        bulletAppState.setDebugInitListener((Node physicsDebugRootNode) -> {
-            DemoSpace.addLighting(app, physicsDebugRootNode);
-        });
+        bulletAppState.setDebugInitListener(
+                (Node physicsDebugRootNode)
+                -> DemoSpace.addLighting(app, physicsDebugRootNode)
+        );
         bulletAppState.setDebugShadowMode(
                 RenderQueue.ShadowMode.CastAndReceive);
 
@@ -184,9 +185,8 @@ public class HelloOrbitCam extends SimpleApplication {
         signalTracker.add(signalName);
 
         int sourceIndex = numTriggers;
-        ActionListener actionListener = (action, keyPressed, tpf) -> {
-            signalTracker.setActive(signalName, sourceIndex, keyPressed);
-        };
+        ActionListener actionListener = (action, keyPressed, tpf)
+                -> signalTracker.setActive(signalName, sourceIndex, keyPressed);
         String action = "signal " + signalName;
         inputManager.addListener(actionListener, action);
 
@@ -206,9 +206,8 @@ public class HelloOrbitCam extends SimpleApplication {
         signalTracker.add(signalName);
 
         int sourceIndex = numTriggers;
-        ActionListener actionListener = (action, keyPressed, tpf) -> {
-            signalTracker.setActive(signalName, sourceIndex, keyPressed);
-        };
+        ActionListener actionListener = (action, keyPressed, tpf)
+                -> signalTracker.setActive(signalName, sourceIndex, keyPressed);
         String action = "signal " + signalName;
         inputManager.addListener(actionListener, action);
 
