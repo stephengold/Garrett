@@ -6,7 +6,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'com.github.stephengold.garrett.examples.HelloGarrett'
+mainClassName = 'com.github.stephengold.garrett.examples.GarrettDemo'
 if (!hasProperty('mainClass')) {
     ext.mainClass = mainClassName
 }
