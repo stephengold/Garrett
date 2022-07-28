@@ -181,7 +181,6 @@ public class GarrettDemo extends AcorusDemo {
 
         // Instantiate and attach the "Affixed" camera controller.
         AffixedCamera affixedCam = new AffixedCamera(cnAffixed, cam, signals);
-        affixedCam.setCameraName(cnAffixed);
         affixedCam.setLookDirection(new Vector3f(0f, 0f, -1f));
         affixedCam.setOffset(new Vector3f(0f, 1f, 5f));
         affixedCam.setSignalName(CameraSignal.ZoomIn, signalZoomIn);
@@ -193,7 +192,6 @@ public class GarrettDemo extends AcorusDemo {
         // Instantiate and attach the "Chase" camera controller.
         OrbitCamera chaseCam = new OrbitCamera(cnChase, cam, signals);
         chaseCam.setAzimuthTau(0.2f);
-        chaseCam.setCameraName(cnChase);
         setOrbitSignals(chaseCam);
         success = stateManager.attach(chaseCam);
         assert success;
@@ -202,7 +200,6 @@ public class GarrettDemo extends AcorusDemo {
         // Instantiate and attach the "Dynamic" camera controller.
         DynamicCamera dynaCam = new DynamicCamera(
                 cnDynamic, cam, physicsSpace, signals, usualMass, ramMass);
-        dynaCam.setCameraName(cnDynamic);
         dynaCam.setDefaultState(CameraSignal.PointToLook, true);
         dynaCam.setMoveSpeed(6f); // default=1
         dynaCam.setPoleExclusionAngle(1.2f); // default=0.3
@@ -214,7 +211,6 @@ public class GarrettDemo extends AcorusDemo {
 
         // Instantiate and attach the "Orbit" camera controller.
         OrbitCamera orbitCam = new OrbitCamera(cnOrbit, cam, signals);
-        orbitCam.setCameraName(cnOrbit);
         setOrbitSignals(orbitCam);
         success = stateManager.attach(orbitCam);
         assert success;
@@ -223,7 +219,6 @@ public class GarrettDemo extends AcorusDemo {
         // Instantiate and attach the "Watch" camera controller.
         DynamicCamera watchCam = new DynamicCamera(
                 cnWatch, cam, physicsSpace, signals, usualMass, ramMass);
-        watchCam.setCameraName(cnWatch);
         watchCam.setMoveSpeed(6f); // default=1
         setDynamicSignals(watchCam);
         success = stateManager.attach(watchCam);

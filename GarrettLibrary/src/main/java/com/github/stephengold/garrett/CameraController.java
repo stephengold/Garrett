@@ -127,6 +127,7 @@ abstract class CameraController
 
         this.camera = camera;
         this.signalTracker = tracker;
+        setCameraName(id);
         super.setEnabled(false);
     }
     // *************************************************************************
@@ -216,7 +217,7 @@ abstract class CameraController
      * <p>
      * Allowed only when the controller is NOT attached and enabled.
      *
-     * @param name the desired name (default=null)
+     * @param name the desired name (default=appstate ID)
      */
     public void setCameraName(String name) {
         if (isInitialized() && isEnabled()) {
