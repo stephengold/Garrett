@@ -1,5 +1,15 @@
 # release log for the Garrett Library
 
+## Version 0.5.1 released on TBD
+
++ Merged all `DragToRotate` functionality into `PointToLook` and deleted the
+  `DragToRotate` values from the `CameraSignal` enum. (API change)
++ Added an option to `DynamicCamera` to watch a `Target`.
++ Added the `defaultState()` and `setDefaultState()` methods
+  to camera controllers.
++ Rebased all 3 camera controllers on a new superclass.
++ Upgraded the Heart library to v8.1.0
+
 ## Version 0.5.0 released on 18 July 2022
 
 Added the `DynamicCamera` controller class.
