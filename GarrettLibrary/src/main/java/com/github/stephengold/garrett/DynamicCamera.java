@@ -544,10 +544,10 @@ public class DynamicCamera
         Vector3f location = camera.getLocation();
         rigidBody.setPhysicsLocation(location);
 
-        float frustumYTangent = MyCamera.yTangent(camera);
         float yDegrees;
         if (camera.isParallelProjection()) {
-            float yRadians = FastMath.atan(frustumYTangent);
+            float yTangent = MyCamera.yTangent(camera);
+            float yRadians = FastMath.atan(yTangent);
             yDegrees = MyMath.toDegrees(yRadians);
         } else {
             yDegrees = MyCamera.yDegrees(camera);
@@ -556,7 +556,6 @@ public class DynamicCamera
         float near = camera.getFrustumNear();
         float far = camera.getFrustumFar();
         camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
-        frustumYTangent = MyCamera.yTangent(camera);
 
         physicsSpace.addCollisionObject(rigidBody);
         physicsSpace.addTickListener(this);
