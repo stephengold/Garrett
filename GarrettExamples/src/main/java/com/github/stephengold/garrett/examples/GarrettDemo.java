@@ -499,7 +499,7 @@ public class GarrettDemo extends AcorusDemo {
      *
      * @param dc the controller to configure (not null)
      */
-    private void setDynamicSignals(DynamicCamera dc) {
+    private static void setDynamicSignals(DynamicCamera dc) {
         dc.setSignalName(CameraSignal.Ghost, signalXray);
         dc.setSignalName(CameraSignal.PointToLook, signalPtl);
         dc.setSignalName(CameraSignal.Ram, signalRam);
@@ -514,7 +514,7 @@ public class GarrettDemo extends AcorusDemo {
      *
      * @param oc the controller to configure (not null)
      */
-    private void setOrbitSignals(OrbitCamera oc) {
+    private static void setOrbitSignals(OrbitCamera oc) {
         oc.setSignalName(CameraSignal.Back, CameraInput.FLYCAM_BACKWARD);
         oc.setSignalName(CameraSignal.DragToOrbit, signalDrag);
         oc.setSignalName(CameraSignal.Forward, CameraInput.FLYCAM_FORWARD);
