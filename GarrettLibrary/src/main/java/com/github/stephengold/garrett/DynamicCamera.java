@@ -34,6 +34,7 @@ import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.MultiSphere;
 import com.jme3.bullet.objects.PhysicsRigidBody;
+import com.jme3.input.CameraInput;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseAxisTrigger;
@@ -185,13 +186,13 @@ public class DynamicCamera
         rigidBody.setApplicationData(this);
         rigidBody.setFriction(0f);
 
-        // Initialize some signal names use to imitate FlyByCamera.
-        setSignalName(CameraSignal.Back, "FLYCAM_Backward");
-        setSignalName(CameraSignal.Forward, "FLYCAM_Forward");
-        setSignalName(CameraSignal.Left, "FLYCAM_StrafeLeft");
-        setSignalName(CameraSignal.Right, "FLYCAM_StrafeRight");
-        setSignalName(CameraSignal.WorldDown, "FLYCAM_Lower");
-        setSignalName(CameraSignal.WorldUp, "FLYCAM_Rise");
+        // Initialize some signal names used to imitate FlyByCamera.
+        setSignalName(CameraSignal.Back, CameraInput.FLYCAM_BACKWARD);
+        setSignalName(CameraSignal.Forward, CameraInput.FLYCAM_FORWARD);
+        setSignalName(CameraSignal.Left, CameraInput.FLYCAM_STRAFELEFT);
+        setSignalName(CameraSignal.Right, CameraInput.FLYCAM_STRAFERIGHT);
+        setSignalName(CameraSignal.WorldDown, CameraInput.FLYCAM_LOWER);
+        setSignalName(CameraSignal.WorldUp, CameraInput.FLYCAM_RISE);
     }
     // *************************************************************************
     // new methods exposed
