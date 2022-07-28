@@ -19,7 +19,7 @@ dependencies {
     implementation minieCoordinates
     implementation 'com.github.stephengold:Acorus:0.9.16'
     runtimeOnly 'org.jmonkeyengine:jme3-desktop:' + jme3Version
-    implementation 'org.jmonkeyengine:jme3-lwjgl3:' + jme3Version
+    runtimeOnly 'org.jmonkeyengine:jme3-lwjgl3:' + jme3Version
 
     // GarrettExamples doesn't use jme3-jogg nor jme3-plugins
     //  -- they are included solely to avoid warnings from AssetConfig.
