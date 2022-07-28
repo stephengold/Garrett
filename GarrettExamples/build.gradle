@@ -54,6 +54,10 @@ tasks.register('cleanSOs', Delete) { // extracted Linux and Android native libra
 
 // tasks to run the example apps:
 
+tasks.register('GarrettDemo', JavaExec) {
+    mainClass = 'com.github.stephengold.garrett.examples.GarrettDemo'
+}
+
 tasks.register('HelloDynaCam', JavaExec) {
     mainClass = 'com.github.stephengold.garrett.examples.HelloDynaCam'
 }
