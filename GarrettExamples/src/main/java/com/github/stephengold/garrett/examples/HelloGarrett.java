@@ -44,6 +44,8 @@ import jme3utilities.SignalTracker;
 
 /**
  * A simple application, its camera controlled by AffixedCamera.
+ * <p>
+ * Collision objects are rendered entirely by debug visualization.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -104,14 +106,15 @@ public class HelloGarrett extends SimpleApplication {
         flyCam.setEnabled(false);
 
         // Instantiate the camera controller.
-        AffixedCamera fix = new AffixedCamera("fix", cam, signalTracker);
-        fix.setLookDirection(new Vector3f(0f, 0f, -1f));
-        fix.setOffset(new Vector3f(0f, 1f, 5f));
-        fix.setRigidBody(redBall);
+        AffixedCamera affixedCam
+                = new AffixedCamera("AffixedCam", cam, signalTracker);
+        affixedCam.setLookDirection(new Vector3f(0f, 0f, -1f));
+        affixedCam.setOffset(new Vector3f(0f, 1f, 5f));
+        affixedCam.setRigidBody(redBall);
 
         // Name some camera-input signals.
-        fix.setSignalName(CameraSignal.ZoomIn, "cameraIn");
-        fix.setSignalName(CameraSignal.ZoomOut, "cameraOut");
+        affixedCam.setSignalName(CameraSignal.ZoomIn, "cameraIn");
+        affixedCam.setSignalName(CameraSignal.ZoomOut, "cameraOut");
 
         // Map keyboard keys to the named camera-input signals.
         mapKeyToSignal(KeyInput.KEY_W, "cameraIn");
@@ -125,9 +128,9 @@ public class HelloGarrett extends SimpleApplication {
         mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraOut");
 
         // Attach and enable the camera controller.
-        boolean success = stateManager.attach(fix);
+        boolean success = stateManager.attach(affixedCam);
         assert success;
-        fix.setEnabled(true);
+        affixedCam.setEnabled(true);
     }
     // *************************************************************************
     // private methods

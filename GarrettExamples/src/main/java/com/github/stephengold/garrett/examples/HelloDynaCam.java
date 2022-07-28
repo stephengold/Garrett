@@ -45,6 +45,8 @@ import jme3utilities.SignalTracker;
 
 /**
  * A simple application, its camera controlled by DynamicCamera.
+ * <p>
+ * Collision objects are rendered entirely by debug visualization.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -123,8 +125,8 @@ public class HelloDynaCam extends SimpleApplication {
          */
         mapKeyToSignal(KeyInput.KEY_W, CameraInput.FLYCAM_FORWARD);
         mapKeyToSignal(KeyInput.KEY_A, CameraInput.FLYCAM_STRAFELEFT);
-        mapKeyToSignal(KeyInput.KEY_D, CameraInput.FLYCAM_STRAFERIGHT);
         mapKeyToSignal(KeyInput.KEY_S, CameraInput.FLYCAM_BACKWARD);
+        mapKeyToSignal(KeyInput.KEY_D, CameraInput.FLYCAM_STRAFERIGHT);
         mapKeyToSignal(KeyInput.KEY_Q, CameraInput.FLYCAM_RISE);
         mapKeyToSignal(KeyInput.KEY_Z, CameraInput.FLYCAM_LOWER);
         mapKeyToSignal(KeyInput.KEY_LEFT, CameraInput.FLYCAM_STRAFELEFT);
@@ -133,21 +135,21 @@ public class HelloDynaCam extends SimpleApplication {
         // Instantiate the camera controller.
         float usualMass = 0.1f;
         float ramMass = 100f;
-        DynamicCamera dyna = new DynamicCamera(
-                "dyna", cam, physicsSpace, signalTracker, usualMass, ramMass);
-        dyna.setDefaultState(CameraSignal.PointToLook, true);
-        dyna.setMoveSpeed(6f); // default=1
-        dyna.setPoleExclusionAngle(1.2f); // default=0.3
-        dyna.setPtlTurnRate(2f); // default=1
+        DynamicCamera dynaCam = new DynamicCamera("DynaCam", cam, physicsSpace,
+                signalTracker, usualMass, ramMass);
+        dynaCam.setDefaultState(CameraSignal.PointToLook, true);
+        dynaCam.setMoveSpeed(6f); // default=1
+        dynaCam.setPoleExclusionAngle(1.2f); // default=0.3
+        dynaCam.setPtlTurnRate(2f); // default=1
 
         // Add some camera-input signals that aren't automatically named.
-        dyna.setSignalName(CameraSignal.Ghost, "ghost");
-        dyna.setSignalName(CameraSignal.PointToLook, "pointToLook");
-        dyna.setSignalName(CameraSignal.Ram, "ram");
-        dyna.setSignalName(CameraSignal.ViewDown, "viewDown");
-        dyna.setSignalName(CameraSignal.ViewUp, "viewUp");
-        dyna.setSignalName(CameraSignal.ZoomIn, "cameraZoomIn");
-        dyna.setSignalName(CameraSignal.ZoomOut, "cameraZoomOut");
+        dynaCam.setSignalName(CameraSignal.Ghost, "ghost");
+        dynaCam.setSignalName(CameraSignal.PointToLook, "pointToLook");
+        dynaCam.setSignalName(CameraSignal.Ram, "ram");
+        dynaCam.setSignalName(CameraSignal.ViewDown, "viewDown");
+        dynaCam.setSignalName(CameraSignal.ViewUp, "viewUp");
+        dynaCam.setSignalName(CameraSignal.ZoomIn, "cameraZoomIn");
+        dynaCam.setSignalName(CameraSignal.ZoomOut, "cameraZoomOut");
         /*
          * Map keyboard keys and mouse buttons
          * to the added camera-input signals.
@@ -163,9 +165,9 @@ public class HelloDynaCam extends SimpleApplication {
         mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraZoomOut");
 
         // Attach and enable the camera controller.
-        boolean success = stateManager.attach(dyna);
+        boolean success = stateManager.attach(dynaCam);
         assert success;
-        dyna.setEnabled(true);
+        dynaCam.setEnabled(true);
     }
     // *************************************************************************
     // private methods

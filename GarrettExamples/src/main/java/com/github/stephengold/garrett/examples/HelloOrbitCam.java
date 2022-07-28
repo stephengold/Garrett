@@ -48,6 +48,8 @@ import jme3utilities.SignalTracker;
 
 /**
  * A simple application, its camera controlled by OrbitCamera.
+ * <p>
+ * Collision objects are rendered entirely by debug visualization.
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -127,20 +129,20 @@ public class HelloOrbitCam extends SimpleApplication {
         };
 
         // Instantiate the camera controller.
-        OrbitCamera orbit = new OrbitCamera("orbit", cam, signalTracker);
-        orbit.setTarget(target);
+        OrbitCamera orbitCam = new OrbitCamera("OrbitCam", cam, signalTracker);
+        orbitCam.setTarget(target);
 
         // Name some camera-input signals.
-        orbit.setSignalName(CameraSignal.Back, "cameraBackward");
-        orbit.setSignalName(CameraSignal.DragToOrbit, "cameraDrag");
-        orbit.setSignalName(CameraSignal.Forward, "cameraForward");
-        orbit.setSignalName(CameraSignal.OrbitCcw, "cameraOrbitCcw");
-        orbit.setSignalName(CameraSignal.OrbitCw, "cameraOrbitCw");
-        orbit.setSignalName(CameraSignal.OrbitDown, "cameraOrbitDown");
-        orbit.setSignalName(CameraSignal.OrbitUp, "cameraOrbitUp");
-        orbit.setSignalName(CameraSignal.Xray, "cameraXray");
-        orbit.setSignalName(CameraSignal.ZoomIn, "cameraZoomIn");
-        orbit.setSignalName(CameraSignal.ZoomOut, "cameraZoomOut");
+        orbitCam.setSignalName(CameraSignal.Back, "cameraBackward");
+        orbitCam.setSignalName(CameraSignal.DragToOrbit, "cameraDrag");
+        orbitCam.setSignalName(CameraSignal.Forward, "cameraForward");
+        orbitCam.setSignalName(CameraSignal.OrbitCcw, "cameraOrbitCcw");
+        orbitCam.setSignalName(CameraSignal.OrbitCw, "cameraOrbitCw");
+        orbitCam.setSignalName(CameraSignal.OrbitDown, "cameraOrbitDown");
+        orbitCam.setSignalName(CameraSignal.OrbitUp, "cameraOrbitUp");
+        orbitCam.setSignalName(CameraSignal.Xray, "cameraXray");
+        orbitCam.setSignalName(CameraSignal.ZoomIn, "cameraZoomIn");
+        orbitCam.setSignalName(CameraSignal.ZoomOut, "cameraZoomOut");
         /*
          * Map keyboard keys and mouse buttons
          * to the named camera-input signals.
@@ -163,9 +165,9 @@ public class HelloOrbitCam extends SimpleApplication {
         mapKeyToSignal(KeyInput.KEY_SUBTRACT, "cameraZoomOut");
 
         // Attach and enable the camera controller.
-        boolean success = stateManager.attach(orbit);
+        boolean success = stateManager.attach(orbitCam);
         assert success;
-        orbit.setEnabled(true);
+        orbitCam.setEnabled(true);
     }
     // *************************************************************************
     // private methods
