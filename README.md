@@ -1,6 +1,6 @@
 # Garrett Project
 
-The [Garrett Project][garrett] provides a collection of camera controllers for
+[The Garrett Project][garrett] provides a collection of camera controllers for
 [the jMonkeyEngine (JME) game engine][jme].
 
 It contains 2 sub-projects:
@@ -53,7 +53,8 @@ The Garrett Library depends on [Minie].
 However, the Minie dependency is intentionally omitted from Garrett's POM
 so developers can specify *which* Minie library should be used.
 
-For projects built using [Maven] or [Gradle], it is *not* sufficient to specify the
+For projects built using [Maven] or [Gradle], it is
+*not* sufficient to specify the
 dependency on the Garrett Library.
 You must also explicitly specify the Minie dependency.
 The following examples specify "+big3",
@@ -67,7 +68,7 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.5.0'
+        implementation 'com.github.stephengold:Garrett:0.5.1'
         implementation 'com.github.stephengold:Minie:5.0.0+big3'
     }
 
@@ -88,7 +89,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.1</version>
     </dependency>
 
     <dependency>
@@ -117,7 +118,7 @@ Add to the project’s "pom.xml" file:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
-    + `git checkout -b latest 0.5.0`
+    + `git checkout -b latest 0.5.1`
   + using a web browser:
     + browse to [the latest release][latest]
     + follow the "Source code (zip)" link
@@ -166,20 +167,20 @@ The following apps are found in the GarrettExamples sub-project:
 ### HelloGarrett
 
 A very simple example of how Garrett maps keys to input signals.
-Using `AffixedCamera`, the camera is affixed to the red sphere.
+Using `AffixedCamera`, the camera stays at a fixed offset from the red sphere.
 
-+ up-arrow key or mouse wheel to zoom out
-+ down-arrow key or mouse wheel to zoom in
++ "W" key, up-arrow key, equals key, plus key, or mouse wheel to zoom in
++ "S" key, down-arrow key, hyphen key, minus key, or mouse wheel to zoom out
 
 ### HelloDynaCam
 
 An example of a camera controlled by `DynamicCamera`.
 
-+ drag with the left mouse button (LMB) to rotate the camera
-+ drag with the right mouse button (RMB) to rotate in "point-to-look" mode
-+ rotate the mouse wheel to zoom in or out
-+ "W" key to move the camera forward 
-+ "S" key to move the camera backward 
++ move the mouse to rotate the camera in "point-to-look" mode
++ equals key, plus key, or mouse wheel to zoom in
++ hyphen key, minus key, or mouse wheel to zoom out
++ "W" key to move the camera forward
++ "S" key to move the camera backward
 + left-arrow key or "A" key to strafe left
 + right-arrow key or "D" key to strafe right
 + "Q" key to raise the camera along the world's Y axis
@@ -188,6 +189,7 @@ An example of a camera controlled by `DynamicCamera`.
 + down-arrow key to move the camera downward in view coordinates
 + hold down the "G" key for "ghost mode", which temporarily disables physics
 + hold down the "R" key for "ram mode", which temporarily increase the mass
++ hold down the left shift key to tempararily disable point-to-look mode
 
 ### HelloOrbitCam
 
@@ -195,8 +197,8 @@ An example of a camera controlled by `OrbitCamera`.
 The camera orbits the red ball, which is its target.
 
 + drag with the left mouse button (LMB) to orbit the ball on 2 axes
-+ up-arrow key or mouse wheel to zoom out
-+ down-arrow key or mouse wheel to zoom in
++ equals key, plus key, or mouse wheel to zoom in
++ hyphen key, minus key, or mouse wheel to zoom out
 + "W" key to move the camera forward (toward the ball)
 + "S" key to move the camera backward (away from the ball)
 + left-arrow key or "A" key to orbit left (counter-clockwise, seen from above)

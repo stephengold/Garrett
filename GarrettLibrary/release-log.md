@@ -1,9 +1,9 @@
 # release log for the Garrett Library
 
-## Version 0.5.1 released on TBD
+## Version 0.5.1 released on 28 July 2022
 
 + Merged all `DragToRotate` functionality into `PointToLook` and deleted the
-  `DragToRotate` values from the `CameraSignal` enum. (API change)
+  `DragToRotate` value from the `CameraSignal` enum. (API change)
 + Added an option to `DynamicCamera` to watch a `Target`.
 + Added the `defaultState()` and `setDefaultState()` methods
   to camera controllers.
