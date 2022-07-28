@@ -547,7 +547,8 @@ public class DynamicCamera
         float frustumYTangent = MyCamera.yTangent(camera);
         float yDegrees;
         if (camera.isParallelProjection()) {
-            yDegrees = MyMath.toDegrees(FastMath.atan(frustumYTangent));
+            float yRadians = FastMath.atan(frustumYTangent);
+            yDegrees = MyMath.toDegrees(yRadians);
         } else {
             yDegrees = MyCamera.yDegrees(camera);
         }

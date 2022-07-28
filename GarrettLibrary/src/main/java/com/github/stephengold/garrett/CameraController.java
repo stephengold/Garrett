@@ -321,7 +321,8 @@ abstract class CameraController
         }
 
         if (zoomAnalogSum != 0f) {
-            float zoomFactor = FastMath.exp(zoomMultiplier() * zoomAnalogSum);
+            float logFactor = zoomMultiplier() * zoomAnalogSum;
+            float zoomFactor = FastMath.exp(logFactor);
             magnify(zoomFactor);
             this.zoomAnalogSum = 0f;
         }

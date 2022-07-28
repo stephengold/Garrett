@@ -396,7 +396,8 @@ public class OrbitCamera extends CameraController {
      */
     public void setRangeAndOffset() {
         Camera camera = getCamera();
-        tmpCameraLocation.set(camera.getLocation());
+        Vector3f location = camera.getLocation(); // alias
+        tmpCameraLocation.set(location);
         target.locateTarget(tmpTargetLocation);
         tmpCameraLocation.subtract(tmpTargetLocation, offset);
 
