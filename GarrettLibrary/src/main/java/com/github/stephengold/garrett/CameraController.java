@@ -93,7 +93,7 @@ abstract class CameraController
     /**
      * accumulated analog zoom amount since the last update (in clicks)
      */
-    protected float zoomAnalogSum = 0f;
+    private float zoomAnalogSum = 0f;
     /**
      * analog zoom input multiplier (in log units per click)
      */
