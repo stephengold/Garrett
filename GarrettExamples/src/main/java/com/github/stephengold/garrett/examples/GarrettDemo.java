@@ -226,7 +226,7 @@ public class GarrettDemo extends AcorusDemo {
         cameraControllers.put(cnWatch, watchCam);
 
         // Continuously display information about the active camera controller.
-        float width = 164f; // pixels
+        float width = 214f; // pixels
         int numLines = 1;
         this.overlay = new Overlay("Overlay", width, numLines) {
             @Override
@@ -413,9 +413,12 @@ public class GarrettDemo extends AcorusDemo {
             ObstructionResponse next;
             switch (current) {
                 case Clip:
-                    next = ObstructionResponse.Warp;
+                    next = ObstructionResponse.WarpBias;
                     break;
-                case Warp:
+                case WarpBias:
+                    next = ObstructionResponse.WarpNoBias;
+                    break;
+                case WarpNoBias:
                     next = ObstructionResponse.XRay;
                     break;
                 case XRay:

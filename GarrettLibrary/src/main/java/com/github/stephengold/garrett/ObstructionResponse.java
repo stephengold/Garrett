@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021, Stephen Gold
+ Copyright (c) 2021-2022, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 package com.github.stephengold.garrett;
 
 /**
- * Enumerate ways a camera controller can respond to an obstructed line of
+ * Enumerate some ways a camera controller can respond to an obstructed line of
  * sight.
  *
  * @author Stephen Gold sgold@sonic.net
@@ -44,11 +44,17 @@ public enum ObstructionResponse {
      */
     Clip,
     /**
-     * Temporarily warp the Camera forward along the line of sight.
+     * Warp the Camera forward along the line of sight, but don't warp all the
+     * way back when the sightline clears.
      */
-    Warp,
+    WarpBias,
     /**
-     * Ignore all obstructions.
+     * Temporarily warp the Camera forward along the line of sight. When the
+     * sightline clears, return to the previous range.
+     */
+    WarpNoBias,
+    /**
+     * Ignore all obstructions, as if the Camera has "X-ray vision".
      */
     XRay
 }

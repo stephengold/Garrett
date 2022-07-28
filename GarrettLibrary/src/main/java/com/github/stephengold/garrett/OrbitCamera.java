@@ -654,16 +654,17 @@ public class OrbitCamera extends CameraController {
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
-        boolean xrayVision
-                = obstructionResponse == ObstructionResponse.XRay
+        boolean wb = (obstructionResponse == ObstructionResponse.WarpBias);
+        boolean wnb = (obstructionResponse == ObstructionResponse.WarpNoBias);
+        boolean warping = (wnb || wb);
+        boolean xrayVision = (obstructionResponse == ObstructionResponse.XRay)
                 || isActive(CameraSignal.Xray);
-        boolean jumpy = obstructionResponse == ObstructionResponse.Warp;
         if (forwardSum != 0) {
             range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
-            if (forwardSum > 0 || xrayVision) {
-                preferredRange = range;
+            if (xrayVision || wnb || wb && forwardSum > 0) {
+                this.preferredRange = range;
             }
-        } else if (jumpy && range < preferredRange) { // jump backward
+        } else if (warping && range < preferredRange) { // warp backward
             range = preferredRange;
         }
         /*
@@ -681,7 +682,7 @@ public class OrbitCamera extends CameraController {
             /*
              * Test the sightline for obstructions.
              */
-            if (jumpy) {
+            if (warping) {
                 float rayRange = Math.max(range, preferredRange);
                 range = testSightline(rayRange, targetPco);
             } else {
