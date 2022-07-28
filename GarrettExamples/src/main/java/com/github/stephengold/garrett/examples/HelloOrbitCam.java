@@ -114,7 +114,7 @@ public class HelloOrbitCam extends SimpleApplication {
         Target target = new Target() {
             @Override
             public Vector3f forwardDirection(Vector3f storeResult) {
-                throw new UnsupportedOperationException("not chaseable");
+                throw new UnsupportedOperationException("not chasable");
             }
 
             @Override
