@@ -460,6 +460,8 @@ public class DynamicCamera
                 tmpLook.set(tmpProj);
             }
         }
+
+        // Apply the new "look" direction to the Camera.
         assert tmpLook.isUnitVector() : tmpLook;
         camera.lookAtDirection(tmpLook, preferredUpDirection);
 
