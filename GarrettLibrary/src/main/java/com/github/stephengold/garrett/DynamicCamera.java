@@ -543,7 +543,7 @@ public class DynamicCamera
      */
     private void enable() {
         Camera camera = getCamera();
-        Vector3f location = camera.getLocation();
+        Vector3f location = camera.getLocation(); // alias
         rigidBody.setPhysicsLocation(location);
 
         float yDegrees;
