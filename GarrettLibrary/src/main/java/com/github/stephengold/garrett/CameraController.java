@@ -111,8 +111,7 @@ abstract class CameraController
     // constructors
 
     /**
-     * Instantiate a disabled AppState that will affix the specified Camera to a
-     * rigid body.
+     * Instantiate a disabled AppState that will control the specified Camera.
      *
      * @param id the desired unique ID for this AppState
      * @param camera the Camera to control (not null, alias created)
