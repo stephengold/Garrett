@@ -59,7 +59,7 @@ import jme3utilities.math.MyVector3f;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-public class OrbitCamera extends CameraController {
+public class OrbitCamera extends ExclusionCamera {
     // *************************************************************************
     // constants and loggers
 
@@ -83,16 +83,6 @@ public class OrbitCamera extends CameraController {
      * to treat all non-target PCOs as obstructions
      */
     private BulletDebugAppState.DebugAppStateFilter obstructionFilter;
-    /**
-     * maximum dot product between the camera's look direction and its preferred
-     * "up" direction (constrains looking up)
-     */
-    private double maxDot = Math.cos(0.3);
-    /**
-     * minimum dot product between the camera's look direction and its preferred
-     * "up" direction (constrains looking down)
-     */
-    private double minDot = -Math.cos(0.3);
     /**
      * time constant for horizontal rotation (in seconds, 0 &rarr; locked on
      * deltaAzimuthSetpoint, +Infinity &rarr; free horizontal rotation)
@@ -143,17 +133,12 @@ public class OrbitCamera extends CameraController {
      */
     final private Vector3f offset = new Vector3f();
     /**
-     * camera's preferred "up" direction (unit vector in world coordinates)
-     */
-    final private Vector3f preferredUpDirection = new Vector3f(0f, 1f, 0f);
-    /**
      * reusable vectors
      */
     final private static Vector3f tmpCameraLocation = new Vector3f();
     final private static Vector3f tmpLeft = new Vector3f();
     final private static Vector3f tmpLook = new Vector3f();
-    final private static Vector3f tmpProj = new Vector3f();
-    final private static Vector3f tmpRej = new Vector3f();
+    final private static Vector3f tmpTargetForward = new Vector3f();
     final private static Vector3f tmpTargetLocation = new Vector3f();
     final private static Vector3f tmpUp = new Vector3f();
     // *************************************************************************
@@ -183,23 +168,6 @@ public class OrbitCamera extends CameraController {
     public float azimuthTau() {
         assert azimuthTau >= 0f : azimuthTau;
         return azimuthTau;
-    }
-
-    /**
-     * Copy the preferred "up" direction.
-     *
-     * @param storeResult storage for the result (modified if not null)
-     * @return a direction vector (either storeResult or a new vector)
-     */
-    public Vector3f copyPreferredUpDirection(Vector3f storeResult) {
-        Vector3f result;
-        if (storeResult == null) {
-            result = preferredUpDirection.clone();
-        } else {
-            result = storeResult.set(preferredUpDirection);
-        }
-
-        return result;
     }
 
     /**
@@ -350,48 +318,6 @@ public class OrbitCamera extends CameraController {
     }
 
     /**
-     * Alter the apertures of the pole-exclusion cones, which prevent the Camera
-     * from looking too near its preferred "up" direction or its opposite.
-     *
-     * @param minAngle the minimum angle between the camera axis and the
-     * preferred "up"/"down" directions, half the aperture of the exclusion
-     * cones (in radians, &ge;0, &le;pi/2, default=0.3)
-     */
-    public void setPoleExclusionAngle(float minAngle) {
-        Validate.inRange(minAngle, "minimum angle", 0f, FastMath.HALF_PI);
-
-        double cos = Math.cos(minAngle);
-        if (cos < 0.0) {
-            cos = 0.0;
-        }
-        this.maxDot = cos;
-        this.minDot = -cos;
-        assert maxDot > minDot : cos;
-    }
-
-    /**
-     * Alter the apertures of the pole-exclusion cones, which prevent the Camera
-     * from looking too near its preferred "up" direction or its opposite.
-     *
-     * @param upperAngle the minimum angle between the camera axis and the
-     * preferred "up" direction, half the aperture of the upper exclusion cone
-     * (in radians, &ge;0, &lt;{@code PI - minDownAngle}, default=0.3)
-     * @param lowerAngle the minimum angle between the camera axis and the
-     * preferred "down" direction, half the aperture of the lower exclusion cone
-     * (in radians, &ge;0, &lt;{@code PI - minUpAngle}, default=0.3)
-     */
-    public void setPoleExclusionAngles(float upperAngle, float lowerAngle) {
-        Validate.inRange(upperAngle, "upper angle", 0f, FastMath.PI);
-        Validate.inRange(lowerAngle, "lower angle", 0f, FastMath.PI);
-        float sum = upperAngle + lowerAngle;
-        Validate.require(sum < FastMath.PI, "sum of angles less than pi");
-
-        this.maxDot = Math.cos(upperAngle);
-        this.minDot = -Math.cos(lowerAngle);
-        assert maxDot > minDot;
-    }
-
-    /**
      * Alter the preferred distance to the near clipping plane.
      *
      * @param distance the desired distance (in world units, &gt;0)
@@ -409,19 +335,6 @@ public class OrbitCamera extends CameraController {
     public void setPreferredRange(float range) {
         Validate.positive(range, "range");
         this.preferredRange = range;
-    }
-
-    /**
-     * Alter the preferred "up" direction.
-     *
-     * @param direction the desired direction (not null, not zero,
-     * default=(0,1,0))
-     */
-    public void setPreferredUpDirection(Vector3f direction) {
-        Validate.nonZero(direction, "direction");
-
-        preferredUpDirection.set(direction);
-        preferredUpDirection.normalizeLocal();
     }
 
     /**
@@ -634,40 +547,18 @@ public class OrbitCamera extends CameraController {
             this.pitchAnalogSum = 0f;
             this.yawAnalogSum = 0f;
         }
-        /*
-         * Avoid looking too near the preferred "up" direction or its opposite.
-         */
+
         offset.mult(-1f, tmpLook);
-        tmpLook.normalizeLocal();
-        double dot = MyVector3f.dot(tmpLook, preferredUpDirection);
-        if (!MyMath.isBetween(minDot, dot, maxDot)) {
-            // looking in an excluded direction
-
-            // tmpRej <- the horizontal direction closest to the look direction
-            if (dot >= 1.0 || dot <= -1.0) {
-                // looking directly up or down: pick a new direction
-                MyVector3f.generateBasis(tmpLook, tmpProj, tmpRej);
-                tmpLook.set(tmpRej);
-                dot = MyVector3f.dot(tmpLook, preferredUpDirection);
-            } else {
-                preferredUpDirection.mult((float) dot, tmpProj);
-                tmpLook.subtract(tmpProj, tmpRej);
-                MyVector3f.normalizeLocal(tmpRej);
-            }
-
-            double newDot = MyMath.clamp(dot, minDot, maxDot);
-            preferredUpDirection.mult((float) newDot, tmpLook);
-            float rejCoefficient = (float) MyMath.circle(newDot);
-            MyVector3f.accumulateScaled(tmpLook, tmpRej, rejCoefficient);
-        }
+        avoidExclusionCones(tmpLook);
 
         if (!isAzimuthFree()) {
             /*
              * Rotate the camera horizontally
              * based on the target's forward direction.
              */
-            target.forwardDirection(tmpRej);
-            float targetAzimuth = FastMath.atan2(tmpRej.x, tmpRej.z);
+            target.forwardDirection(tmpTargetForward);
+            float targetAzimuth
+                    = FastMath.atan2(tmpTargetForward.x, tmpTargetForward.z);
             float cameraAzimuth = FastMath.atan2(tmpLook.x, tmpLook.z);
             float deltaAzimuth = cameraAzimuth - targetAzimuth;
             if (Float.isFinite(deltaAzimuth)) {
@@ -687,9 +578,7 @@ public class OrbitCamera extends CameraController {
             }
         }
 
-        // Apply the new "look" direction to the Camera.
-        assert tmpLook.isUnitVector() : tmpLook;
-        camera.lookAtDirection(tmpLook, preferredUpDirection);
+        reorientCamera(tmpLook);
 
         boolean wb = (obstructionResponse == ObstructionResponse.WarpBias);
         boolean wnb = (obstructionResponse == ObstructionResponse.WarpNoBias);
