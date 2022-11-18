@@ -140,7 +140,7 @@ public class HelloDynaCam extends SimpleApplication {
                 signalTracker, usualMass, ramMass);
         dynaCam.setDefaultState(CameraSignal.PointToLook, true);
         dynaCam.setMoveSpeed(6f); // default=1
-        dynaCam.setPoleExclusionAngle(1.2f); // default=0.3
+        dynaCam.setPoleExclusionAngles(1.2f, 1.2f); // default=0.3, 0.3
         dynaCam.setPtlTurnRate(2f); // default=1
 
         // Add some camera-input signals that aren't automatically named.

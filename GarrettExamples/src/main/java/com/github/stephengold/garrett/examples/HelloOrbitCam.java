@@ -131,6 +131,7 @@ public class HelloOrbitCam extends SimpleApplication {
 
         // Instantiate the camera controller.
         OrbitCamera orbitCam = new OrbitCamera("OrbitCam", cam, signalTracker);
+        orbitCam.setPoleExclusionAngles(1.5f, 0.2f); // default=0.3, 0.3
         orbitCam.setTarget(target);
 
         // Name some camera-input signals.
