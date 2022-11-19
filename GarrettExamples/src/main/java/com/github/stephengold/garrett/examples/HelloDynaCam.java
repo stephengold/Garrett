@@ -40,6 +40,8 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.scene.Node;
+import java.util.logging.Level;
+import jme3utilities.Heart;
 import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
 
@@ -71,6 +73,9 @@ public class HelloDynaCam extends SimpleApplication {
      * @param arguments array of command-line arguments (not null)
      */
     public static void main(String[] arguments) {
+        // Mute the chatty loggers in certain packages.
+        Heart.setLoggingLevels(Level.WARNING);
+
         HelloDynaCam application = new HelloDynaCam();
         application.start();
     }

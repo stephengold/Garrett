@@ -44,6 +44,8 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
+import java.util.logging.Level;
+import jme3utilities.Heart;
 import jme3utilities.SignalTracker;
 
 /**
@@ -74,6 +76,9 @@ public class HelloOrbitCam extends SimpleApplication {
      * @param arguments array of command-line arguments (not null)
      */
     public static void main(String[] arguments) {
+        // Mute the chatty loggers in certain packages.
+        Heart.setLoggingLevels(Level.WARNING);
+
         HelloOrbitCam application = new HelloOrbitCam();
         application.start();
     }
