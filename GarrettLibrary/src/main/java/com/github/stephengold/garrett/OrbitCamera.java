@@ -95,6 +95,11 @@ public class OrbitCamera extends ExclusionCamera {
      */
     private float deltaAzimuthSetpoint = 0f;
     /**
+     * maximum fraction of the viewport width and height considered when
+     * checking for obstructions
+     */
+    private float maxFraction = 0f;
+    /**
      * orbiting rate (in radians per second, &ge;0)
      */
     private float orbitRate = 0.5f;
@@ -185,6 +190,18 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
+     * Return the maximum fraction of the viewport width and height considered
+     * when checking for obstructions.
+     *
+     * @return the fraction (&ge;0, &le;1)
+     */
+    public float maxFraction() {
+        assert maxFraction >= 0f : maxFraction;
+        assert maxFraction <= 1f : maxFraction;
+        return maxFraction;
+    }
+
+    /**
      * Access the obstruction filter.
      *
      * @return the pre-existing instance, or null if none
@@ -272,6 +289,17 @@ public class OrbitCamera extends ExclusionCamera {
     public void setDeltaAzimuth(float angle) {
         Validate.inRange(angle, "angle", -FastMath.TWO_PI, FastMath.TWO_PI);
         this.deltaAzimuthSetpoint = angle;
+    }
+
+    /**
+     * Alter the maximum fraction of the viewport width and height considered
+     * when checking for obstructions.
+     *
+     * @param fraction the desired fraction (&ge;0, &le;1, default=0)
+     */
+    public void setMaxFraction(float fraction) {
+        Validate.fraction(fraction, "fraction");
+        this.maxFraction = fraction;
     }
 
     /**
