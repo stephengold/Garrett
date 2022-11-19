@@ -461,15 +461,13 @@ public class OrbitCamera extends ExclusionCamera {
             logger.warning("The object isn't added to a CollisionSpace!");
             return;
         }
-        /*
-         * Hide the cursor if dragging.
-         */
+
+        // Hide the cursor if dragging.
         InputManager inputManager = getApplication().getInputManager();
         boolean cursorVisible = !isActive(CameraSignal.DragToOrbit);
         inputManager.setCursorVisible(cursorVisible);
-        /*
-         * Sum the discrete inputs (signals).
-         */
+
+        // Sum the discrete inputs (signals).
         int forwardSum = 0;
         int orbitUpSign = 0;
         int orbitCwSign = 0;
@@ -593,9 +591,8 @@ public class OrbitCamera extends ExclusionCamera {
         } else if (warping && range < preferredRange) { // warp backward
             range = preferredRange;
         }
-        /*
-         * Limit the range to reduce the risk of far-plane clipping.
-         */
+
+        // Limit the range to reduce the risk of far-plane clipping.
         float far = camera.getFrustumFar();
         float maxRange = 0.5f * far;
         if (range > maxRange) {
@@ -605,9 +602,7 @@ public class OrbitCamera extends ExclusionCamera {
         float near = preferredClip;
         target.locateTarget(tmpTargetLocation);
         if (!xrayVision) {
-            /*
-             * Test the sightline for obstructions.
-             */
+            // Test the sightline for obstructions.
             if (warping) {
                 float rayRange = Math.max(range, preferredRange);
                 range = testSightline(rayRange, targetPco);
@@ -621,9 +616,8 @@ public class OrbitCamera extends ExclusionCamera {
         if (obstructionResponse == ObstructionResponse.Clip) {
             MyCamera.setNearFar(camera, near, far);
         }
-        /*
-         * Calculate the new camera offset and apply it to the Camera.
-         */
+
+        // Calculate the new camera offset and apply it to the Camera.
         tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
         camera.setLocation(tmpCameraLocation);
@@ -638,9 +632,8 @@ public class OrbitCamera extends ExclusionCamera {
      */
     private void disable() {
         assert isInitialized();
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         if (isAzimuthFree()) {
             inputManager.deleteMapping(analogOrbitCcw);
@@ -662,26 +655,22 @@ public class OrbitCamera extends ExclusionCamera {
         if (target == null) {
             throw new IllegalStateException("No target has been set!");
         }
-        /*
-         * Initialize the camera offset and preferred range.
-         */
+
+        // Initialize the camera offset and preferred range.
         setRangeAndOffset();
 
         float yDegrees;
         Camera camera = getCamera();
         if (camera.isParallelProjection()) {
-            /*
-             * Configure perspective.
-             */
+            // Configure perspective.
             yDegrees = 30f;
             float aspectRatio = MyCamera.viewAspectRatio(camera);
             float near = camera.getFrustumNear();
             float far = camera.getFrustumFar();
             camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
         }
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         if (isAzimuthFree()) {
             inputManager.addMapping(analogOrbitCcw,
@@ -704,15 +693,15 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
-     * Test the sightline for obstructions, from the Target to the Camera, using
-     * the obstructionFilter (if any). Requires that "tmpLook" and
-     * "tmpTargetLocation" be initialized on entry. May modify the "offset" and
-     * "tmpCameraLocation" fields.
+     * Check the sightline for obstructions, from the target to the camera,
+     * using the obstructionFilter (if any). {@code tmpLook} and
+     * {@code tmpTargetLocation} must be set prior to invocation.
      *
-     * @param range the distance between the Target and the Camera (in world
+     * @param range the distance between the target and the camera (in world
      * units, &ge;0)
-     * @param targetPco the collision object of the Target (not null)
-     * @return a modified distance (in world units, &ge;0)
+     * @param targetPco the collision object of the target (not null)
+     * @return a modified distance from the target (in world units, &ge;0,
+     * &le;{@code range})
      */
     private float testSightline(float range, PhysicsCollisionObject targetPco) {
         CollisionSpace collisionSpace = targetPco.getCollisionSpace();
@@ -725,6 +714,7 @@ public class OrbitCamera extends ExclusionCamera {
         List<PhysicsRayTestResult> hits = collisionSpace.rayTestRaw(
                 tmpTargetLocation, tmpCameraLocation);
 
+        // Find the obstruction closest to the target:
         float minFraction = 1f;
         for (PhysicsRayTestResult hit : hits) {
             PhysicsCollisionObject pco = hit.getCollisionObject();
