@@ -99,12 +99,11 @@ public class HelloOrbitCam extends SimpleApplication {
 
         // Add lighting and shadows to the debug scene.
         SimpleApplication app = this;
-        bulletAppState.setDebugInitListener(
-                (Node physicsDebugRootNode)
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
                 -> DemoSpace.addLighting(app, physicsDebugRootNode)
         );
-        bulletAppState.setDebugShadowMode(
-                RenderQueue.ShadowMode.CastAndReceive);
+        bulletAppState
+                .setDebugShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
         // Populate the PhysicsSpace.
         DemoSpace.addGrayBox(this);

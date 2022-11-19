@@ -97,8 +97,7 @@ public class HelloDynaCam extends SimpleApplication {
 
         // Add lighting and shadows to the debug scene.
         SimpleApplication app = this;
-        bulletAppState.setDebugInitListener(
-                (Node physicsDebugRootNode)
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
                 -> DemoSpace.addLighting(app, physicsDebugRootNode)
         );
 //        bulletAppState.setDebugShadowMode(

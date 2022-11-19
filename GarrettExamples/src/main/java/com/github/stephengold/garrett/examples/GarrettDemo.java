@@ -350,8 +350,8 @@ public class GarrettDemo extends AcorusDemo {
 
                 default:
                     if (actionString.startsWith(apSelectCamera)) {
-                        String cameraName = MyString.remainder(
-                                actionString, apSelectCamera);
+                        String cameraName = MyString
+                                .remainder(actionString, apSelectCamera);
                         setCameraController(cameraName);
                         return;
                     }
@@ -400,8 +400,7 @@ public class GarrettDemo extends AcorusDemo {
 
         // Add lighting and shadows to the debug scene.
         AcorusDemo app = this;
-        bulletAppState.setDebugInitListener(
-                (Node physicsDebugRootNode)
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
                 -> DemoSpace.addLighting(app, physicsDebugRootNode)
         );
     }
