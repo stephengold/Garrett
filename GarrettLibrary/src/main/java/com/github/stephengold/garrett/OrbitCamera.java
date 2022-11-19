@@ -30,9 +30,12 @@
 package com.github.stephengold.garrett;
 
 import com.jme3.bullet.CollisionSpace;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.PhysicsRayTestResult;
+import com.jme3.bullet.collision.shapes.HullCollisionShape;
 import com.jme3.bullet.debug.BulletDebugAppState;
+import com.jme3.bullet.objects.PhysicsGhostObject;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseAxisTrigger;
@@ -78,6 +81,10 @@ public class OrbitCamera extends ExclusionCamera {
     // *************************************************************************
     // fields
 
+    /**
+     * reusable boolean
+     */
+    private boolean tmpObstructed = false;
     /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
@@ -146,6 +153,13 @@ public class OrbitCamera extends ExclusionCamera {
     final private static Vector3f tmpTargetForward = new Vector3f();
     final private static Vector3f tmpTargetLocation = new Vector3f();
     final private static Vector3f tmpUp = new Vector3f();
+    /**
+     * reusable vector array
+     */
+    final private static Vector3f[] tmpCorners = new Vector3f[]{
+        new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f(),
+        new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f()
+    };
     // *************************************************************************
     // constructors
 
@@ -740,8 +754,57 @@ public class OrbitCamera extends ExclusionCamera {
         tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
 
+        // initial ray test:
         float newRange = sightlineRay(range, targetPco);
-        return newRange;
+        if (maxFraction == 0f) {
+            return newRange;
+        }
+        /*
+         * Perform contact tests at full range to estimate
+         * the largest viewport fraction free of obstructions.
+         */
+        float fraction = maxFraction;
+        boolean obstructed = testFrustum(range, range, fraction, targetPco);
+        if (obstructed) {
+            float min = 0f; // known to be unobstructed
+            float max = fraction; // known to be obstructed
+            while (true) {
+                assert max > min;
+                if (max - min < 0.01f) { // accurate enough?
+                    fraction = min;
+                    break;
+                }
+
+                fraction = 0.5f * (min + max);
+                obstructed = testFrustum(range, range, fraction, targetPco);
+                if (obstructed) {
+                    max = fraction;
+                } else {
+                    min = fraction;
+                }
+            }
+        }
+
+        obstructed = testFrustum(newRange, range, fraction, targetPco);
+        if (!obstructed) {
+            return newRange;
+        }
+
+        // binary search for the longest unobstructed frustum:
+        float min = newRange; // known to be obstructed
+        float max = range; // known to be unobstructed
+        while (true) {
+            if (max - min < 0.01f) {
+                return range - max;
+            }
+            float z = 0.5f * (min + max);
+            obstructed = testFrustum(z, range, fraction, targetPco);
+            if (obstructed) {
+                min = z;
+            } else {
+                max = z;
+            }
+        }
     }
 
     /**
@@ -780,5 +843,63 @@ public class OrbitCamera extends ExclusionCamera {
         float result = Math.min(obstructRange, range);
 
         return result;
+    }
+
+    /**
+     * Check a frustum for obstructions using the {@code obstructionFilter} (if
+     * any) and a contact test. {@code tmpCameraLocation} must be set prior to
+     * invocation.
+     *
+     * @param zNear distance from camera to the near plane of the frustum
+     * @param zFar distance from camera to the far plane of the frustum
+     * @param fraction the fraction of the viewport's width and height to test
+     * (&ge;0, &le;1, 1=all)
+     * @param targetPco the collision object of the target (not null)
+     * @return true if frustum is obstructed, otherwise false
+     */
+    private boolean testFrustum(float zNear, float zFar, float fraction,
+            PhysicsCollisionObject targetPco) {
+        assert Validate.fraction(fraction, "fraction");
+
+        Camera cam = getCamera();
+        float xTangent = fraction * MyCamera.xTangent(cam);
+        float yTangent = fraction * MyCamera.yTangent(cam);
+
+        float xFar = xTangent * zFar;
+        float yFar = yTangent * zFar;
+        tmpCorners[0].set(+xFar, +yFar, zFar);
+        tmpCorners[1].set(+xFar, -yFar, zFar);
+        tmpCorners[2].set(-xFar, +yFar, zFar);
+        tmpCorners[3].set(-xFar, -yFar, zFar);
+
+        float tryX = xTangent * zNear;
+        float tryY = yTangent * zNear;
+        tmpCorners[4].set(+tryX, +tryY, zNear);
+        tmpCorners[5].set(+tryX, -tryY, zNear);
+        tmpCorners[6].set(-tryX, +tryY, zNear);
+        tmpCorners[7].set(-tryX, -tryY, zNear);
+
+        HullCollisionShape shape = new HullCollisionShape(tmpCorners);
+        PhysicsGhostObject frustumGhost = new PhysicsGhostObject(shape);
+        frustumGhost.setPhysicsLocation(tmpCameraLocation);
+
+        tmpRotation.set(cam.getRotation());
+        frustumGhost.setPhysicsRotation(tmpRotation);
+
+        this.tmpObstructed = false;
+        CollisionSpace space = targetPco.getCollisionSpace();
+        space.contactTest(frustumGhost, (PhysicsCollisionEvent event) -> {
+            PhysicsCollisionObject a = event.getObjectA();
+            PhysicsCollisionObject b = event.getObjectB();
+            PhysicsCollisionObject pco = (a == frustumGhost) ? b : a;
+            boolean isObstruction = (pco != targetPco)
+                    && (obstructionFilter == null
+                    || obstructionFilter.displayObject(pco));
+            if (isObstruction) {
+                this.tmpObstructed = true;
+            }
+        });
+
+        return tmpObstructed;
     }
 }
