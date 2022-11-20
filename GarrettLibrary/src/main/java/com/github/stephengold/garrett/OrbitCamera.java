@@ -204,18 +204,6 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
-     * Return the maximum fraction of the viewport width and height considered
-     * when checking for obstructions.
-     *
-     * @return the fraction (&ge;0, &le;1)
-     */
-    public float maxFraction() {
-        assert maxFraction >= 0f : maxFraction;
-        assert maxFraction <= 1f : maxFraction;
-        return maxFraction;
-    }
-
-    /**
      * Access the obstruction filter.
      *
      * @return the pre-existing instance, or null if none
@@ -262,6 +250,18 @@ public class OrbitCamera extends ExclusionCamera {
     public boolean isAzimuthLocked() {
         boolean result = (azimuthTau == 0f);
         return result;
+    }
+
+    /**
+     * Return the maximum fraction of the viewport width and height considered
+     * when checking for obstructions.
+     *
+     * @return the fraction (&ge;0, &le;1)
+     */
+    public float maxFraction() {
+        assert maxFraction >= 0f : maxFraction;
+        assert maxFraction <= 1f : maxFraction;
+        return maxFraction;
     }
 
     /**
