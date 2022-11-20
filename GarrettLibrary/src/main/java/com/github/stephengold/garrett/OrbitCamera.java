@@ -795,7 +795,7 @@ public class OrbitCamera extends ExclusionCamera {
         float max = range; // known to be unobstructed
         while (true) {
             if (max - min < 0.01f) {
-                return range - max;
+                return range - min;
             }
             float z = (min + max) / 2f;
             obstructed = testFrustum(z, range, fraction, targetPco);
