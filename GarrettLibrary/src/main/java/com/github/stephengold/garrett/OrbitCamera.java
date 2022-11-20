@@ -775,7 +775,7 @@ public class OrbitCamera extends ExclusionCamera {
                     break;
                 }
 
-                fraction = 0.5f * (min + max);
+                fraction = (min + max) / 2f;
                 obstructed = testFrustum(range, range, fraction, targetPco);
                 if (obstructed) {
                     max = fraction;
@@ -797,7 +797,7 @@ public class OrbitCamera extends ExclusionCamera {
             if (max - min < 0.01f) {
                 return range - max;
             }
-            float z = 0.5f * (min + max);
+            float z = (min + max) / 2f;
             obstructed = testFrustum(z, range, fraction, targetPco);
             if (obstructed) {
                 min = z;
