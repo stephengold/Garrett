@@ -1,5 +1,13 @@
 # release log for the Garrett Library
 
+## Version 0.5.2 released on TBD
+
++ Split the `maxAbsDot` parameter into 2 parameters: `maxDot` and `MinDot`.
++ Split the `Warp` obstruction response into 2 options:
+  `WarpBias` and `WarpNoBias`.
++ Added contact tests and the `maxFraction` parameter to `OrbitCamera`.
++ Upgraded the Heart library to v8.2.0 and the Minie library to v6.2.0
+
 ## Version 0.5.1 released on 28 July 2022
 
 + Merged all `DragToRotate` functionality into `PointToLook` and deleted the
