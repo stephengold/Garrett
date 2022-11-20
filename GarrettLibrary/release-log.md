@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.5.2 released on TBD
+## Version 0.5.2 released on 20 November 2022
 
 + Split the `maxAbsDot` parameter into 2 parameters: `maxDot` and `MinDot`.
 + Split the `Warp` obstruction response into 2 options:

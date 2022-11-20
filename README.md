@@ -68,8 +68,8 @@ Add to the project’s "build.gradle" file:
         mavenCentral()
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.5.1'
-        implementation 'com.github.stephengold:Minie:5.0.0+big3'
+        implementation 'com.github.stephengold:Garrett:0.5.2'
+        implementation 'com.github.stephengold:Minie:6.2.0+big3'
     }
 
 For some older versions of Gradle,
@@ -89,13 +89,13 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Garrett</artifactId>
-      <version>0.5.1</version>
+      <version>0.5.2</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Minie</artifactId>
-      <version>5.0.0+big3</version>
+      <version>6.2.0+big3</version>
     </dependency>
 
 [Jump to table of contents](#toc)
@@ -118,7 +118,7 @@ Add to the project’s "pom.xml" file:
   + using Git:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
-    + `git checkout -b latest 0.5.1`
+    + `git checkout -b latest 0.5.2`
   + using a web browser:
     + browse to [the latest release][latest]
     + follow the "Source code (zip)" link
@@ -150,8 +150,7 @@ You can restore the project to a pristine state:
 Library classes are in the `com.github.stephengold.garrett` package.
 Example classes are in the `com.github.stephengold.garrett.examples` package.
 
-The library source code is compatible with JDK 7.
-The examples and pre-built libraries are compatible with JDK 8.
+The source code and pre-built libraries are compatible with JDK 8.
 
 [Jump to table of contents](#toc)
 
