@@ -132,7 +132,6 @@ public class DynamicCamera
     /**
      * reusable vectors
      */
-    final private static Vector3f tmpCorner = new Vector3f();
     final private static Vector3f tmpLeft = new Vector3f();
     final private static Vector3f tmpLocation = new Vector3f();
     final private static Vector3f tmpLook = new Vector3f();
@@ -414,7 +413,7 @@ public class DynamicCamera
         if (!isEnabled()) {
             return;
         }
-        updateRigidBodySize();
+        updateShape();
         updateVelocity();
         rigidBody.setLinearVelocity(tmpVelocity);
         rigidBody.setAngularVelocity(translateIdentity);
@@ -506,24 +505,22 @@ public class DynamicCamera
     }
 
     /**
-     * Update the size of the rigid sphere.
+     * Update the shape of the rigid body.
      */
-    private void updateRigidBodySize() {
+    private void updateShape() {
         Camera camera = getCamera();
         assert !camera.isParallelProjection();
         float left = camera.getFrustumLeft();
         float top = camera.getFrustumTop();
         float near = camera.getFrustumNear();
-        tmpCorner.set(left, top, near);
-        float radius = tmpCorner.length();
+        float radius = MyMath.hypotenuse(left, top, near);
 
         CollisionShape shape = rigidBody.getCollisionShape();
-        shape.getScale(tmpScale);
-        if (tmpScale.x != radius
-                || tmpScale.y != radius
-                || tmpScale.z != radius) {
-            tmpScale.set(radius, radius, radius);
-            shape.setScale(tmpScale);
+        Vector3f scale = tmpScale;
+        shape.getScale(scale);
+        if (scale.x != radius || scale.y != radius || scale.z != radius) {
+            scale.set(radius, radius, radius);
+            shape.setScale(scale);
         }
     }
 
