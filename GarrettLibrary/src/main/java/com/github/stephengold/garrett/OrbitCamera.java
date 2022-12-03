@@ -33,7 +33,10 @@ import com.jme3.bullet.CollisionSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.PhysicsRayTestResult;
+import com.jme3.bullet.collision.PhysicsSweepTestResult;
+import com.jme3.bullet.collision.shapes.ConvexShape;
 import com.jme3.bullet.collision.shapes.HullCollisionShape;
+import com.jme3.bullet.collision.shapes.MultiSphere;
 import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.bullet.objects.PhysicsGhostObject;
 import com.jme3.input.InputManager;
@@ -41,8 +44,10 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,6 +90,10 @@ public class OrbitCamera extends ExclusionCamera {
      * reusable boolean
      */
     private boolean tmpObstructed = false;
+    /**
+     * scalable collision shape for sweep tests, instantiated lazily
+     */
+    private ConvexShape sweepShape;
     /**
      * test whether a collision object can obstruct the line of sight, or null
      * to treat all non-target PCOs as obstructions
@@ -133,6 +142,11 @@ public class OrbitCamera extends ExclusionCamera {
      */
     private ObstructionResponse obstructionResponse = ObstructionResponse.Clip;
     /**
+     * reusable result list for sweep tests
+     */
+    final private List<PhysicsSweepTestResult> sweepResults
+            = new ArrayList<>(8);
+    /**
      * reusable Quaternion
      */
     final private static Quaternion tmpRotation = new Quaternion();
@@ -140,6 +154,11 @@ public class OrbitCamera extends ExclusionCamera {
      * what's being orbited, or null if none
      */
     private Target target = null;
+    /**
+     * transforms for sweep tests
+     */
+    final private static Transform endSweep = new Transform();
+    final private static Transform startSweep = new Transform();
     /**
      * camera's offset relative to the Target (in world coordinates)
      */
@@ -253,13 +272,20 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
-     * Return the maximum fraction of the viewport width and height considered
-     * when checking for obstructions.
+     * Return the parameter that controls sightline checking.
+     * <p>
+     * zero - cast a ray from target to camera
+     * <p>
+     * negative - sweep a sphere containing the camera's near clipping plane
+     * <p>
+     * positive - binary search of contact tests using frustum shapes. In this
+     * case, the parameter value is the maximum fraction of the viewport width
+     * and height used to generate the shapes.
      *
-     * @return the fraction (&ge;0, &le;1)
+     * @return the parameter value (&ge;-1, &le;1)
      */
     public float maxFraction() {
-        assert maxFraction >= 0f : maxFraction;
+        assert maxFraction >= -1f : maxFraction;
         assert maxFraction <= 1f : maxFraction;
         return maxFraction;
     }
@@ -306,13 +332,20 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
-     * Alter the maximum fraction of the viewport width and height considered
-     * when checking for obstructions.
+     * Alter the parameter that controls sightline checking.
+     * <p>
+     * zero - cast a ray from target to camera
+     * <p>
+     * negative - sweep a sphere containing the camera's near clipping plane
+     * <p>
+     * positive - binary search of contact tests using frustum shapes. In this
+     * case, the parameter value is the maximum fraction of the viewport width
+     * and height used to generate the shapes.
      *
-     * @param fraction the desired fraction (&ge;0, &le;1, default=0)
+     * @param fraction the parameter value (&ge;-1, &le;1, default=0)
      */
     public void setMaxFraction(float fraction) {
-        Validate.fraction(fraction, "fraction");
+        Validate.inRange(fraction, "fraction", -1f, 1f);
         this.maxFraction = fraction;
     }
 
@@ -759,6 +792,9 @@ public class OrbitCamera extends ExclusionCamera {
      * Check the sightline for obstructions, from the target to the camera,
      * using the obstructionFilter (if any). {@code tmpLook} and
      * {@code tmpTargetLocation} must be set prior to invocation.
+     * <p>
+     * The implementation of the check depends strongly on the value of
+     * {@code maxFraction}.
      *
      * @param range the distance between the target and the camera (in world
      * units, &ge;0)
@@ -774,6 +810,11 @@ public class OrbitCamera extends ExclusionCamera {
 
         tmpLook.mult(-range, offset);
         tmpTargetLocation.add(offset, tmpCameraLocation);
+
+        if (maxFraction < 0f) { // use a sweep test
+            float newRange = sightlineSweep(range);
+            return newRange;
+        }
 
         // initial ray test:
         float newRange = sightlineRay(range);
@@ -866,6 +907,47 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
+     * Check the sightline for obstructions, from the target to the camera,
+     * using the {@code obstructionFilter} (if any) and a sweep test.
+     * {@code tmpCameraLocation} and {@code tmpTargetLocation} must be set prior
+     * to invocation.
+     *
+     * @param range the distance between the target and the camera (in world
+     * units, &ge;0)
+     * @return a modified distance from the target (in world units, &ge;0,
+     * &le;{@code range})
+     */
+    private float sightlineSweep(float range) {
+        updateShape();
+
+        startSweep.setTranslation(tmpTargetLocation);
+        endSweep.setTranslation(tmpCameraLocation);
+        PhysicsCollisionObject targetPco = target.getTargetPco();
+        CollisionSpace collisionSpace = targetPco.getCollisionSpace();
+        float penetration = 0f;
+        collisionSpace.sweepTest(
+                sweepShape, startSweep, endSweep, sweepResults, penetration);
+
+        // Find the obstruction closest to the target:
+        float minFraction = 1f;
+        for (PhysicsSweepTestResult hit : sweepResults) {
+            PhysicsCollisionObject pco = hit.getCollisionObject();
+            boolean isObstruction = isObstruction(pco);
+            if (isObstruction) {
+                float hitFraction = hit.getHitFraction();
+                if (hitFraction < minFraction) {
+                    minFraction = hitFraction;
+                }
+            }
+        }
+
+        float obstructRange = range * minFraction;
+        float result = Math.min(obstructRange, range);
+
+        return result;
+    }
+
+    /**
      * Check a frustum for obstructions using the {@code obstructionFilter} (if
      * any) and a contact test. {@code tmpCameraLocation} must be set prior to
      * invocation.
@@ -918,5 +1000,27 @@ public class OrbitCamera extends ExclusionCamera {
         });
 
         return tmpObstructed;
+    }
+
+    /**
+     * Update the collision shape for sweep tests.
+     */
+    private void updateShape() {
+        Camera camera = getCamera();
+        assert !camera.isParallelProjection();
+        float left = camera.getFrustumLeft();
+        float top = camera.getFrustumTop();
+        float near = camera.getFrustumNear();
+        float radius = MyMath.hypotenuse(left, top, near);
+
+        if (sweepShape == null) {
+            this.sweepShape = new MultiSphere(1f); // scalable shape
+        }
+        Vector3f scale = tmpCorners[0];
+        sweepShape.getScale(scale);
+
+        if (scale.x != radius || scale.y != radius || scale.z != radius) {
+            sweepShape.setScale(radius);
+        }
     }
 }
