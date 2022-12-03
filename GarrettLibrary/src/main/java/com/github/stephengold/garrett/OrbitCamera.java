@@ -735,6 +735,27 @@ public class OrbitCamera extends ExclusionCamera {
     }
 
     /**
+     * Test whether the specified collision object acts as an obstruction for
+     * the current Target.
+     *
+     * @param pco the collision object to test (may be null, unaffected)
+     * @return true if it's an obstruction, otherwise false
+     */
+    private boolean isObstruction(PhysicsCollisionObject pco) {
+        boolean result;
+        PhysicsCollisionObject targetPco = target.getTargetPco();
+        if (pco == targetPco) {
+            result = false;
+        } else if (obstructionFilter == null) {
+            result = true;
+        } else {
+            result = obstructionFilter.displayObject(pco);
+        }
+
+        return result;
+    }
+
+    /**
      * Check the sightline for obstructions, from the target to the camera,
      * using the obstructionFilter (if any). {@code tmpLook} and
      * {@code tmpTargetLocation} must be set prior to invocation.
@@ -828,9 +849,7 @@ public class OrbitCamera extends ExclusionCamera {
         float minFraction = 1f;
         for (PhysicsRayTestResult hit : hits) {
             PhysicsCollisionObject pco = hit.getCollisionObject();
-            boolean isObstruction
-                    = (pco != targetPco) && (obstructionFilter == null
-                    || obstructionFilter.displayObject(pco));
+            boolean isObstruction = isObstruction(pco);
             if (isObstruction) {
                 float hitFraction = hit.getHitFraction();
                 if (hitFraction < minFraction) {
@@ -892,9 +911,7 @@ public class OrbitCamera extends ExclusionCamera {
             PhysicsCollisionObject a = event.getObjectA();
             PhysicsCollisionObject b = event.getObjectB();
             PhysicsCollisionObject pco = (a == frustumGhost) ? b : a;
-            boolean isObstruction = (pco != targetPco)
-                    && (obstructionFilter == null
-                    || obstructionFilter.displayObject(pco));
+            boolean isObstruction = isObstruction(pco);
             if (isObstruction) {
                 this.tmpObstructed = true;
             }
