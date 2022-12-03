@@ -647,11 +647,11 @@ public class OrbitCamera extends ExclusionCamera {
             // Test the sightline for obstructions.
             if (warping) {
                 float rayRange = Math.max(range, preferredRange);
-                range = sightline(rayRange, targetPco);
+                range = sightline(rayRange);
             } else {
                 assert obstructionResponse == ObstructionResponse.Clip :
                         obstructionResponse;
-                near = range - sightline(range, targetPco);
+                near = range - sightline(range);
                 near = FastMath.clamp(near, preferredClip, far);
             }
         }
@@ -762,11 +762,11 @@ public class OrbitCamera extends ExclusionCamera {
      *
      * @param range the distance between the target and the camera (in world
      * units, &ge;0)
-     * @param targetPco the collision object of the target (not null)
      * @return a modified distance from the target (in world units, &ge;0,
      * &le;{@code range})
      */
-    private float sightline(float range, PhysicsCollisionObject targetPco) {
+    private float sightline(float range) {
+        PhysicsCollisionObject targetPco = target.getTargetPco();
         CollisionSpace collisionSpace = targetPco.getCollisionSpace();
         if (collisionSpace == null) {
             return range;
@@ -776,7 +776,7 @@ public class OrbitCamera extends ExclusionCamera {
         tmpTargetLocation.add(offset, tmpCameraLocation);
 
         // initial ray test:
-        float newRange = sightlineRay(range, targetPco);
+        float newRange = sightlineRay(range);
         if (maxFraction == 0f) {
             return newRange;
         }
@@ -785,7 +785,8 @@ public class OrbitCamera extends ExclusionCamera {
          * the largest viewport fraction free of obstructions.
          */
         float fraction = maxFraction;
-        boolean obstructed = testFrustum(range, range, fraction, targetPco);
+        assert fraction > 0f && fraction <= 1f : fraction;
+        boolean obstructed = testFrustum(range, range, fraction);
         if (obstructed) {
             float min = 0f; // known to be unobstructed
             float max = fraction; // known to be obstructed
@@ -797,7 +798,7 @@ public class OrbitCamera extends ExclusionCamera {
                 }
 
                 fraction = (min + max) / 2f;
-                obstructed = testFrustum(range, range, fraction, targetPco);
+                obstructed = testFrustum(range, range, fraction);
                 if (obstructed) {
                     max = fraction;
                 } else {
@@ -806,7 +807,7 @@ public class OrbitCamera extends ExclusionCamera {
             }
         }
 
-        obstructed = testFrustum(newRange, range, fraction, targetPco);
+        obstructed = testFrustum(newRange, range, fraction);
         if (!obstructed) {
             return newRange;
         }
@@ -819,7 +820,7 @@ public class OrbitCamera extends ExclusionCamera {
                 return range - min;
             }
             float z = (min + max) / 2f;
-            obstructed = testFrustum(z, range, fraction, targetPco);
+            obstructed = testFrustum(z, range, fraction);
             if (obstructed) {
                 min = z;
             } else {
@@ -830,17 +831,17 @@ public class OrbitCamera extends ExclusionCamera {
 
     /**
      * Check the sightline for obstructions, from the target to the camera,
-     * using the {@code obstructionFilter} (if any) and a raytest.
+     * using the {@code obstructionFilter} (if any) and a ray test.
      * {@code tmpCameraLocation} and {@code tmpTargetLocation} must be set prior
      * to invocation.
      *
      * @param range the distance between the target and the camera (in world
      * units, &ge;0)
-     * @param targetPco the collision object of the target (not null)
      * @return a modified distance from the target (in world units, &ge;0,
      * &le;{@code range})
      */
-    private float sightlineRay(float range, PhysicsCollisionObject targetPco) {
+    private float sightlineRay(float range) {
+        PhysicsCollisionObject targetPco = target.getTargetPco();
         CollisionSpace collisionSpace = targetPco.getCollisionSpace();
         List<PhysicsRayTestResult> hits = collisionSpace
                 .rayTestRaw(tmpTargetLocation, tmpCameraLocation);
@@ -873,11 +874,9 @@ public class OrbitCamera extends ExclusionCamera {
      * @param zFar distance from camera to the far plane of the frustum
      * @param fraction the fraction of the viewport's width and height to test
      * (&ge;0, &le;1, 1=all)
-     * @param targetPco the collision object of the target (not null)
      * @return true if frustum is obstructed, otherwise false
      */
-    private boolean testFrustum(float zNear, float zFar, float fraction,
-            PhysicsCollisionObject targetPco) {
+    private boolean testFrustum(float zNear, float zFar, float fraction) {
         assert Validate.fraction(fraction, "fraction");
 
         Camera cam = getCamera();
@@ -906,6 +905,7 @@ public class OrbitCamera extends ExclusionCamera {
         frustumGhost.setPhysicsRotation(tmpRotation);
 
         this.tmpObstructed = false;
+        PhysicsCollisionObject targetPco = target.getTargetPco();
         CollisionSpace space = targetPco.getCollisionSpace();
         space.contactTest(frustumGhost, (PhysicsCollisionEvent event) -> {
             PhysicsCollisionObject a = event.getObjectA();
