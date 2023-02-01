@@ -6,11 +6,9 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'com.github.stephengold.garrett.examples.GarrettDemo'
-if (!hasProperty('mainClass')) {
-    ext.mainClass = mainClassName
+application {
+    mainClass = 'com.github.stephengold.garrett.examples.GarrettDemo'
 }
-jar.manifest.attributes('Main-Class': mainClassName)
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
