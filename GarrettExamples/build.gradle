@@ -18,6 +18,7 @@ dependencies {
     implementation heartCoordinates
     implementation minieCoordinates
     implementation 'com.github.stephengold:Acorus:0.9.17'
+    runtimeOnly 'org.jmonkeyengine:jme3-awt-dialogs:' + jme3Version
     runtimeOnly 'org.jmonkeyengine:jme3-desktop:' + jme3Version
     runtimeOnly 'org.jmonkeyengine:jme3-lwjgl3:' + jme3Version
 
