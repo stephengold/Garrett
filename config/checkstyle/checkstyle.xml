@@ -28,7 +28,7 @@
     <!-- Checks for size violations.                  -->
     <!-- See https://checkstyle.org/config_sizes.html -->
     <module name="FileLength">
-        <property name="max" value="1200"/>
+        <property name="max" value="1100"/>
     </module>
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
@@ -383,13 +383,13 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation">
-            <property name="tokens" value="BLOCK_COMMENT_BEGIN"/>
+            <property name="tokens" value="SINGLE_LINE_COMMENT, BLOCK_COMMENT_BEGIN"/>
         </module>
 
         <!-- Checks for size violations.                  -->
         <!-- See https://checkstyle.org/config_sizes.html -->
         <module name="MethodLength">
-            <property name="max" value="250"/>
+            <property name="max" value="200"/>
         </module>
         <module name="ParameterNumber">
             <property name="max" value="6"/>
