@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022, Stephen Gold
+ Copyright (c) 2022-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -100,8 +100,6 @@ public class HelloDynaCam extends SimpleApplication {
         bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
                 -> DemoSpace.addLighting(app, physicsDebugRootNode)
         );
-//        bulletAppState.setDebugShadowMode(
-//                RenderQueue.ShadowMode.CastAndReceive);
 
         // Populate the PhysicsSpace.
         PhysicsRigidBody doorBody = DemoSpace.addBlueDoor(this);
