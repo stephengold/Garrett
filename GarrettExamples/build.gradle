@@ -10,8 +10,6 @@ application {
     mainClass = 'com.github.stephengold.garrett.examples.GarrettDemo'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-
 dependencies {
     implementation heartCoordinates
     implementation minieCoordinates
