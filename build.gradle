@@ -10,6 +10,7 @@ subprojects {
 
 tasks.register('checkstyle') {
     dependsOn ':GarrettExamples:checkstyleMain', ':GarrettLibrary:checkstyleMain'
+    description = 'Runs the checkstyle tool on all sourcecode.'
 }
 
 // publishing tasks:
