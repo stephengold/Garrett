@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2021-2022, Stephen Gold
+ Copyright (c) 2021-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -62,6 +62,6 @@ final public class GarrettVersion {
      * @return the branch and revision string (not null, not empty)
      */
     public static String versionShort() {
-        return "master 0.5.3-SNAPSHOT";
+        return "master 0.5.3";
     }
 }

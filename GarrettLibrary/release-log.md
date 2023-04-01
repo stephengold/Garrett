@@ -1,5 +1,11 @@
 # release log for the Garrett Library
 
+## Version 0.5.3 releases on TBD
+
++ Added a sweep-test option to `OrbitCamera`
++ Upgraded JMonkeyEngine to v3.6.0-stable.
++ Upgraded the Heart library to v8.3.2 and the Minie library to v7.4.0
+
 ## Version 0.5.2 released on 20 November 2022
 
 + Split the `maxAbsDot` parameter into 2 parameters: `maxDot` and `MinDot`.
