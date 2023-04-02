@@ -3,16 +3,6 @@
 apply plugin: 'checkstyle'
 apply plugin: 'java'
 
-ext {
-    // module coordinates of external dependencies:
-    heartCoordinates = 'com.github.stephengold:Heart:8.3.2'
-    minieCoordinates = 'com.github.stephengold:Minie:7.4.0'
-
-    // current versions of libraries:
-    garrettVersion = '0.5.4-SNAPSHOT'
-    jme3Version = '3.6.0-stable'
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
