@@ -1,6 +1,6 @@
 # release log for the Garrett Library
 
-## Version 0.5.3 releases on TBD
+## Version 0.5.3 releases on 1 April 2023
 
 + Added a sweep-test option to `OrbitCamera`
 + Upgraded JMonkeyEngine to v3.6.0-stable.

@@ -9,7 +9,7 @@ ext {
     minieCoordinates = 'com.github.stephengold:Minie:7.4.0'
 
     // current versions of libraries:
-    garrettVersion = '0.5.3'
+    garrettVersion = '0.5.4-SNAPSHOT'
     jme3Version = '3.6.0-stable'
 }
 
