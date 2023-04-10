@@ -223,11 +223,12 @@ the following software:
 + the [GitKraken] client
 + the [Firefox] web browser
 + the [Gradle] build tool
-+ the [Java] compiler, standard doclet, and virtual machine
++ the [Java] compiler, standard doclet, and runtime environment
 + [jMonkeyEngine][jme] and the jME3 Software Development Kit
 + the [Linux Mint][mint] operating system
 + LWJGL, the Lightweight Java Game Library
 + the [Markdown] document-conversion tool
++ the [Meld] visual merge tool
 + Microsoft Windows
 + the [NetBeans] integrated development environment
 
@@ -259,6 +260,7 @@ correct the situation: sgold@sonic.net
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
 [maven]: https://maven.apache.org "Maven Project"
+[meld]: https://meldmerge.org "Meld merge tool"
 [minie]: https://stephengold.github.io/Minie/minie/overview.html "Minie Project"
 [mint]: https://linuxmint.com "Linux Mint Project"
 [netbeans]: https://netbeans.org "NetBeans Project"
