@@ -6,7 +6,7 @@ plugins {
 
 ext {
     // module coordinates of external dependencies:
-    heartCoordinates = 'com.github.stephengold:Heart:8.3.2'
+    heartCoordinates = 'com.github.stephengold:Heart:8.4.0'
     minieCoordinates = 'com.github.stephengold:Minie:7.5.0'
 
     // current versions of libraries:
