@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022, Stephen Gold
+ Copyright (c) 2022-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -58,11 +58,11 @@ public class HelloGarrett extends SimpleApplication {
     /**
      * count how many triggers have been added to the InputManager
      */
-    private int numTriggers = 0;
+    private static int numTriggers = 0;
     /**
      * track which of the named input signals are active
      */
-    final private SignalTracker signalTracker = new SignalTracker();
+    final private static SignalTracker signalTracker = new SignalTracker();
     // *************************************************************************
     // new methods exposed
 

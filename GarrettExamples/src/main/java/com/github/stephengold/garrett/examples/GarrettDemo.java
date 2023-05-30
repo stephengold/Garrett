@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022, Stephen Gold
+ Copyright (c) 2022-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -122,19 +122,20 @@ public class GarrettDemo extends AcorusDemo {
     /**
      * continuously display information about the active camera controller
      */
-    private AppState activeCameraController;
+    private static AppState activeCameraController;
     /**
      * map camera names to camera controllers
      */
-    final private Map<String, AppState> cameraControllers = new HashMap<>(6);
+    final private static Map<String, AppState> cameraControllers
+            = new HashMap<>(6);
     /**
      * display information about the camera controller
      */
-    private Overlay overlay;
+    private static Overlay overlay;
     /**
      * dump debugging information to {@code System.out}
      */
-    final private PhysicsDumper dumper = new PhysicsDumper();
+    final private static PhysicsDumper dumper = new PhysicsDumper();
     // *************************************************************************
     // new methods exposed
 
@@ -228,7 +229,7 @@ public class GarrettDemo extends AcorusDemo {
         // Continuously display information about the active camera controller.
         float width = 214f; // pixels
         int numLines = 1;
-        this.overlay = new Overlay("Overlay", width, numLines) {
+        overlay = new Overlay("Overlay", width, numLines) {
             @Override
             public void update(float tpf) {
                 super.update(tpf);
@@ -493,7 +494,7 @@ public class GarrettDemo extends AcorusDemo {
         }
 
         cc.setEnabled(true);
-        this.activeCameraController = cc;
+        activeCameraController = cc;
     }
 
     /**
