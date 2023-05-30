@@ -546,7 +546,7 @@ public class DynamicCamera
                         break;
 
                     case East:
-                        tmpVelocity.z += 1f;
+                        this.tmpVelocity.z += 1f;
                         break;
 
                     case Forward:
@@ -558,7 +558,7 @@ public class DynamicCamera
                         break;
 
                     case North:
-                        tmpVelocity.x += 1f;
+                        this.tmpVelocity.x += 1f;
                         break;
 
                     case PreferredDown:
@@ -574,7 +574,7 @@ public class DynamicCamera
                         break;
 
                     case South:
-                        tmpVelocity.x -= 1f;
+                        this.tmpVelocity.x -= 1f;
                         break;
 
                     case ViewDown:
@@ -586,7 +586,7 @@ public class DynamicCamera
                         break;
 
                     case West:
-                        tmpVelocity.z -= 1f;
+                        this.tmpVelocity.z -= 1f;
                         break;
 
                     case WorldDown:
@@ -594,7 +594,7 @@ public class DynamicCamera
                         break;
 
                     case WorldUp:
-                        tmpVelocity.y += 1f;
+                        this.tmpVelocity.y += 1f;
                         break;
 
                     case ZoomIn:
