@@ -350,15 +350,13 @@ public class DynamicCamera
     @Override
     public void update(float tpf) {
         super.update(tpf);
-        /*
-         * Hide the cursor if dragging.
-         */
+
+        // Hide the cursor if dragging.
         InputManager inputManager = getApplication().getInputManager();
         boolean cursorVisible = !isActive(CameraSignal.PointToLook);
         inputManager.setCursorVisible(cursorVisible);
-        /*
-         * Update the camera's location to match the rigid sphere.
-         */
+
+        // Update the camera's location to match the rigid sphere.
         rigidBody.getPhysicsLocation(tmpLocation);
         Camera camera = getCamera();
         camera.setLocation(tmpLocation);
@@ -445,9 +443,8 @@ public class DynamicCamera
         physicsSpace.removeCollisionObject(rigidBody);
         physicsSpace.removeTickListener(this);
         physicsSpace.activateAll(true);
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         inputManager.deleteMapping(analogPitchDown);
         inputManager.deleteMapping(analogPitchUp);
@@ -484,9 +481,8 @@ public class DynamicCamera
         physicsSpace.addCollisionObject(rigidBody);
         physicsSpace.addTickListener(this);
         rigidBody.setGravity(translateIdentity);
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         inputManager.addMapping(analogPitchDown,
                 new MouseAxisTrigger(MouseInput.AXIS_Y, false));
@@ -538,11 +534,10 @@ public class DynamicCamera
         assert tmpLook.isUnitVector() : tmpLook;
         assert tmpLeft.isUnitVector() : tmpLeft;
         assert tmpUp.isUnitVector() : tmpUp;
-        /*
-         * Sum the active input signals.
-         */
+
+        // Sum the active input signals.
         tmpVelocity.zero();
-        zoomSignalDirection = 0;
+        this.zoomSignalDirection = 0;
         for (CameraSignal function : CameraSignal.values()) {
             if (isActive(function)) {
                 switch (function) {
@@ -614,9 +609,8 @@ public class DynamicCamera
                 }
             }
         }
-        /*
-         * Scale the velocity so that its magnitude is either 0 or moveSpeed.
-         */
+
+        // Scale the velocity so that its magnitude is either 0 or moveSpeed.
         if (!MyVector3f.isZero(tmpVelocity)) {
             tmpVelocity.normalizeLocal();
             tmpVelocity.multLocal(moveSpeed);

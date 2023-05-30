@@ -358,9 +358,8 @@ public class GarrettDemo extends AcorusDemo {
                     }
             }
         }
-        /*
-         * The action is not handled here: forward it to the superclass.
-         */
+
+        // The action is not handled here: forward it to the superclass.
         super.onAction(actionString, ongoing, tpf);
     }
 

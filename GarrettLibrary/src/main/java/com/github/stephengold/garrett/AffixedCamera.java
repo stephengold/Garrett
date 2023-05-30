@@ -252,9 +252,8 @@ public class AffixedCamera extends CameraController {
             logger.warning("No rigid body has been set!");
             return;
         }
-        /*
-         * Sum the discrete inputs (signals).
-         */
+
+        // Sum the discrete inputs (signals).
         int zoomSignalDirection = 0;
         for (CameraSignal function : CameraSignal.values()) {
             if (isActive(function)) {
@@ -271,17 +270,15 @@ public class AffixedCamera extends CameraController {
                 }
             }
         }
-        /*
-         * Update the camera's orientation.
-         */
+
+        // Update the camera's orientation.
         rigidBody.getPhysicsRotation(tmpRotation);
         MyQuaternion.rotate(tmpRotation, lookDirection, tmpLook);
         MyQuaternion.rotate(tmpRotation, upDirection, tmpUp);
         Camera camera = getCamera();
         camera.lookAtDirection(tmpLook, tmpUp);
-        /*
-         * Update the camera's location.
-         */
+
+        // Update the camera's location.
         MyQuaternion.rotate(tmpRotation, offset, tmpOffset);
         rigidBody.getMotionState().getLocation(tmpCameraLocation);
         tmpCameraLocation.addLocal(tmpOffset);
@@ -297,9 +294,8 @@ public class AffixedCamera extends CameraController {
      */
     private void disable() {
         assert isInitialized();
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         inputManager.deleteMapping(analogZoomIn);
         inputManager.deleteMapping(analogZoomOut);
@@ -319,18 +315,15 @@ public class AffixedCamera extends CameraController {
         float yDegrees;
         Camera camera = getCamera();
         if (camera.isParallelProjection()) {
-            /*
-             * Configure perspective.
-             */
+            // Configure perspective.
             yDegrees = 30f;
             float aspectRatio = MyCamera.viewAspectRatio(camera);
             float near = camera.getFrustumNear();
             float far = camera.getFrustumFar();
             camera.setFrustumPerspective(yDegrees, aspectRatio, near, far);
         }
-        /*
-         * Configure the analog inputs.
-         */
+
+        // Configure the analog inputs.
         InputManager inputManager = getApplication().getInputManager();
         inputManager.addMapping(analogZoomIn,
                 new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
