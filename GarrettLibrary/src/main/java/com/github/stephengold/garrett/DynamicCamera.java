@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2020-2022, Stephen Gold
+ Copyright (c) 2020-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -48,6 +48,7 @@ import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
 import jme3utilities.Validate;
 import jme3utilities.math.MyMath;
+import jme3utilities.math.MyQuaternion;
 import jme3utilities.math.MyVector3f;
 
 /**
@@ -373,7 +374,7 @@ public class DynamicCamera
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
-            tmpRotation.mult(tmpLook, tmpLook);
+            MyQuaternion.rotate(tmpRotation, tmpLook, tmpLook);
 
         } else { // Look at the target.
             target.locateTarget(tmpLook);

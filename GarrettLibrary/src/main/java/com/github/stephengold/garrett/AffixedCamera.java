@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2020-2022, Stephen Gold
+ Copyright (c) 2020-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@ import java.util.logging.Logger;
 import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
 import jme3utilities.Validate;
+import jme3utilities.math.MyQuaternion;
 
 /**
  * An AppState to control a Camera affixed to (mounted on) a rigid body.
@@ -274,14 +275,14 @@ public class AffixedCamera extends CameraController {
          * Update the camera's orientation.
          */
         rigidBody.getPhysicsRotation(tmpRotation);
-        tmpRotation.mult(lookDirection, tmpLook);
-        tmpRotation.mult(upDirection, tmpUp);
+        MyQuaternion.rotate(tmpRotation, lookDirection, tmpLook);
+        MyQuaternion.rotate(tmpRotation, upDirection, tmpUp);
         Camera camera = getCamera();
         camera.lookAtDirection(tmpLook, tmpUp);
         /*
          * Update the camera's location.
          */
-        tmpRotation.mult(offset, tmpOffset);
+        MyQuaternion.rotate(tmpRotation, offset, tmpOffset);
         rigidBody.getMotionState().getLocation(tmpCameraLocation);
         tmpCameraLocation.addLocal(tmpOffset);
         camera.setLocation(tmpCameraLocation);

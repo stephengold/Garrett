@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2020-2022, Stephen Gold
+ Copyright (c) 2020-2023, Stephen Gold
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,7 @@ import jme3utilities.MyCamera;
 import jme3utilities.SignalTracker;
 import jme3utilities.Validate;
 import jme3utilities.math.MyMath;
+import jme3utilities.math.MyQuaternion;
 import jme3utilities.math.MyVector3f;
 
 /**
@@ -615,7 +616,7 @@ public class OrbitCamera extends ExclusionCamera {
             float pitchAngle = multiplier * pitchAnalogSum;
             float yawAngle = multiplier * yawAnalogSum;
             tmpRotation.fromAngles(pitchAngle, yawAngle, 0f);
-            tmpRotation.mult(offset, offset);
+            MyQuaternion.rotate(tmpRotation, offset, offset);
 
             this.pitchAnalogSum = 0f;
             this.yawAnalogSum = 0f;
@@ -646,7 +647,7 @@ public class OrbitCamera extends ExclusionCamera {
                         yTurnAngle = gain * azimuthError;
                     }
                     tmpRotation.fromAngles(0f, yTurnAngle, 0f);
-                    tmpRotation.mult(tmpLook, tmpLook);
+                    MyQuaternion.rotate(tmpRotation, tmpLook, tmpLook);
                 }
             }
         }
