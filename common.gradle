@@ -29,7 +29,3 @@ tasks.withType(JavaExec) { // Java runtime options:
     enableAssertions true
     //jvmArgs '-Xms512m', '-Xmx512m' // to enlarge the Java heap
 }
-
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds' // to disable caching of SNAPSHOTs
-}
