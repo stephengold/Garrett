@@ -534,7 +534,7 @@ public class OrbitCamera extends ExclusionCamera {
         }
         CollisionSpace collisionSpace = targetPco.getCollisionSpace();
         if (collisionSpace == null) {
-            logger.warning("The object isn't added to a CollisionSpace!");
+            logger.warning("The target isn't added to a CollisionSpace!");
             return;
         }
 
