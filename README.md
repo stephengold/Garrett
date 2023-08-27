@@ -255,7 +255,7 @@ correct the situation: sgold@sonic.net
 [gitkraken]: https://www.gitkraken.com "GitKraken client"
 [gradle]: https://gradle.org "Gradle Project"
 [java]: https://java.com "Java"
-[jme]: https://jmonkeyengine.org  "jMonkeyEngine Project"
+[jme]: https://jmonkeyengine.org "jMonkeyEngine Project"
 [latest]: https://github.com/stephengold/Garrett/releases/latest "latest release"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
