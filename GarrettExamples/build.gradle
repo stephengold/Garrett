@@ -52,6 +52,7 @@ tasks.register('cleanSOs', Delete) { // extracted Linux and Android native libra
 // tasks to run specific apps:
 
 tasks.register('GarrettDemo', JavaExec) {
+    description 'Runs the demo.'
     mainClass = 'com.github.stephengold.garrett.examples.GarrettDemo'
 }
 
