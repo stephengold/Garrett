@@ -25,9 +25,3 @@ tasks.withType(JavaCompile).configureEach { // Java compile-time options:
         options.release = 8
     }
 }
-
-tasks.withType(JavaExec).configureEach { // Java runtime options:
-    classpath sourceSets.main.runtimeClasspath
-    enableAssertions true
-    //jvmArgs '-Xms512m', '-Xmx512m' // to enlarge the Java heap
-}
