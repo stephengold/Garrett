@@ -2,8 +2,8 @@
 *.dylib
 *.so
 /.gradle/
+/GarrettExamples/Written Assets/
+/GarrettExamples/build//.gradle/
+/GarrettLibrary/build
 /.idea/
 /.nb-gradle/
-/GarrettLibrary/build
-/GarrettExamples/Written Assets/
-/GarrettExamples/build/
