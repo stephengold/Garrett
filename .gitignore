@@ -7,7 +7,7 @@
 
 # Ignore Gradle's build output directories:
 /GarrettExamples/Written Assets/
-/GarrettExamples/build//.gradle/
+/GarrettExamples/build/
 /GarrettLibrary/build
 
 # Ignore IDE-specific directories:
