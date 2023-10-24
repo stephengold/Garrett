@@ -6,7 +6,7 @@
 It contains 2 sub-projects:
 
 1. GarrettLibrary: the Garrett runtime library
-2. GarrettExamples: example apps that use the library
+2. GarrettExamples: example applications using the library
 
 Complete source code (in Java) is provided under
 [a BSD 3-Clause license][license].
@@ -42,7 +42,7 @@ Complete source code (in Java) is provided under
   to maintain a clear line of sight in the target's CollisionSpace.
   A continuum of chasing behaviors is implemented.
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 <a name="add"></a>
@@ -98,7 +98,7 @@ Add to the project’s "pom.xml" file:
       <version>8.3.2+big3</version>
     </dependency>
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 <a name="build"></a>
@@ -140,7 +140,7 @@ You can restore the project to a pristine state:
 + using Bash or PowerShell or Zsh: `./gradlew clean`
 + using Windows Command Prompt: `.\gradlew clean`
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 <a name="conventions"></a>
@@ -152,7 +152,7 @@ Example classes are in the `com.github.stephengold.garrett.examples` package.
 
 The source code and pre-built libraries are compatible with JDK 8.
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 <a name="examples"></a>
@@ -207,7 +207,7 @@ The camera orbits the red ball, which is its target.
 + hold down the "X" key for "X-ray mode", which temporarily ignores obstructions
 
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 <a name="acks"></a>
@@ -226,7 +226,7 @@ the following software:
 + the [Java] compiler, standard doclet, and runtime environment
 + [jMonkeyEngine][jme] and the jME3 Software Development Kit
 + the [Linux Mint][mint] operating system
-+ LWJGL, the Lightweight Java Game Library
++ [LWJGL], the Lightweight Java Game Library
 + the [Markdown] document-conversion tool
 + the [Meld] visual merge tool
 + Microsoft Windows
@@ -241,7 +241,7 @@ I'm also grateful to my dear Holly, for keeping me sane.
 If I've misattributed anything or left anyone out, please let me know, so I can
 correct the situation: sgold@sonic.net
 
-[Jump to table of contents](#toc)
+[Jump to the table of contents](#toc)
 
 
 [adoptium]: https://adoptium.net/releases.html "Adoptium Project"
@@ -254,10 +254,11 @@ correct the situation: sgold@sonic.net
 [github]: https://github.com "GitHub"
 [gitkraken]: https://www.gitkraken.com "GitKraken client"
 [gradle]: https://gradle.org "Gradle Project"
-[java]: https://java.com "Java"
+[java]: https://en.wikipedia.org/wiki/Java_(programming_language) "Java programming language"
 [jme]: https://jmonkeyengine.org "jMonkeyEngine Project"
 [latest]: https://github.com/stephengold/Garrett/releases/latest "latest release"
 [license]: https://github.com/stephengold/Garrett/blob/master/LICENSE "Garrett license"
+[lwjgl]: https://www.lwjgl.org "Lightweight Java Game Library"
 [markdown]: https://daringfireball.net/projects/markdown "Markdown Project"
 [maven]: https://maven.apache.org "Maven Project"
 [meld]: https://meldmerge.org "Meld merge tool"
