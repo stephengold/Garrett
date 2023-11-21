@@ -5,7 +5,7 @@
 //   of the root project.
 
 plugins {
-    id 'application' // to build a Java application
+    id 'application' // to build Java applications
 }
 
 application {
@@ -29,7 +29,7 @@ dependencies {
     implementation project(':GarrettLibrary') // for latest sourcecode
 }
 
-// cleanup tasks:
+// Register cleanup tasks:
 
 clean.dependsOn('cleanDLLs', 'cleanDyLibs', 'cleanLogs', 'cleanSandbox', 'cleanSOs')
 
@@ -49,7 +49,7 @@ tasks.register('cleanSOs', Delete) { // extracted Linux and Android native libra
     delete fileTree(dir: '.', include: '*.so')
 }
 
-// tasks to run specific apps:
+// Register tasks to run specific applications:
 
 tasks.register('GarrettDemo', JavaExec) {
     description 'Runs the demo.'
