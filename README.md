@@ -69,7 +69,7 @@ Add to the project’s "build.gradle" file:
     }
     dependencies {
         implementation 'com.github.stephengold:Garrett:0.5.3'
-        implementation 'com.github.stephengold:Minie:7.8.0+big3'
+        implementation 'com.github.stephengold:Minie:7.8.1+big3'
     }
 
 For some older versions of Gradle,
@@ -95,7 +95,7 @@ Add to the project’s "pom.xml" file:
     <dependency>
       <groupId>com.github.stephengold</groupId>
       <artifactId>Minie</artifactId>
-      <version>7.8.0+big3</version>
+      <version>7.8.1+big3</version>
     </dependency>
 
 [Jump to the table of contents](#toc)
