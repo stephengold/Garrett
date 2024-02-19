@@ -9,8 +9,7 @@ It contains 2 sub-projects:
 2. GarrettExamples: example applications using the library
 
 Complete source code (in Java) is provided under
-[a BSD 3-Clause license][license].
-
+[a 3-clause BSD license][license].
 
 
 <a name="toc"></a>
