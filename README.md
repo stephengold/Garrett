@@ -8,7 +8,7 @@ It contains 2 sub-projects:
 1. GarrettLibrary: the Garrett runtime library
 2. GarrettExamples: example applications using the library
 
-Complete source code (in Java) is provided under
+Complete source code (in [Java]) is provided under
 [a 3-clause BSD license][license].
 
 
@@ -115,7 +115,7 @@ Add to the project’s "pom.xml" file:
   + using Windows Command Prompt: `set JAVA_HOME="` *path to installation* `"`
   + using PowerShell: `$env:JAVA_HOME = '` *path to installation* `'`
 3. Download and extract the Garrett source code from GitHub:
-  + using Git:
+  + using [Git]:
     + `git clone https://github.com/stephengold/Garrett.git`
     + `cd Garrett`
     + `git checkout -b latest 0.5.3`
