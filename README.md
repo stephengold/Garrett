@@ -48,7 +48,7 @@ Complete source code (in [Java]) is provided under
 
 ## How to add Garrett to an existing project
 
-The Garrett Library depends on [Minie].
+Garrett Library comes pre-built as a single library that depends on [Minie].
 However, the Minie dependency is intentionally omitted from Garrett's POM
 so developers can specify *which* Minie library should be used.
 
