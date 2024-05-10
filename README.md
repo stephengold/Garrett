@@ -48,15 +48,16 @@ Complete source code (in [Java]) is provided under
 
 ## How to add Garrett to an existing project
 
-Garrett Library comes pre-built as a single library that depends on [Minie].
+Garrett comes pre-built as a single JVM library
+that depends on [Minie].
 However, the Minie dependency is intentionally omitted from Garrett's POM
 so developers can specify *which* Minie library should be used.
 
 For projects built using [Maven] or [Gradle], it is
 *not* sufficient to specify the
-dependency on the Garrett Library.
+dependency on Garrett.
 You must also explicitly specify the Minie dependency.
-The following examples specify "+big3",
+The following examples specify "+big4",
 but "+debug" or the default Minie library should also work.
 
 ### Gradle-built projects
@@ -208,7 +209,6 @@ The camera orbits the red ball, which is its target.
 + "Q" key to orbit upward
 + "Z" key to orbit downward
 + hold down the "X" key for "X-ray mode", which temporarily ignores obstructions
-
 
 [Jump to the table of contents](#toc)
 
