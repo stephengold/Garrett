@@ -3,7 +3,7 @@
 [The Garrett Project][garrett] provides a collection of camera controllers for
 [the jMonkeyEngine (JME) game engine][jme].
 
-It contains 2 sub-projects:
+It contains 2 subprojects:
 
 1. GarrettLibrary: the Garrett runtime library
 2. GarrettExamples: example applications using the library
@@ -165,7 +165,7 @@ The source code and pre-built libraries are compatible with JDK 8.
 
 Applications have been created to test and demonstrate
 certain features of Garrett.
-The following apps are found in the GarrettExamples sub-project:
+The following apps are found in the GarrettExamples subproject:
 
 ### HelloGarrett
 
