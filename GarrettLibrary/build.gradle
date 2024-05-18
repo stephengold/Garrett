@@ -19,9 +19,9 @@ ext {
 }
 
 dependencies {
-    api heartCoordinates
-    api 'org.jmonkeyengine:jme3-core:' + jme3Version
-    compileOnly minieCoordinates
+    api(libs.heart)
+    api(libs.jme3.core)
+    compileOnly(libs.minie)
 }
 
 // Register publishing tasks:

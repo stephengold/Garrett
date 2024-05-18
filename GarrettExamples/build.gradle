@@ -13,17 +13,17 @@ application {
 }
 
 dependencies {
-    implementation heartCoordinates
-    implementation minieCoordinates
-    implementation 'com.github.stephengold:Acorus:2.0.0'
-    runtimeOnly 'org.jmonkeyengine:jme3-awt-dialogs:' + jme3Version
-    runtimeOnly 'org.jmonkeyengine:jme3-desktop:' + jme3Version
-    runtimeOnly 'org.jmonkeyengine:jme3-lwjgl3:' + jme3Version
+    implementation(libs.heart)
+    implementation(libs.minie)
+    implementation(libs.acorus)
+    runtimeOnly(libs.jme3.awt.dialogs)
+    runtimeOnly(libs.jme3.desktop)
+    runtimeOnly(libs.jme3.lwjgl3)
 
     // GarrettExamples doesn't use jme3-jogg nor jme3-plugins
     //  -- they are included solely to avoid warnings from AssetConfig.
-    runtimeOnly 'org.jmonkeyengine:jme3-jogg:' + jme3Version
-    runtimeOnly 'org.jmonkeyengine:jme3-plugins:' + jme3Version
+    runtimeOnly(libs.jme3.jogg)
+    runtimeOnly(libs.jme3.plugins)
 
     //implementation 'com.github.stephengold:Garrett:' + garrettVersion // for published library
     implementation project(':GarrettLibrary') // for latest sourcecode
