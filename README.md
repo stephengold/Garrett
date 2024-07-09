@@ -62,14 +62,14 @@ but "+debug" or the default Minie library should also work.
 
 ### Gradle-built projects
 
-Add to the project’s "build.gradle" file:
+Add to the project’s "build.gradle" or "build.gradle.kts" file:
 
     repositories {
         mavenCentral()
     }
     dependencies {
-        implementation 'com.github.stephengold:Garrett:0.5.3'
-        implementation 'com.github.stephengold:Minie:8.0.0+big4'
+        implementation("com.github.stephengold:Garrett:0.5.3")
+        implementation("com.github.stephengold:Minie:8.0.0+big4")
     }
 
 For some older versions of Gradle,
