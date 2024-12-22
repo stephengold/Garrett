@@ -18,16 +18,16 @@ configurations.configureEach {
 
 tasks.register('checkstyle') {
     dependsOn ':GarrettExamples:checkstyleMain', ':GarrettLibrary:checkstyleMain'
-    description 'Checks the style of all Java sourcecode.'
+    description = 'Checks the style of all Java sourcecode.'
 }
 
 // Register publishing tasks:
 
 tasks.register('install') {
     dependsOn ':GarrettLibrary:install'
-    description 'Installs Maven artifacts to the local repository.'
+    description = 'Installs Maven artifacts to the local repository.'
 }
 tasks.register('release') {
     dependsOn ':GarrettLibrary:release'
-    description 'Stages Maven artifacts to Sonatype OSSRH.'
+    description = 'Stages Maven artifacts to Sonatype OSSRH.'
 }

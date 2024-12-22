@@ -52,7 +52,7 @@ tasks.register('cleanSOs', Delete) { // extracted Linux and Android native libra
 // Register tasks to run specific applications:
 
 tasks.register('GarrettDemo', JavaExec) {
-    description 'Runs the demo.'
+    description = 'Runs the demo.'
     mainClass = 'com.github.stephengold.garrett.examples.GarrettDemo'
 }
 
@@ -68,6 +68,6 @@ tasks.register('HelloOrbitCam', JavaExec) {
 
 tasks.withType(JavaExec).configureEach { // Java runtime options:
     classpath sourceSets.main.runtimeClasspath
-    enableAssertions true
+    enableAssertions = true
     //jvmArgs '-Xms512m', '-Xmx512m' // to enlarge the Java heap
 }
