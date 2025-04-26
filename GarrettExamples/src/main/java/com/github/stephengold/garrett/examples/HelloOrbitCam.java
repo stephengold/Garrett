@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022-2023, Stephen Gold
+ Copyright (c) 2022-2025 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -66,6 +66,18 @@ public class HelloOrbitCam extends SimpleApplication {
      * track which of the named input signals are active
      */
     final private static SignalTracker signalTracker = new SignalTracker();
+    // *************************************************************************
+    // constructors
+
+    /**
+     * Instantiate the HelloOrbitCam application.
+     * <p>
+     * This no-arg constructor was made explicit to avoid javadoc warnings from
+     * JDK 18+.
+     */
+    public HelloOrbitCam() {
+        // do nothing
+    }
     // *************************************************************************
     // new methods exposed
 

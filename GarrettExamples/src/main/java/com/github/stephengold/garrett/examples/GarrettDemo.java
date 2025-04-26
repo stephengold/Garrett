@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022-2023, Stephen Gold
+ Copyright (c) 2022-2025 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -135,6 +135,18 @@ public class GarrettDemo extends AcorusDemo {
      * dump debugging information to {@code System.out}
      */
     final private static PhysicsDumper dumper = new PhysicsDumper();
+    // *************************************************************************
+    // constructors
+
+    /**
+     * Instantiate the GarrettDemo application.
+     * <p>
+     * This no-arg constructor was made explicit to avoid javadoc warnings from
+     * JDK 18+.
+     */
+    public GarrettDemo() {
+        // do nothing
+    }
     // *************************************************************************
     // new methods exposed
 
