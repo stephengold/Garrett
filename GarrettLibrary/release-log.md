@@ -1,6 +1,11 @@
 # release log for the Garrett Library
 
-## Version 0.5.3 releases on 1 April 2023
+## Version 0.5.4 released on TBD
+
++ Upgraded JMonkeyEngine to v3.8.1-stable.
++ Upgraded the Heart library to v9.2.0 and the Minie library to v9.0.1
+
+## Version 0.5.3 released on 1 April 2023
 
 + Added a sweep-test option to `OrbitCamera`
 + Upgraded JMonkeyEngine to v3.6.0-stable.
@@ -8,7 +13,7 @@
 
 ## Version 0.5.2 released on 20 November 2022
 
-+ Split the `maxAbsDot` parameter into 2 parameters: `maxDot` and `MinDot`.
++ Split the `maxAbsDot` parameter into 2 parameters: `maxDot` and `minDot`.
 + Split the `Warp` obstruction response into 2 options:
   `WarpBias` and `WarpNoBias`.
 + Added contact tests and the `maxFraction` parameter to `OrbitCamera`.
