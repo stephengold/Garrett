@@ -5,7 +5,7 @@ plugins {
 }
 
 ext {
-    garrettVersion = '0.5.4'
+    garrettVersion = '0.5.5-SNAPSHOT'
 }
 
 subprojects {

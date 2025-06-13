@@ -61,6 +61,6 @@ final public class GarrettVersion {
      * @return the branch and revision string (not null, not empty)
      */
     public static String versionShort() {
-        return "master 0.5.4";
+        return "master 0.5.5-SNAPSHOT";
     }
 }
