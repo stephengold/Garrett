@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC
-          "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-          "https://checkstyle.org/dtds/configuration_1_3.dtd">
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <!-- Checkstyle configuration for the Garrett project. -->
 
 <module name="Checker">
@@ -9,7 +9,7 @@
     <property name="fileExtensions" value="java, properties, xml"/>
     <property name="severity" value="error"/>
 
-    <!-- Checks for headers:                      -->
+    <!-- Check for header:                        -->
     <!-- See https://checkstyle.org/checks/header -->
     <module name="Header">
         <property name="fileExtensions" value="java"/>
@@ -21,6 +21,8 @@
     <!-- See https://checkstyle.org/checks/javadoc/javadocpackage.html -->
     <module name="JavadocPackage"/>
 
+    <!-- Check for trailing whitespace:                                 -->
+    <!-- See https://checkstyle.org/checks/regexp/regexpsingleline.html -->
     <module name="RegexpSingleline">
         <property name="format" value="\s+$"/>
         <property name="maximum" value="0"/>
@@ -45,6 +47,8 @@
     </module>
 
     <module name="TreeWalker">
+        <!-- Checks for annotations:                      -->
+        <!-- See https://checkstyle.org/checks/annotation -->
         <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationMostCases"/>
             <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
@@ -61,7 +65,6 @@
             <property name="option" value="TEXT"/>
             <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH, ARRAY_INIT, INSTANCE_INIT, LITERAL_CASE, LITERAL_CATCH, LITERAL_DEFAULT, LITERAL_DO, LITERAL_FOR, LITERAL_SYNCHRONIZED, LITERAL_WHILE, STATIC_INIT"/>
         </module>
-
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module>
@@ -92,7 +95,6 @@
         <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
-
         <module name="OneTopLevelClass"/>
 
         <!-- Checks for common coding problems:       -->
@@ -111,7 +113,6 @@
         </module>
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
-
         <module name="NoFinalizer"/>
         <module name="OneStatementPerLine"/>
 
@@ -129,13 +130,13 @@
         <module name="UnusedImports">
             <property name="processJavadoc" value="false"/>
         </module>
+
+        <!-- Checks for Javadoc comments:              -->
+        <!-- See https://checkstyle.org/checks/javadoc -->
         <module name="AtclauseOrder">
             <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
-
-        <!-- Checks for Javadoc comments               -->
-        <!-- See https://checkstyle.org/checks/javadoc -->
         <module name="InvalidJavadocPosition"/>
         <module name="JavadocMethod">
             <property name="allowMissingParamTags" value="false"/>
@@ -170,6 +171,9 @@
             <property name="forbiddenSummaryFragments" value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
             <property name="period" value=""/>
         </module>
+
+        <!-- Miscellaneous checks:                  -->
+        <!-- See https://checkstyle.org/checks/misc -->
         <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowByTailComment" value="true"/>
@@ -190,9 +194,12 @@
         <module name="OuterTypeFilename"/>
         <module name="UpperEll"/>
 
-        <!-- Modifier checks:                           -->
+        <!-- Modifier check:                            -->
         <!-- See https://checkstyle.org/checks/modifier -->
         <module name="RedundantModifier"/>
+
+        <!-- Checks for naming conventions:           -->
+        <!-- See https://checkstyle.org/checks/naming -->
         <module name="AbbreviationAsWordInName">
             <property name="allowedAbbreviationLength" value="1"/>
             <property name="ignoreFinal" value="false"/>
@@ -231,9 +238,6 @@
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern" value="Method type name ''{0}'' must match pattern ''{1}''."/>
         </module>
-
-        <!-- Checks for naming conventions            -->
-        <!-- See https://checkstyle.org/checks/naming -->
         <module name="PackageName">
             <property name="format" value="^[a-z][a-z.]*[a-z]$"/>
             <message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
@@ -329,7 +333,6 @@
             <property name="tokens" value="METHOD_REF"/>
         </module>
         <module name="TypecastParenPad"/>
-
         <module name="WhitespaceAfter">
             <property name="tokens" value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, DO_WHILE"/>
         </module>
