@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022, Stephen Gold
+ Copyright (c) 2022-2025 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -78,23 +78,23 @@ final public class DemoSpace {
     /**
      * X coordinate of the door's center (in physics space)
      */
-    private final static float doorCenterX = 8f;
+    final private static float doorCenterX = 8f;
     /**
      * half the height of the door (in physics-space units)
      */
-    private final static float doorHalfHeight = 2f;
+    final private static float doorHalfHeight = 2f;
     /**
      * half the width of the door (in physics-space units)
      */
-    private final static float doorHalfWidth = 2f;
+    final private static float doorHalfWidth = 2f;
     /**
      * Y coordinate of the floor (in physics space)
      */
-    private final static float floorY = -2.25f;
+    final private static float floorY = -2.25f;
     /**
      * half the thickness of boxes (in physics-space units)
      */
-    private final static float halfThickness = 0.25f;
+    final private static float halfThickness = 0.25f;
     /**
      * message logger for this class
      */
