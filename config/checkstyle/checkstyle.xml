@@ -127,6 +127,7 @@
         </module>
         <module name="IllegalType"/>
         <module name="MissingSwitchDefault"/>
+        <module name="ModifiedControlVariable"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="NoFinalizer"/>
         <module name="OneStatementPerLine"/>
