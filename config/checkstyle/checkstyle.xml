@@ -37,9 +37,7 @@
     <module name="FileLength">
         <property name="max" value="1100"/>
     </module>
-    <module name="LineLength">
-        <property name="fileExtensions" value="java"/>
-    </module>
+    <module name="LineLength"/>
 
     <!-- Checks for whitespace:                       -->
     <!-- See https://checkstyle.org/checks/whitespace -->
@@ -170,10 +168,10 @@
         </module>
         <module name="MissingJavadocMethod">
             <property name="allowedAnnotations" value=""/>
-            <property name="scope" value="protected"/>
+            <property name="scope" value="private"/>
         </module>
         <module name="MissingJavadocType">
-            <property name="scope" value="protected"/>
+            <property name="scope" value="private"/>
         </module>
         <module name="NonEmptyAtclauseDescription"/>
         <module name="RequireEmptyLineBeforeBlockTagGroup"/>
@@ -221,7 +219,7 @@
             <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF, PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF, RECORD_COMPONENT_DEF"/>
         </module>
         <module name="CatchParameterName">
-            <property name="format" value="^exception$"/>
+            <property name="format" value="^$"/>
             <message key="name.invalidPattern" value="Catch parameter name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="ClassTypeParameterName">
@@ -238,7 +236,7 @@
         </module>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName">
-            <property name="format" value="^[a-z][0-9A-Za-z]{0,19}$"/>
+            <property name="format" value="^[a-z][0-9A-Za-z]{0,18}$"/>
             <message key="name.invalidPattern" value="Local variable name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="MemberName">
@@ -258,7 +256,7 @@
             <message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="ParameterName">
-            <property name="format" value="^[a-z][0-9A-Za-z]{0,19}$"/>
+            <property name="format" value="^[a-z][0-9A-Za-z]{0,18}$"/>
             <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="PatternVariableName">
