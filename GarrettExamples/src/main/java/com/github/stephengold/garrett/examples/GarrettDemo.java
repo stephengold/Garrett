@@ -416,6 +416,9 @@ public class GarrettDemo extends AcorusDemo {
         );
     }
 
+    /**
+     * Cycle through the obstruction responses.
+     */
     private void nextObstructionResponse() {
         if (activeCameraController instanceof OrbitCamera) {
             OrbitCamera oc = (OrbitCamera) activeCameraController;
@@ -540,6 +543,11 @@ public class GarrettDemo extends AcorusDemo {
         oc.setSignalName(CameraSignal.ZoomOut, signalZoomOut);
     }
 
+    /**
+     * Assign the target for each camera.
+     *
+     * @param redBall the target body
+     */
     private void updateTargets(PhysicsRigidBody redBall) {
         Target redBallTarget = new Target() {
             @Override
