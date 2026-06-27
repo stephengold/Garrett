@@ -4,10 +4,6 @@ plugins {
     id 'base' // to add a "clean" task to the root project
 }
 
-ext {
-    garrettVersion = '0.5.5-SNAPSHOT'
-}
-
 subprojects {
     apply from: rootProject.file('common.gradle')
 }

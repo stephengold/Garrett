@@ -25,7 +25,7 @@ dependencies {
     runtimeOnly(libs.jme3.jogg)
     runtimeOnly(libs.jme3.plugins)
 
-    //implementation 'com.github.stephengold:Garrett:' + garrettVersion // for published library
+    //implementation 'com.github.stephengold:Garrett:' + providers.gradleProperty('garrettVersion').get() // for published library
     implementation project(':GarrettLibrary') // for latest sourcecode
 }
 
