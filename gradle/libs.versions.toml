@@ -3,12 +3,12 @@
 [versions]
 
 checkstyle = "12.3.1"
-jme = "3.10.0-alpha4"
+jme = "3.10.0-beta2"
 
 [libraries]
 
 acorus = "com.github.stephengold:Acorus:2.0.2"
-heart = "com.github.stephengold:Heart:9.3.0"
+heart = "com.github.stephengold:Heart:9.4.0-test1"
 
 jme3-awt-dialogs = { module = "org.jmonkeyengine:jme3-awt-dialogs", version.ref = "jme" }
 jme3-core = { module = "org.jmonkeyengine:jme3-core", version.ref = "jme" }
@@ -17,7 +17,7 @@ jme3-jogg = { module = "org.jmonkeyengine:jme3-jogg", version.ref = "jme" }
 jme3-lwjgl3 = { module = "org.jmonkeyengine:jme3-lwjgl3", version.ref = "jme" }
 jme3-plugins = { module = "org.jmonkeyengine:jme3-plugins", version.ref = "jme" }
 
-minie = "com.github.stephengold:Minie:9.0.3"
+minie = "com.github.stephengold:Minie:10.0.0-test1"
 
 [bundles]
 
