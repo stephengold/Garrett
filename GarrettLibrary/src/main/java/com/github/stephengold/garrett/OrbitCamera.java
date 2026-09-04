@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2020-2023, Stephen Gold
+ Copyright (c) 2020-2026 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -175,7 +175,7 @@ public class OrbitCamera extends ExclusionCamera {
     /**
      * reusable vector array
      */
-    final private static Vector3f[] tmpCorners = new Vector3f[]{
+    final private static Vector3f[] tmpCorners = new Vector3f[] {
         new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f(),
         new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f()
     };
@@ -659,7 +659,7 @@ public class OrbitCamera extends ExclusionCamera {
         boolean xrayVision = (obstructionResponse == ObstructionResponse.XRay)
                 || isActive(CameraSignal.Xray);
         if (forwardSum != 0) {
-            range *= FastMath.exp(-tpf * forwardSum); // TODO move rate?
+            range *= FastMath.exp(-tpf * forwardSum); // TODO: move rate?
             if (xrayVision || wnb || wb && forwardSum > 0) {
                 this.preferredRange = range;
             }

@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022-2025 Stephen Gold
+ Copyright (c) 2022-2026 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -297,7 +297,7 @@ public class GarrettDemo extends AcorusDemo {
     public void moreDefaultBindings() {
         InputMode dim = getDefaultInputMode();
 
-        //dim.bind(asCollectGarbage, KeyInput.KEY_G);
+        // dim.bind(asCollectGarbage, KeyInput.KEY_G);
         dim.bind(asDumpSpace, KeyInput.KEY_O);
         dim.bind(asDumpViewPort, KeyInput.KEY_P);
         dim.bind(asNextResponse, KeyInput.KEY_N, KeyInput.KEY_SPACE);
@@ -411,8 +411,8 @@ public class GarrettDemo extends AcorusDemo {
 
         // Add lighting and shadows to the debug scene.
         AcorusDemo app = this;
-        bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
-                -> DemoSpace.addLighting(app, physicsDebugRootNode)
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode) ->
+                DemoSpace.addLighting(app, physicsDebugRootNode)
         );
     }
 

@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2022-2025 Stephen Gold
+ Copyright (c) 2022-2026 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -106,8 +106,8 @@ public class HelloGarrett extends SimpleApplication {
 
         // Add lighting and shadows to the debug scene.
         SimpleApplication app = this;
-        bulletAppState.setDebugInitListener((Node physicsDebugRootNode)
-                -> DemoSpace.addLighting(app, physicsDebugRootNode)
+        bulletAppState.setDebugInitListener((Node physicsDebugRootNode) ->
+                DemoSpace.addLighting(app, physicsDebugRootNode)
         );
         bulletAppState
                 .setDebugShadowMode(RenderQueue.ShadowMode.CastAndReceive);
@@ -162,8 +162,8 @@ public class HelloGarrett extends SimpleApplication {
         signalTracker.add(signalName);
 
         int sourceIndex = numTriggers;
-        ActionListener actionListener = (action, keyPressed, tpf)
-                -> signalTracker.setActive(signalName, sourceIndex, keyPressed);
+        ActionListener actionListener = (action, keyPressed, tpf) ->
+                signalTracker.setActive(signalName, sourceIndex, keyPressed);
         String action = "signal " + signalName;
         inputManager.addListener(actionListener, action);
 
