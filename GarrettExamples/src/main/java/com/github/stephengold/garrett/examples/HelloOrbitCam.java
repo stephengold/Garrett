@@ -43,6 +43,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
 import java.util.logging.Level;
 import jme3utilities.Heart;
 import jme3utilities.SignalTracker;
@@ -90,7 +91,11 @@ public class HelloOrbitCam extends SimpleApplication {
         // Mute the chatty loggers in certain packages.
         Heart.setLoggingLevels(Level.WARNING);
 
+        AppSettings as = new AppSettings(true);
+        as.setRenderer(AppSettings.LWJGL_OPENGL32); // default=ANGLE_GLES3
+
         HelloOrbitCam application = new HelloOrbitCam();
+        application.setSettings(as);
         application.start();
     }
     // *************************************************************************
