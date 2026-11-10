@@ -79,7 +79,7 @@ public class GarrettDemo extends AcorusDemo {
     /**
      * message logger for this class
      */
-    final public static Logger logger
+    final public static Logger loggerB
             = Logger.getLogger(GarrettDemo.class.getName());
     /**
      * application name (for the title bar of the app's window)
