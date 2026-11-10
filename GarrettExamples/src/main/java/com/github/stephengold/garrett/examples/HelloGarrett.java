@@ -86,7 +86,7 @@ public class HelloGarrett extends SimpleApplication {
     public static void main(String[] arguments) {
         // Mute the chatty loggers in certain packages.
         Heart.setLoggingLevels(Level.WARNING);
-        
+
         AppSettings as = new AppSettings(true);
         as.setRenderer(AppSettings.LWJGL_OPENGL32); // default=ANGLE_GLES3
 
